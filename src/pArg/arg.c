@@ -33,24 +33,32 @@ const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const c
 			{'h', "-help", NULL, NULL},
 	};
 	const size_t nArg = (sizeof(pArg) / sizeof(pArg[0]));
-	size_t	i;
+	size_t	i = 0;
 
-	*pStr = nxt;
+	printf("Opt %s\n", str);
+	*pStr = NULL;
 	if (str[0] != '-')
 		return (NULL);
 	for (i = 0; i < nArg; ++i) {
 		if (!strcmp(&str[1], pArg[i].str)) {
 			break ;
 		} else if (str[1] == pArg[i].c) {
-			if (str[2])
+			if (str[2]) {
 				*pStr = &str[2];
+				printf("Arg %s\n", *pStr);
+			}
 			break ;
 		}
 	}
 	if (i == nArg)
 		return (NULL);
-	else if (pArg[i].fnCheck && (!*pStr || pArg[i].fnCheck(*pStr)))
-		return (NULL);
+	if (pArg[i].fnCheck) {
+		if (!*pStr)
+			*pStr = nxt;
+		if (!*pStr || pArg[i].fnCheck(*pStr))
+			return (NULL);
+
+	}
 	return (&pArg[i]);
 }
 
