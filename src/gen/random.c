@@ -10,7 +10,7 @@ uint8_t	genNBit(const uint8_t nBit, const uint8_t percent) {
 	return (res);
 }
 
-void	fillTabRandom(t_art *tab) {
+void	genTabRandom(t_art *tab) {
 	const size_t	height = tab->height;
 	const size_t	width = tab->width;
 

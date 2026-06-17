@@ -64,7 +64,7 @@ void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t width)
 	write(fdOut, "\n", 1);
 }
 
-void	printTab(const size_t fdOut, const t_art tab) {
+void	printTab(const int fdOut, const t_art tab) {
 	(void)fullAChar;
 	for (size_t i = 0; tab.arr[i]; ++i) {
 		if (i & 1) {

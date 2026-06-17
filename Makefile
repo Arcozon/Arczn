@@ -8,7 +8,13 @@ S_GEN =  random.c  ivy.c
 D_GEN =  gen/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
-SRC =  $(PARG)  $(GEN)  main.c  print.c
+
+S_PRINT =  print.c  color.c
+D_PRINT =  print/
+PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
+
+
+SRC =  $(PARG)  $(GEN)  $(PRINT)  main.c
 D_SRC = src/
 
 D_BUILD = .build/

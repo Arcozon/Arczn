@@ -30,6 +30,7 @@ const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const c
 			{'g', "-gen", checkArg_gen, parsArg_gen},
 			{'g', "-random", NULL, parsArg_genRandom},
 			{'g', "-ivy", NULL, parsArg_genIvy},
+			{'c', "-color", NULL, parsArg_printColor},
 			{'h', "-help", NULL, NULL},
 	};
 	const size_t nArg = (sizeof(pArg) / sizeof(pArg[0]));
@@ -84,6 +85,8 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 			case 'o':	art->fd = arg->fnPars(optVal);
 				break;
 			case 'g':	art->gen = arg->fnPars(optVal);
+				break;
+			case 'c':	art->print = arg->fnPars(optVal);
 				break;
 			default:	fprintf(stderr, "Unknown opt `%s'\n", av[i]);
 				return (1);

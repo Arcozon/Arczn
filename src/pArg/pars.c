@@ -36,3 +36,8 @@ int	parsArg_gen(const char *str) {
 	}
 	return (G_RANDOM);
 }
+
+int	parsArg_printColor(const char *str) {
+	(void)str;
+	return (P_COLOR);
+}

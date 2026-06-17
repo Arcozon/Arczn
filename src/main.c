@@ -10,30 +10,42 @@ void	freeArt(t_art *tab) {
 		close(tab->fd);
 }
 
-typedef void	(*fillTabFn)(t_art *);
-void	fillTab(t_art *tab) {
-	static const fillTabFn _fillTab[G_MAX] = {
-		fillTabRandom,	fillTabIvy
+typedef void	(*genTabFn)(t_art *);
+void	selectGenTab(t_art *tab) {
+	static const genTabFn _genTabFn[G_MAX] = {
+		genTabRandom,	genTabIvy
 	};
-	(*_fillTab[tab->gen])(tab);
+	(*_genTabFn[tab->gen])(tab);
+}
+
+typedef void	(*printTabFn)(const int, const t_art);
+void	selectPrintTab(t_art *tab) {
+	static const printTabFn _printTabFn[G_MAX] = {
+		printTab,	printTabColor
+	};
+	(*_printTabFn[tab->print])(tab->fd, *tab);
 }
 
 #define DEFAULT_PERCENT	40
 #define DEFAULT_TYPE	T_RANDOM
+#define DEFAULT_MIN		150
+#define DEFAULT_MAX		230
+#define DEFAULT_DELTA	7
 #define DEFAULT_WIDTH	5
 #define DEFAULT_HEIGHT	5
 int main(int ac, char *av[], char *env[]) {
 	__attribute__((cleanup(freeArt)))
-	t_art	art	= {STDOUT_FILENO, G_RANDOM, DEFAULT_PERCENT,
+	t_art	art	= {DEFAULT_PERCENT, G_RANDOM,
+		STDOUT_FILENO, {DEFAULT_MIN, DEFAULT_MAX, DEFAULT_DELTA}, P_NORMAL,
 		DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL};
 
 	srand(time(NULL));
 	if (init(ac, av, &art))
 		exit(1);
 	
-	fillTab(&art);
+	selectGenTab(&art);
+	selectPrintTab(&art);
 
-	printTab(art.fd, art);
 	return (0);
 	(void)ac, (void)av, (void)env;
 }

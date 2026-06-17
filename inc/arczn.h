@@ -34,13 +34,21 @@ enum e_printType {
 # define P_MAX		P_MAX
 };
 
+typedef struct s_clrSet	t_clrSet;
+struct s_clrSet {
+	uint8_t	min;
+	uint8_t	max;
+	uint8_t	delta;
+};
 
 typedef struct s_art	t_art;
 struct s_art {
-	int		fd;
-	
-	e_genType	gen;
 	uint8_t		percent;
+	e_genType	gen;
+	
+	int			fd;
+	t_clrSet	clrSetting;
+	e_printType	print;
 
 	size_t	width;
 	size_t	height;
@@ -48,11 +56,11 @@ struct s_art {
 };
 
 size_t	init(const int ac, char *av[], t_art *art);
-void	printTab(const size_t fdOut, const t_art tab);
+void	printTab(const int fdOut, const t_art tab);
+void	printTabColor(const int fdOut, const t_art tab);
 
 uint8_t	genNBit(const uint8_t nBit, const uint8_t percent);
-void	fillTabRandom(t_art *tab);
-void	fillTabIvy(t_art *tab);
-
+void	genTabRandom(t_art *tab);
+void	genTabIvy(t_art *tab);
 
 #endif

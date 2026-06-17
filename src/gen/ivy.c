@@ -26,7 +26,7 @@ struct s_span	getSpanNeighbours(const size_t n, const uint8_t pLine[], const siz
 	return ((struct s_span){start + 1, end});
 }
 
-void	fillTabIvy(t_art *tab) {
+void	genTabIvy(t_art *tab) {
 	const size_t	height = tab->height;
 	const size_t	width = tab->width;
 
