@@ -12,11 +12,11 @@ struct s_parsArg {
 
 int	checkArg_int(const char *);
 int	checkArg_output(const char *);
-int	checkArg_type(const char *);
+int	checkArg_gen(const char *);
 
 int	parsArg_output(const char *);
-int	parsArg_typeRandom(const char *str);
-int	parsArg_typeIvy(const char *str);
-int	parsArg_type(const char *);
+int	parsArg_genRandom(const char *str);
+int	parsArg_genIvy(const char *str);
+int	parsArg_gen(const char *);
 
 #endif

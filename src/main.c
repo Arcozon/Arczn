@@ -12,10 +12,10 @@ void	freeArt(t_art *tab) {
 
 typedef void	(*fillTabFn)(t_art *);
 void	fillTab(t_art *tab) {
-	static const fillTabFn _fillTab[T_MAX] = {
+	static const fillTabFn _fillTab[G_MAX] = {
 		fillTabRandom,	fillTabIvy
 	};
-	(*_fillTab[tab->type])(tab);
+	(*_fillTab[tab->gen])(tab);
 }
 
 #define DEFAULT_PERCENT	40
@@ -24,7 +24,7 @@ void	fillTab(t_art *tab) {
 #define DEFAULT_HEIGHT	5
 int main(int ac, char *av[], char *env[]) {
 	__attribute__((cleanup(freeArt)))
-	t_art	art	= {STDOUT_FILENO, T_RANDOM, DEFAULT_PERCENT,
+	t_art	art	= {STDOUT_FILENO, G_RANDOM, DEFAULT_PERCENT,
 		DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL};
 
 	srand(time(NULL));

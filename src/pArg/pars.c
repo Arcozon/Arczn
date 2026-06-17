@@ -12,27 +12,27 @@ int	parsArg_output(const char *str) {
 struct s_pType {
 	char	*c;
 	char	*str;
-	e_artType	type;
+	e_genType	type;
 };
 
-int	parsArg_typeRandom(const char *str) {
+int	parsArg_genRandom(const char *str) {
 	(void)str;
-	return (T_RANDOM);
+	return (G_RANDOM);
 }
-int	parsArg_typeIvy(const char *str) {
+int	parsArg_genIvy(const char *str) {
 	(void)str;
-	return (T_IVY);
+	return (G_IVY);
 }
 
-int	parsArg_type(const char *str) {
-	static const struct s_pType	typeList[T_MAX] = {
-		{"r", "random", T_RANDOM},
-		{"i", "ivy", T_IVY}
+int	parsArg_gen(const char *str) {
+	static const struct s_pType	typeList[G_MAX] = {
+		{"r", "random", G_RANDOM},
+		{"i", "ivy", G_IVY}
 	};
-	for (size_t i = 0; i < T_MAX; ++i) {
+	for (size_t i = 0; i < G_MAX; ++i) {
 		if (!strcmp(typeList[i].c, str)
 			|| !strcmp(typeList[i].str, str))
 			return (typeList[i].type);
 	}
-	return (T_RANDOM);
+	return (G_RANDOM);
 }

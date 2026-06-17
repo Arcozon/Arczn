@@ -14,21 +14,32 @@
 # define SETB(var, bit)		((var) |= MASK(bit))
 # define UNSETB(var, bit)	((var) &= ~MASK(bit))
 
-typedef enum e_artType	e_artType;
-enum e_artType {
-	T_RANDOM = 0,
-# define T_RANDOM	T_RANDOM
-	T_IVY,
-# define T_IVY		T_IVY
-	T_MAX
-# define T_MAX		T_MAX
+typedef enum e_genType	e_genType;
+enum e_genType {
+	G_RANDOM = 0,
+# define G_RANDOM	G_RANDOM
+	G_IVY,
+# define G_IVY		G_IVY
+	G_MAX
+# define G_MAX		G_MAX
 };
+
+typedef enum e_printType	e_printType;
+enum e_printType {
+	P_NORMAL = 0,
+# define P_NORMAL	P_NORMAL
+	P_COLOR,
+# define P_COLOR	P_COLOR
+	P_MAX
+# define P_MAX		P_MAX
+};
+
 
 typedef struct s_art	t_art;
 struct s_art {
 	int		fd;
 	
-	e_artType	type;
+	e_genType	gen;
 	uint8_t		percent;
 
 	size_t	width;

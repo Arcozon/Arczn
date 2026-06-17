@@ -27,15 +27,14 @@ const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const c
 			{'w', "-width", checkArg_int, atoi},
 			{'h', "-height", checkArg_int, atoi},
 			{'o', "-output", checkArg_output, parsArg_output},
-			{'t', "-type", checkArg_type, parsArg_type},
-			{'t', "-random", NULL, parsArg_typeRandom},
-			{'t', "-ivy", NULL, parsArg_typeIvy},
+			{'g', "-gen", checkArg_gen, parsArg_gen},
+			{'g', "-random", NULL, parsArg_genRandom},
+			{'g', "-ivy", NULL, parsArg_genIvy},
 			{'h', "-help", NULL, NULL},
 	};
 	const size_t nArg = (sizeof(pArg) / sizeof(pArg[0]));
 	size_t	i = 0;
 
-	printf("Opt %s\n", str);
 	*pStr = NULL;
 	if (str[0] != '-')
 		return (NULL);
@@ -45,7 +44,6 @@ const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const c
 		} else if (str[1] == pArg[i].c) {
 			if (str[2]) {
 				*pStr = &str[2];
-				printf("Arg %s\n", *pStr);
 			}
 			break ;
 		}
@@ -85,7 +83,7 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 				break;
 			case 'o':	art->fd = arg->fnPars(optVal);
 				break;
-			case 't':	art->type = arg->fnPars(optVal);
+			case 'g':	art->gen = arg->fnPars(optVal);
 				break;
 			default:	fprintf(stderr, "Unknown opt `%s'\n", av[i]);
 				return (1);

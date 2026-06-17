@@ -13,12 +13,12 @@ int	checkArg_output(const char *) {
 	return (0);
 }
 
-int	checkArg_type(const char *str) {
-	static const char	*typeList[T_MAX * 2] = {
+int	checkArg_gen(const char *str) {
+	static const char	*typeList[G_MAX * 2] = {
 		"random", "r",
 		"ivy", "i"
 	};
-	for (size_t i = 0; i < T_MAX * 2; ++i) {
+	for (size_t i = 0; i < G_MAX * 2; ++i) {
 		if (!strcmp(typeList[i], str))
 			return (0);
 	}
