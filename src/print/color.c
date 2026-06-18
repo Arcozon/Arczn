@@ -18,20 +18,20 @@ t_clr	newColor(const uint8_t min, const uint8_t spanMinMax) {
 }
 
 
-t_clr	seededNewColor(t_clr oldClr, const t_clrSet settings) {
-	const uint32_t	rnd = rand() % (settings.spanDelta * settings.spanDelta * settings.spanDelta);
-	uint32_t	deltaRed = (rnd % settings.spanDelta) - settings.delta;
-	uint32_t	deltaGreen = ((rnd / settings.spanDelta) % settings.spanDelta) - settings.delta;
-	uint32_t	deltaBlue = ((rnd / (settings.spanDelta * settings.spanDelta)) % settings.spanDelta) - settings.delta;
+t_clr	seededNewColor(t_clr oldClr, const t_clrSet set) {
+	const uint32_t	rnd = rand() % (set.spanDelta * set.spanDelta * set.spanDelta);
+	int32_t	deltaRed = (rnd % set.spanDelta) - set.delta;
+	int32_t	deltaGreen = ((rnd / set.spanDelta) % set.spanDelta) - set.delta;
+	int32_t	deltaBlue = ((rnd / (set.spanDelta * set.spanDelta)) % set.spanDelta) - set.delta;
 	
-	if (deltaRed + oldClr.r <= settings.min)		oldClr.r = settings.min;
-	else if (deltaRed + oldClr.r >= settings.max)	oldClr.r = settings.max;
+	if (deltaRed + oldClr.r <= set.min)		oldClr.r = set.min;
+	else if (deltaRed + oldClr.r >= set.max)	oldClr.r = set.max;
 	else											oldClr.r = deltaRed + oldClr.r;
-	if (deltaGreen + oldClr.g <= settings.min)		oldClr.g = settings.min;
-	else if (deltaGreen + oldClr.g >= settings.max)	oldClr.g = settings.max;
+	if (deltaGreen + oldClr.g <= set.min)		oldClr.g = set.min;
+	else if (deltaGreen + oldClr.g >= set.max)	oldClr.g = set.max;
 	else											oldClr.g = deltaGreen + oldClr.g;
-	if (deltaBlue + oldClr.b <= settings.min)		oldClr.b = settings.min;
-	else if (deltaBlue + oldClr.b >= settings.max)	oldClr.b = settings.max;
+	if (deltaBlue + oldClr.b <= set.min)		oldClr.b = set.min;
+	else if (deltaBlue + oldClr.b >= set.max)	oldClr.b = set.max;
 	else											oldClr.b = deltaBlue + oldClr.b;
 	return (oldClr);
 }
@@ -90,12 +90,11 @@ static struct s_span	_getSpanNeighbours(const size_t n, const uint8_t pLine[], c
 }
 
 static size_t _findParent(const uint8_t line[], const struct s_span pSpan) {
-	if (pSpan.start == pSpan.end)	return (pSpan.start);
-	for (size_t i = pSpan.start; i < pSpan.end; ++i) {
+	for (size_t i = pSpan.start; i <= pSpan.end; ++i) {
 		if (line[i / 8] & MASK(i % 8))
 			return (i);
 	}
-	return (pSpan.end);
+	return (pSpan.end + 1);
 }
 
 void	_fillClrLineEven(const uint8_t line[], const uint8_t prevLine[], const size_t arrWidth,
@@ -104,13 +103,23 @@ void	_fillClrLineEven(const uint8_t line[], const uint8_t prevLine[], const size
 		const struct s_span	arrSpan = _getSpanNeighbours(i, line, arrWidth);
 		const size_t	arrParent = _findParent(prevLine, arrSpan);
 		const struct s_span	clrSpan = {arrSpan.start * 2, arrSpan.end * 2};
-		const size_t	clrParent = 2 * arrParent;
+		size_t	clrParent = 2 * arrParent;
 
-		dstClr[clrParent] = seededNewColor(srcClr[clrParent], settings);
-		for (size_t d = 1; d <= clrParent - clrSpan.start; ++d) {
-			dstClr[clrParent - d] = seededNewColor(dstClr[clrParent - d + 1], settings);
+		// printf("%lu-%lu | %lu\n", arrSpan.start, arrSpan.end, arrParent);
+		// printf("%lu-%lu | %lu\n", clrSpan.start, clrSpan.end, clrParent);
+		if (arrParent <= arrSpan.end) {
+			dstClr[clrParent] = seededNewColor(srcClr[clrParent], settings);
+			for (size_t d = 1; d <= clrParent - clrSpan.start; ++d) {
+				dstClr[clrParent - d] = seededNewColor(dstClr[clrParent - d + 1], settings);
+			}
+		}
+		else {
+			clrParent = clrSpan.start;
+			dstClr[clrParent] = newColor(settings.min, settings.spanMinMax);
+			// printf("Gen: %lu (%u|%u|%u)\n", clrParent, dstClr[clrParent].r, dstClr[clrParent].g, dstClr[clrParent].b);
 		}
 		for (size_t d = 1; d <= clrSpan.end - clrParent; ++d) {
+			// printf("Gen: %lu base on %lu\n", clrParent + d, clrParent + d - 1);
 			dstClr[clrParent + d] = seededNewColor(dstClr[clrParent + d - 1], settings);
 		}
 		i = arrSpan.end + 1;
@@ -174,9 +183,8 @@ void	printTabColor(const int fdOut, const t_art tab) {
 			if (tab.arr[i + 1])
 				_fillClrLineOdd(tab.arr[i + 1], tab.width, clrL[1], clrL[0], clrWidth, tab.clrSetting);
 		}
+		// usleep(20000);
 	}
-	// fflush(fdOut);
-	// printTab(fdOut, tab);
 	free(clrL[0]);
 	free(clrL[1]);
 	(void)fdOut;

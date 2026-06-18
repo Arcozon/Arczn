@@ -31,6 +31,9 @@ const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const c
 			{'g', "-random", NULL, parsArg_genRandom},
 			{'g', "-ivy", NULL, parsArg_genIvy},
 			{'c', "-color", NULL, parsArg_printColor},
+			{'d', "-delta", checkArg_int, atoi},
+			{'m', "-min", checkArg_int, atoi},
+			{'M', "-max", checkArg_int, atoi},
 			{'h', "-help", NULL, NULL},
 	};
 	const size_t nArg = (sizeof(pArg) / sizeof(pArg[0]));
@@ -88,6 +91,12 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 				break;
 			case 'c':	art->print = arg->fnPars(optVal);
 				break;
+			case 'd':	art->clrSetting.delta = arg->fnPars(optVal);
+				break;
+			case 'M':	art->clrSetting.max = arg->fnPars(optVal);
+				break;
+			case 'm':	art->clrSetting.min = arg->fnPars(optVal);
+				break;
 			default:	fprintf(stderr, "Unknown opt `%s'\n", av[i]);
 				return (1);
 		}
@@ -96,17 +105,19 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 }
 
 void	_fillSettings(t_clrSet *set) {
-	set->spanMinMax = set->max - set->min;
+	if (set->max < set->min)
+		set->max = set->min;
+	set->spanMinMax = set->max - set->min + 1;
+	if (set->delta > set->spanMinMax)
+		set->delta = set->spanMinMax;
 	set->spanDelta = set->delta * 2 + 1;
+	// printf("%u-%u (%u) | %u (%u)\n", set->max, set->min, set->spanMinMax, set->delta, set->spanDelta);
 }
 
-size_t	_check(t_art *art) {
-	if (art->fd < 0)
-		return (1);
-	else if (art->width == 0)
-		return (1);
-	else if (art->height == 0)
-		return (1);
+size_t	_check(const t_art *art) {
+	if (art->fd < 0)			return (1);
+	else if (art->width == 0)	return (1);
+	else if (art->height == 0)	return (1);
 	return (0);
 }
 
