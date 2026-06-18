@@ -31,7 +31,8 @@ void	genTabIvy(t_art *tab) {
 	const size_t	width = tab->width;
 
 
-	for (size_t i = 0; i < height * 2 - 1; ++i) {
+	for (size_t i = height * 2 - 1; i > 0;) {
+		--i;
 		if (!(i & 1)){ // Horizontal Lines 
 			for (size_t j = 0; j < width / 8; ++j) {
 				tab->arr[i][j] = genNBit(8, tab->percent);
@@ -40,7 +41,7 @@ void	genTabIvy(t_art *tab) {
 				tab->arr[i][width / 8] = genNBit(width % 8, tab->percent);
 		} else {
 			for (size_t j = 0; j < width;) {
-				struct s_span s = getSpanNeighbours(j, tab->arr[i - 1], width);
+				struct s_span s = getSpanNeighbours(j, tab->arr[i + 1], width);
 				// printf("%lu Span [%lu]: %lu-%lu (%lu)\n", i - 1, j, s.start, s.end, s.end - s.start);
 				size_t res = rand() % (s.end - s.start + 1) + s.start;
 				tab->arr[i][res / 8] |= MASK(res % 8);
