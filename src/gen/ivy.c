@@ -1,7 +1,6 @@
 #include "arczn.h"
 
-
-int	_checkBox(size_t n, const uint8_t pLine[], const size_t width) {
+static int	_checkBox(size_t n, const uint8_t pLine[], const size_t width) {
 	if (n >= width - 1)
 		return (0);
 	return (pLine[n / 8] & (MASK(n % 8)));
@@ -11,7 +10,7 @@ struct s_span {
 	size_t start;
 	size_t end;
 };
-struct s_span	getSpanNeighbours(const size_t n, const uint8_t pLine[], const size_t width) {
+static struct s_span	getSpanNeighbours(const size_t n, const uint8_t pLine[], const size_t width) {
 	size_t	start;
 	size_t	end;
 
@@ -42,11 +41,9 @@ void	genTabIvy(t_art *tab) {
 		} else {
 			for (size_t j = 0; j < width;) {
 				struct s_span s = getSpanNeighbours(j, tab->arr[i + 1], width);
-				// printf("%lu Span [%lu]: %lu-%lu (%lu)\n", i - 1, j, s.start, s.end, s.end - s.start);
 				size_t res = rand() % (s.end - s.start + 1) + s.start;
 				tab->arr[i][res / 8] |= MASK(res % 8);
 				j = s.end + 1;
-				// break;
 			}
 		}
 	}

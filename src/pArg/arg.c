@@ -95,6 +95,11 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 	return (0);
 }
 
+void	_fillSettings(t_clrSet *set) {
+	set->spanMinMax = set->max - set->min;
+	set->spanDelta = set->delta * 2 + 1;
+}
+
 size_t	_check(t_art *art) {
 	if (art->fd < 0)
 		return (1);
@@ -110,6 +115,7 @@ size_t	init(const int ac, char *av[], t_art *art) {
 		return (1);
 	if (_check(art))
 		return (1);
+	_fillSettings(&art->clrSetting);
 	art->arr = allocArray(art->width, art->height);
 	if (!art->arr)
 		return (1);

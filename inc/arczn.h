@@ -36,9 +36,11 @@ enum e_printType {
 
 typedef struct s_clrSet	t_clrSet;
 struct s_clrSet {
-	uint8_t	min;
-	uint8_t	max;
-	uint8_t	delta;
+	uint8_t		min;
+	uint8_t		max;
+	uint8_t		delta;
+	uint8_t		spanMinMax;
+	uint32_t	spanDelta;
 };
 
 typedef struct s_art	t_art;
