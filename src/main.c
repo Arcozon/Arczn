@@ -35,7 +35,7 @@ void	selectPrintTab(t_art *tab) {
 #define DEFAULT_HEIGHT	5
 int main(int ac, char *av[], char *env[]) {
 	__attribute__((cleanup(freeArt)))
-	t_art	art	= {DEFAULT_PERCENT, G_RANDOM,
+	t_art	art	= {0, DEFAULT_PERCENT, G_RANDOM,
 		STDOUT_FILENO, {DEFAULT_MIN, DEFAULT_MAX, DEFAULT_DELTA, 0, 0}, P_NORMAL,
 		DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL};
 

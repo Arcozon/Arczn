@@ -45,6 +45,7 @@ struct s_clrSet {
 
 typedef struct s_art	t_art;
 struct s_art {
+	uint8_t		orphanPercent;
 	uint8_t		percent;
 	e_genType	gen;
 	

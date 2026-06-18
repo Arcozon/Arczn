@@ -24,6 +24,7 @@ uint8_t	**allocArray(const size_t width, const size_t height) {
 const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nxt) {
 	static const struct s_parsArg	pArg[] = {
 			{'p', "-percent", checkArg_int, atoi},
+			{'O', "-orphan", checkArg_int, atoi},
 			{'w', "-width", checkArg_int, atoi},
 			{'h', "-height", checkArg_int, atoi},
 			{'o', "-output", checkArg_output, parsArg_output},
@@ -80,6 +81,8 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 
 		switch (arg->c) {
 			case 'p':	art->percent = arg->fnPars(optVal);
+				break;
+			case 'O':	art->orphanPercent = arg->fnPars(optVal);
 				break;
 			case 'w':	art->width = arg->fnPars(optVal);
 				break;

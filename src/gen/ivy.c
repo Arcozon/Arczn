@@ -25,10 +25,11 @@ static struct s_span	getSpanNeighbours(const size_t n, const uint8_t pLine[], co
 	return ((struct s_span){start + 1, end});
 }
 
+
 void	genTabIvy(t_art *tab) {
 	const size_t	height = tab->height;
 	const size_t	width = tab->width;
-
+	const ssize_t	orphanPerc = tab->orphanPercent;
 
 	for (size_t i = height * 2 - 1; i > 0;) {
 		--i;
@@ -41,8 +42,10 @@ void	genTabIvy(t_art *tab) {
 		} else {
 			for (size_t j = 0; j < width;) {
 				struct s_span s = getSpanNeighbours(j, tab->arr[i + 1], width);
-				size_t res = rand() % (s.end - s.start + 1) + s.start;
-				tab->arr[i][res / 8] |= MASK(res % 8);
+				if ((rand() % 100) >= orphanPerc) {
+					size_t res = rand() % (s.end - s.start + 1) + s.start;
+					tab->arr[i][res / 8] |= MASK(res % 8);
+				}
 				j = s.end + 1;
 			}
 		}
