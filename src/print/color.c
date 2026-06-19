@@ -7,22 +7,19 @@ struct s_clr {
 	uint8_t	b;
 };
 
-t_clr	newColor(const uint8_t min, const uint8_t spanMinMax) {
-	const uint32_t	rnd = rand() % (spanMinMax * spanMinMax * spanMinMax);
-	
+t_clr	newColor(const uint8_t min, const uint8_t max) {
 	return ((t_clr){
-		min + (rnd) % spanMinMax,
-		min + (rnd / (spanMinMax)) % spanMinMax,
-		min + (rnd / (spanMinMax * spanMinMax)) % spanMinMax
+		aRandRange(min, max),
+		aRandRange(min, max),
+		aRandRange(min, max)
 	});
 }
 
 
 t_clr	seededNewColor(t_clr oldClr, const t_clrSet set) {
-	const uint32_t	rnd = rand() % (set.spanDelta * set.spanDelta * set.spanDelta);
-	int32_t	deltaRed = (rnd % set.spanDelta) - set.delta;
-	int32_t	deltaGreen = ((rnd / set.spanDelta) % set.spanDelta) - set.delta;
-	int32_t	deltaBlue = ((rnd / (set.spanDelta * set.spanDelta)) % set.spanDelta) - set.delta;
+	int32_t	deltaRed = aRand(set.spanDelta) - set.delta;
+	int32_t	deltaGreen = aRand(set.spanDelta) - set.delta;
+	int32_t	deltaBlue = aRand(set.spanDelta) - set.delta;
 	
 	if (deltaRed + oldClr.r <= set.min)		oldClr.r = set.min;
 	else if (deltaRed + oldClr.r >= set.max)	oldClr.r = set.max;
@@ -39,7 +36,7 @@ t_clr	seededNewColor(t_clr oldClr, const t_clrSet set) {
 void _fillFirstClrL(t_clr *clrL, const size_t sizeClrL, const uint8_t line[], const size_t sizeLine,
 		const t_clrSet settings) {
 	for (size_t i = 0; i < sizeClrL;) {
-		clrL[i] = newColor(settings.min, settings.spanMinMax);
+		clrL[i] = newColor(settings.min, settings.max);
 		++i;
 		for (size_t j = i / 2; j < sizeLine; ++j) {
 			if (line[j / 8] & MASK(j % 8)) {
@@ -105,8 +102,6 @@ void	_fillClrLineEven(const uint8_t line[], const uint8_t prevLine[], const size
 		const struct s_span	clrSpan = {arrSpan.start * 2, arrSpan.end * 2};
 		size_t	clrParent = 2 * arrParent;
 
-		// printf("%lu-%lu | %lu\n", arrSpan.start, arrSpan.end, arrParent);
-		// printf("%lu-%lu | %lu\n", clrSpan.start, clrSpan.end, clrParent);
 		if (arrParent <= arrSpan.end) {
 			dstClr[clrParent] = seededNewColor(srcClr[clrParent], settings);
 			for (size_t d = 1; d <= clrParent - clrSpan.start; ++d) {
@@ -115,11 +110,9 @@ void	_fillClrLineEven(const uint8_t line[], const uint8_t prevLine[], const size
 		}
 		else {
 			clrParent = clrSpan.start;
-			dstClr[clrParent] = newColor(settings.min, settings.spanMinMax);
-			// printf("Gen: %lu (%u|%u|%u)\n", clrParent, dstClr[clrParent].r, dstClr[clrParent].g, dstClr[clrParent].b);
+			dstClr[clrParent] = newColor(settings.min, settings.max);
 		}
 		for (size_t d = 1; d <= clrSpan.end - clrParent; ++d) {
-			// printf("Gen: %lu base on %lu\n", clrParent + d, clrParent + d - 1);
 			dstClr[clrParent + d] = seededNewColor(dstClr[clrParent + d - 1], settings);
 		}
 		i = arrSpan.end + 1;
@@ -183,9 +176,7 @@ void	printTabColor(const int fdOut, const t_art tab) {
 			if (tab.arr[i + 1])
 				_fillClrLineOdd(tab.arr[i + 1], tab.width, clrL[1], clrL[0], clrWidth, tab.clrSetting);
 		}
-		// usleep(20000);
 	}
 	free(clrL[0]);
 	free(clrL[1]);
-	(void)fdOut;
 }

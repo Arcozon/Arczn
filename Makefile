@@ -14,7 +14,7 @@ D_PRINT =  print/
 PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
 
 
-SRC =  $(PARG)  $(GEN)  $(PRINT)  main.c
+SRC =  $(PARG)  $(GEN)  $(PRINT)  main.c  random.c
 D_SRC = src/
 
 D_BUILD = .build/

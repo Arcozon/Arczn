@@ -58,6 +58,9 @@ struct s_art {
 	uint8_t	**arr;
 };
 
+size_t	aRand(const size_t range);
+size_t	aRandRange(const size_t min, const size_t max);
+
 size_t	init(const int ac, char *av[], t_art *art);
 void	printTab(const int fdOut, const t_art tab);
 void	printTabColor(const int fdOut, const t_art tab);
