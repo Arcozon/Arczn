@@ -9,17 +9,15 @@ D_GEN =  gen/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
 
-S_PRINT =  print.c  color.c
+S_PRINT =  print.c  color.c  frame.c
 D_PRINT =  print/
 PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
-
 
 SRC =  $(PARG)  $(GEN)  $(PRINT)  main.c  random.c
 D_SRC = src/
 
 D_BUILD = .build/
 OBJ =  $(addprefix $(D_BUILD), $(SRC:.c=.o))
-
 
 CC =  cc
 FLAGS = -Wall -Wextra -Werror -MMD -g -O3

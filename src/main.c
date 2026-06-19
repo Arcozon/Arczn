@@ -20,8 +20,8 @@ void	selectGenTab(t_art *tab) {
 
 typedef void	(*printTabFn)(const int, const t_art);
 void	selectPrintTab(t_art *tab) {
-	static const printTabFn _printTabFn[G_MAX] = {
-		printTab,	printTabColor
+	static const printTabFn _printTabFn[P_MAX] = {
+		printTab,	printTabColor,	printFrame
 	};
 	(*_printTabFn[tab->print])(tab->fd, *tab);
 }

@@ -41,3 +41,8 @@ int	parsArg_printColor(const char *str) {
 	(void)str;
 	return (P_COLOR);
 }
+
+int	parsArg_printFrame(const char *str) {
+	(void)str;
+	return (P_FRAME);
+}

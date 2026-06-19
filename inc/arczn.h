@@ -30,6 +30,8 @@ enum e_printType {
 # define P_NORMAL	P_NORMAL
 	P_COLOR,
 # define P_COLOR	P_COLOR
+	P_FRAME,
+# define P_FRAME	P_FRAME
 	P_MAX
 # define P_MAX		P_MAX
 };
@@ -64,6 +66,7 @@ size_t	aRandRange(const size_t min, const size_t max);
 size_t	init(const int ac, char *av[], t_art *art);
 void	printTab(const int fdOut, const t_art tab);
 void	printTabColor(const int fdOut, const t_art tab);
+void	printFrame(const int fdOut, const t_art tab);
 
 uint8_t	genNBit(const uint8_t nBit, const uint8_t percent);
 void	genTabRandom(t_art *tab);

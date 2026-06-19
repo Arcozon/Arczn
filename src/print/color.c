@@ -23,13 +23,13 @@ t_clr	seededNewColor(t_clr oldClr, const t_clrSet set) {
 	
 	if (deltaRed + oldClr.r <= set.min)		oldClr.r = set.min;
 	else if (deltaRed + oldClr.r >= set.max)	oldClr.r = set.max;
-	else											oldClr.r = deltaRed + oldClr.r;
+	else										oldClr.r = deltaRed + oldClr.r;
 	if (deltaGreen + oldClr.g <= set.min)		oldClr.g = set.min;
 	else if (deltaGreen + oldClr.g >= set.max)	oldClr.g = set.max;
 	else											oldClr.g = deltaGreen + oldClr.g;
 	if (deltaBlue + oldClr.b <= set.min)		oldClr.b = set.min;
 	else if (deltaBlue + oldClr.b >= set.max)	oldClr.b = set.max;
-	else											oldClr.b = deltaBlue + oldClr.b;
+	else										oldClr.b = deltaBlue + oldClr.b;
 	return (oldClr);
 }
 
@@ -117,11 +117,7 @@ void	_fillClrLineEven(const uint8_t line[], const uint8_t prevLine[], const size
 		}
 		i = arrSpan.end + 1;
 	}
-	(void)settings;
-	(void)srcClr;
-	(void)dstClr;
 	(void)clrWidth;
-	(void)prevLine;
 }
 
 #define FULL_ACHAR	"██"

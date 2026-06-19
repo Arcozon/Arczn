@@ -8,7 +8,7 @@ typedef char	aChar[sizeof("██") - 1];
 static const aChar fullAChar __attribute__((nonstring)) = _FULLACHAR;
 static const aChar emptyAChar __attribute__((nonstring)) = _MTYACHAR;
 
-void	_printLineEven(const int fdOut, const uint8_t lineTab[], const size_t _width) {
+static void	_printLineEven(const int fdOut, const uint8_t lineTab[], const size_t _width) {
 	static const aChar	bLine[]  __attribute__((nonstring)) = {
 		"██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██"};
 	aChar line[sizeof(bLine) / sizeof(aChar)]  __attribute__((nonstring)) = {};
@@ -36,7 +36,7 @@ void	_printLineEven(const int fdOut, const uint8_t lineTab[], const size_t _widt
 	write(fdOut, "\n", 1);
 }
 
-void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t width) {
+static void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t width) {
 	static const aChar	bLine[]  __attribute__((nonstring)) = {
 		_MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR,
 		_MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR
@@ -65,7 +65,6 @@ void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t width)
 }
 
 void	printTab(const int fdOut, const t_art tab) {
-	(void)fullAChar;
 	for (size_t i = 0; tab.arr[i]; ++i) {
 		if (i & 1) {
 			_printLineOdd(fdOut, tab.arr[i], tab.width);

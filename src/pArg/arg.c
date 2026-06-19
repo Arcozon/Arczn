@@ -32,6 +32,7 @@ const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const c
 			{'g', "-random", NULL, parsArg_genRandom},
 			{'g', "-ivy", NULL, parsArg_genIvy},
 			{'c', "-color", NULL, parsArg_printColor},
+			{'f', "-frame", NULL, parsArg_printFrame},
 			{'d', "-delta", checkArg_int, atoi},
 			{'m', "-min", checkArg_int, atoi},
 			{'M', "-max", checkArg_int, atoi},
@@ -93,6 +94,8 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 			case 'g':	art->gen = arg->fnPars(optVal);
 				break;
 			case 'c':	art->print = arg->fnPars(optVal);
+				break;
+			case 'f':	art->print = arg->fnPars(optVal);
 				break;
 			case 'd':	art->clrSetting.delta = arg->fnPars(optVal);
 				break;
