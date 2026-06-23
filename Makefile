@@ -13,7 +13,11 @@ S_PRINT =  print.c  color.c  frame.c
 D_PRINT =  print/
 PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
 
-SRC =  $(PARG)  $(GEN)  $(PRINT)  main.c  random.c
+S_UTILS =  random.c  color.c
+D_UTILS =  utils/
+UTILS = $(addprefix $(D_UTILS), $(S_UTILS))
+
+SRC =  $(PARG)  $(GEN)  $(PRINT)  $(UTILS)  main.c
 D_SRC = src/
 
 D_BUILD = .build/

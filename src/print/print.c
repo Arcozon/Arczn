@@ -14,7 +14,7 @@ static void	_printLineEven(const int fdOut, const uint8_t lineTab[], const size_
 	aChar line[sizeof(bLine) / sizeof(aChar)]  __attribute__((nonstring)) = {};
 	const size_t width = _width - 1;
 
-	for (uint8_t i = 0; i < (width / 8); ++i) {
+	for (uint64_t i = 0; i < (width / 8); ++i) {
 		memcpy(line, bLine, sizeof(bLine));
 		for (uint8_t j = 0; j < 8; ++j) {	
 			if (!(lineTab[i] & MASK(j))) {
@@ -43,7 +43,7 @@ static void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t
 	};
 	aChar line[sizeof(bLine) / sizeof(aChar)]  __attribute__((nonstring)) = {};
 
-	for (uint8_t i = 0; i < (width / 8); ++i) {
+	for (uint64_t i = 0; i < (width / 8); ++i) {
 		memcpy(line, bLine, sizeof(bLine));
 		for (uint8_t j = 0; j < 8; ++j) {	
 			if ((lineTab[i] & MASK(j))) {

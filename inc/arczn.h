@@ -9,12 +9,15 @@
 # include <fcntl.h>
 # include <time.h>
 
+# include "types.h"
+# include "color.h"
+# include "random.h"
+
 # define MASK(bit)			(1 << (bit))
 # define GETB(var, bit)		((var) & MASK(bit))
 # define SETB(var, bit)		((var) |= MASK(bit))
 # define UNSETB(var, bit)	((var) &= ~MASK(bit))
 
-typedef enum e_genType	e_genType;
 enum e_genType {
 	G_RANDOM = 0,
 # define G_RANDOM	G_RANDOM
@@ -24,7 +27,6 @@ enum e_genType {
 # define G_MAX		G_MAX
 };
 
-typedef enum e_printType	e_printType;
 enum e_printType {
 	P_NORMAL = 0,
 # define P_NORMAL	P_NORMAL
@@ -36,7 +38,6 @@ enum e_printType {
 # define P_MAX		P_MAX
 };
 
-typedef struct s_clrSet	t_clrSet;
 struct s_clrSet {
 	uint8_t		min;
 	uint8_t		max;
@@ -45,7 +46,6 @@ struct s_clrSet {
 	uint32_t	spanDelta;
 };
 
-typedef struct s_art	t_art;
 struct s_art {
 	uint8_t		orphanPercent;
 	uint8_t		percent;
@@ -59,9 +59,6 @@ struct s_art {
 	size_t	height;
 	uint8_t	**arr;
 };
-
-size_t	aRand(const size_t range);
-size_t	aRandRange(const size_t min, const size_t max);
 
 size_t	init(const int ac, char *av[], t_art *art);
 void	printTab(const int fdOut, const t_art tab);

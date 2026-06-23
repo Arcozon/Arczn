@@ -14,9 +14,14 @@ struct s_node {
 	e_nodeType	nType;
 };
 
-struct wfc
-{
-	
+typedef struct s_form	t_form;
+struct s_form {
+	uint64_t	forms;
+};
+
+#define	WFC_ZONE_SIZE	64 
+struct wfcZone {
+	t_form	*case[WFC_ZONE_SIZE][WFC_ZONE_SIZE];
 };
 
 

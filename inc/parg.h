@@ -1,7 +1,7 @@
 #ifndef PARG_H
 # define PARG_H
 
-#include <ctype.h>
+#include 	"types.h"
 
 struct s_parsArg {
 	char	c;
