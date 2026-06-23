@@ -115,13 +115,16 @@ void	genTabPetri(t_art *tab) {
 	// return ;	// EXIT
 	while (petri.ht->nItems != 0) {
 		const size_t	rItem = aRand(petri.ht->nItems);
-		t_petriPoint	*node = petri.vec->arr + rItem;
+		t_petriPoint	*node = petri.vec->arr + rItem * sizeof(t_petriPoint);
 		
 		printf("[%lu, %lu]:", node->x, node->y);
 		fflush(stdout);
 		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, node->x, node->y);
 		printf("%u\n", poss);
 		fflush(stdout);
+		// chose one poss
+		// expand
+		// add new link if it has poss
 		return;
 	}
 	free(petri.vec);
