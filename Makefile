@@ -4,16 +4,15 @@ S_PARG =  arg.c  pars.c  check.c
 D_PARG =  pArg/
 PARG = $(addprefix $(D_PARG), $(S_PARG))
 
-S_GEN =  random.c  ivy.c
+S_GEN =  random.c  ivy.c  petri.c
 D_GEN =  gen/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
-
 
 S_PRINT =  print.c  color.c  frame.c
 D_PRINT =  print/
 PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
 
-S_UTILS =  random.c  color.c
+S_UTILS =  random.c  color.c  hashtable.c  vector.c
 D_UTILS =  utils/
 UTILS = $(addprefix $(D_UTILS), $(S_UTILS))
 

@@ -4,6 +4,7 @@
 # include <stdint.h>
 # include <stddef.h>
 # include <ctype.h>
+# include <stdbool.h>
 
 typedef enum e_argType		e_argType;
 typedef enum e_genType		e_genType;

@@ -13,7 +13,7 @@ void	freeArt(t_art *tab) {
 typedef void	(*genTabFn)(t_art *);
 void	selectGenTab(t_art *tab) {
 	static const genTabFn _genTabFn[G_MAX] = {
-		genTabRandom,	genTabIvy
+		genTabRandom,	genTabIvy,	genTabPetri
 	};
 	(*_genTabFn[tab->gen])(tab);
 }

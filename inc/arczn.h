@@ -70,5 +70,6 @@ void	printFrame(const int fdOut, const t_art tab);
 uint8_t	genNBit(const uint8_t nBit, const uint8_t percent);
 void	genTabRandom(t_art *tab);
 void	genTabIvy(t_art *tab);
+void	genTabPetri(t_art *tab);
 
 #endif
