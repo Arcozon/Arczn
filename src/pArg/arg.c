@@ -21,47 +21,84 @@ uint8_t	**allocArray(const size_t width, const size_t height) {
 	return (arr);
 }
 
-const struct s_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nxt) {
-	static const struct s_parsArg	pArg[] = {
-			{'p', "-percent", checkArg_int, atoi},
-			{'O', "-orphan", checkArg_int, atoi},
-			{'w', "-width", checkArg_int, atoi},
-			{'h', "-height", checkArg_int, atoi},
-			{'o', "-output", checkArg_output, parsArg_output},
-			{'g', "-gen", checkArg_gen, parsArg_gen},
-			{'g', "-random", NULL, parsArg_genRandom},
-			{'g', "-ivy", NULL, parsArg_genIvy},
-			{'c', "-color", NULL, parsArg_printColor},
-			{'f', "-frame", NULL, parsArg_printFrame},
-			{'d', "-delta", checkArg_int, atoi},
-			{'m', "-min", checkArg_int, atoi},
-			{'M', "-max", checkArg_int, atoi},
-			{'h', "-help", NULL, NULL},
+static const char	*_strsPercent[] = {"-p", "--percent"};
+static const char	*_strsOrphan[] = {"-O", "--orphan"};
+static const char	*_strsWidth[] = {"-w", "--width"};
+static const char	*_strsHeight[] = {"-h", "--height"}	;
+static const char	*_strsOutput[] = {"-o", "--output"};
+static const char	*_strsGeneration[] = {"-g", "--gen", "--generation"};
+static const char	*_strsGenRandom[] = {"--random"};
+static const char	*_strsGenIvy[] = {"--ivy"};
+static const char	*_strsGenPetri[] = {"--petri"};
+static const char	*_strsColor[] = {"-c", "--color"};
+static const char	*_strsFrame[] = {"--frame"};
+static const char	*_strsClrDelta[] = {"-d", "--delta"};
+static const char	*_strsClrMin[] = {"-m", "--min"};
+static const char	*_strsClrMax[] = {"-M", "--max"};
+static const char	*_strsHelp[] =	{"--help"} ;
+
+const t_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nxt) {
+	static const t_parsArg	pArg[__AT_MAX__] = {
+		[AT_PERCENT] = {.argType = AT_PERCENT, .fnCheck = checkArg_int, .fnPars  = atoi,
+			.nStrs = sizeof(_strsPercent) / sizeof(char *), .strs  = _strsPercent},
+		[AT_ORPHAN_PERCENT] = {.argType = AT_ORPHAN_PERCENT, .fnCheck = checkArg_int, .fnPars  = atoi,
+			.nStrs = sizeof(_strsOrphan) / sizeof(char *), .strs  = _strsOrphan},
+		[AT_WIDTH] = {.argType = AT_WIDTH, .fnCheck = checkArg_int, .fnPars  = atoi,
+			.nStrs = sizeof(_strsWidth) / sizeof(char *), .strs  = _strsWidth},
+		[AT_HEIGHT] = {.argType = AT_HEIGHT, .fnCheck = checkArg_int, .fnPars  = atoi,
+			.nStrs = sizeof(_strsHeight) / sizeof(char *), .strs  = _strsHeight},
+		[AT_OUTPUT] = {.argType = AT_OUTPUT, .fnCheck = checkArg_output, .fnPars  = parsArg_output,
+			.nStrs = sizeof(_strsOutput) / sizeof(char *), .strs  = _strsOutput},
+		[AT_GENERATION] = {.argType = AT_GENERATION, .fnCheck = checkArg_gen, .fnPars  = parsArg_gen,
+			.nStrs = sizeof(_strsGeneration) / sizeof(char *), .strs  = _strsGeneration},
+		[AT_GEN_RANDOM] = {.argType = AT_GEN_RANDOM, .fnCheck = NULL, .fnPars  = parsArg_genRandom,
+			.nStrs = sizeof(_strsGenRandom) / sizeof(char *), .strs  = _strsGenRandom},
+		[AT_GEN_IVY] = {.argType = AT_GEN_IVY, .fnCheck = NULL, .fnPars  = parsArg_genIvy,
+			.nStrs = sizeof(_strsGenIvy) / sizeof(char *), .strs  = _strsGenIvy},
+		[AT_GEN_PETRI] = {.argType = AT_GEN_PETRI, .fnCheck = NULL, .fnPars  = parsArg_genPetri,
+			.nStrs = sizeof(_strsGenPetri) / sizeof(char *), .strs  = _strsGenPetri},
+		[AT_COLOR] = {.argType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
+			.nStrs = sizeof(_strsColor) / sizeof(char *), .strs  = _strsColor},
+		[AT_FRAME] = {.argType = AT_FRAME, .fnCheck = NULL, .fnPars  = parsArg_printFrame,
+			.nStrs = sizeof(_strsFrame) / sizeof(char *), .strs  = _strsFrame},
+		[AT_CLR_DELTA] = {.argType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = atoi,
+			.nStrs = sizeof(_strsClrDelta) / sizeof(char *), .strs  = _strsClrDelta},
+		[AT_CLR_MIN] = {.argType = AT_CLR_MIN, .fnCheck = checkArg_int, .fnPars  = atoi,
+			.nStrs = sizeof(_strsClrMin) / sizeof(char *), .strs  = _strsClrMin},
+		[AT_CLR_MAX] = {.argType = AT_CLR_MAX, .fnCheck = checkArg_int, .fnPars  = atoi,
+			.nStrs = sizeof(_strsClrMax) / sizeof(char *), .strs  = _strsClrMax},
+		[AT_HELP] = {.argType = AT_HELP, .fnCheck = NULL, .fnPars  = NULL,
+			.nStrs = sizeof(_strsHelp) / sizeof(char *), .strs  = _strsHelp},
 	};
-	const size_t nArg = (sizeof(pArg) / sizeof(pArg[0]));
 	size_t	i = 0;
+	size_t	j = 0;
 
 	*pStr = NULL;
-	if (str[0] != '-')
-		return (NULL);
-	for (i = 0; i < nArg; ++i) {
-		if (!strcmp(&str[1], pArg[i].str)) {
-			break ;
-		} else if (str[1] == pArg[i].c) {
-			if (str[2]) {
-				*pStr = &str[2];
+	for (i = 0; i < __AT_MAX__; ++i) {
+		for (j = 0; j < pArg[i].nStrs; ++j) {
+			const char	*toCmp = pArg[i].strs[j];
+			if (!strncmp(toCmp, "--", 2)) {	// If starts with '--'
+				if (!strcmp(toCmp, str)) {
+					break ;
+				}
+			} else {	// Starts with -
+				if (!strncmp(toCmp, str, strlen(toCmp))) {
+					if (str[strlen(toCmp)])
+						*pStr = &str[strlen(toCmp)];
+					break ;
+				}
 			}
-			break ;
 		}
+		if (j != pArg[i].nStrs)	// Found Match
+			break ;
 	}
-	if (i == nArg)
+	if (i == __AT_MAX__)
 		return (NULL);
 	if (pArg[i].fnCheck) {
 		if (!*pStr)
 			*pStr = nxt;
 		if (!*pStr || pArg[i].fnCheck(*pStr))
 			return (NULL);
-
 	}
 	return (&pArg[i]);
 }
@@ -80,28 +117,29 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 			++i;
 		}
 
-		switch (arg->c) {
-			case 'p':	art->percent = arg->fnPars(optVal);
+		switch (arg->argType) {
+			case AT_PERCENT:	art->percent = arg->fnPars(optVal);
 				break;
-			case 'O':	art->orphanPercent = arg->fnPars(optVal);
+			case AT_ORPHAN_PERCENT:	art->orphanPercent = arg->fnPars(optVal);
 				break;
-			case 'w':	art->width = arg->fnPars(optVal);
+			case AT_WIDTH:	art->width = arg->fnPars(optVal);
 				break;
-			case 'h':	art->height = arg->fnPars(optVal);
+			case AT_HEIGHT:	art->height = arg->fnPars(optVal);
 				break;
-			case 'o':	art->fd = arg->fnPars(optVal);
+			case AT_OUTPUT:	art->fd = arg->fnPars(optVal);
 				break;
-			case 'g':	art->gen = arg->fnPars(optVal);
+			case AT_GENERATION:
+			case AT_GEN_IVY:
+			case AT_GEN_PETRI:	art->gen = arg->fnPars(optVal);
 				break;
-			case 'c':	art->print = arg->fnPars(optVal);
+			case AT_COLOR:
+			case AT_FRAME:	art->print = arg->fnPars(optVal);
 				break;
-			case 'f':	art->print = arg->fnPars(optVal);
+			case AT_CLR_DELTA:	art->clrSetting.delta = arg->fnPars(optVal);
 				break;
-			case 'd':	art->clrSetting.delta = arg->fnPars(optVal);
+			case AT_CLR_MIN:	art->clrSetting.max = arg->fnPars(optVal);
 				break;
-			case 'M':	art->clrSetting.max = arg->fnPars(optVal);
-				break;
-			case 'm':	art->clrSetting.min = arg->fnPars(optVal);
+			case AT_CLR_MAX:	art->clrSetting.min = arg->fnPars(optVal);
 				break;
 			default:	fprintf(stderr, "Unknown opt `%s'\n", av[i]);
 				return (1);

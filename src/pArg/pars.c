@@ -23,6 +23,11 @@ int	parsArg_genIvy(const char *str) {
 	(void)str;
 	return (G_IVY);
 }
+int	parsArg_genPetri(const char *str) {
+	(void)str;
+	return (G_PETRI);
+}
+
 
 int	parsArg_gen(const char *str) {
 	static const struct s_pType	typeList[G_MAX] = {

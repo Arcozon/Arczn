@@ -23,6 +23,8 @@ enum e_genType {
 # define G_RANDOM	G_RANDOM
 	G_IVY,
 # define G_IVY		G_IVY
+	G_PETRI,
+# define G_PETRI	G_PETRI
 	G_MAX
 # define G_MAX		G_MAX
 };
