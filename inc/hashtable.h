@@ -13,16 +13,15 @@ struct s_bucket {
 };
 
 struct s_hashTable {
-	t_bucket	**buckets;
-	size_t		nBuckets;
-	
-	size_t		nItems;
-
 	size_t	(*hashFn)(const void *);
-
 	void	*(*dupFn)(const void *);
 	bool	(*cmpFn)(const void *, const void *);
 	void	(*freeFn)(void *);
+	
+	size_t		nBuckets;
+	
+	size_t		nItems;
+	t_bucket	*buckets[];
 };
 
 t_ht	*ht_create(const size_t,
@@ -37,3 +36,4 @@ void	*ht_get(t_ht *ht, const void *);
 void	ht_rm(t_ht *ht, const void *);
 
 #endif
+

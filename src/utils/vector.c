@@ -19,6 +19,7 @@ t_vec	*vec_create(const size_t sizeOfType) {
 };
 
 void	vec_destroy(t_vec *vec) {
+	if (!vec)	return ;
 	free(vec->arr);
 	free(vec);
 }
@@ -37,11 +38,21 @@ void	*vec_add(t_vec *vec, const void *val) {
 
 void	vec_rm(t_vec *vec, const size_t index) {
 	if (index >= vec->size) {
-		fprintf(stderr, "Vector error: Index out of bound\n");
+		fprintf(stderr, "Vector error (rm): Index out of bound\n");
+		exit(2);
 		return ;
 	}
 	if (index + 1 != vec->size) {
-		memcpy(vec->arr + (index * vec->sizeOfType), vec->arr + ((vec->size - 1) * vec->sizeOfType), vec->sizeOfType);
+		memmove(vec->arr + (index * vec->sizeOfType), vec->arr + ((vec->size - 1) * vec->sizeOfType), vec->sizeOfType);
 	}
 	--vec->size;
+}
+
+void	*vec_get(t_vec *vec, const size_t index) {
+	if (index >= vec->size) {
+		fprintf(stderr, "Vector error (get): Index out of bound\n");
+		exit(2);
+		return (NULL);
+	}
+	return (vec->arr + index * vec->sizeOfType);
 }

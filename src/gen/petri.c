@@ -27,7 +27,6 @@ void	*petriDup(const void *_toDup) {
 
 	if (!res)	return (NULL);
 	*res = *toDup;
-	// printf("%lu %lu | %lu %lu\n", toDup->x, toDup->y, res->x, res->y);
 	return (res);
 }
 
@@ -37,32 +36,35 @@ bool	petriCmp(const void *d1, const void *d2) {
 	return (!(p1->x == p2->x && p1->y == p2->y));
 }
 
-void	*petriAdd(t_petri *petri, const t_petriPoint *p) {
-	// static int i =0;
-	void	*search = ht_get(petri->ht, p);
+void	*petriAdd(t_petri *petri, const t_petriPoint p) {
+	void	*search = ht_get(petri->ht, &p);
 
 	if (!search) {
-		search = ht_add(petri->ht, p);
+		search = ht_add(petri->ht, &p);
 		vec_add(petri->vec, search);
-		printf("added [%lu, %lu]\n", ((t_petriPoint *)search)->x, ((t_petriPoint *)search)->y);
-		// t_petriPoint	*node = petri->vec->arr + i * sizeof(t_petriPoint);
-		// printf("vec[%i] [%lu, %lu]\n", i, node->x, node->y);
-		// ++i;
-	} else {
-		// printf("found [%lu, %lu]\n", p->x, p->y);
 	}
 	return (search);
+}
+
+void	petriRm(t_petri *petri, const size_t index, const void *item) {
+	if (item != NULL) {
+		ht_rm(petri->ht, item);
+	} else {
+		ht_rm(petri->ht, vec_get(petri->vec, index));
+	}
+	vec_rm(petri->vec, index);
 }
 
 __attribute__((always_inline))
 static inline bool	_hasNeighbour(uint8_t *arr[], const size_t width, const size_t height, const size_t x, const size_t _y) {
 	const size_t y = 2 * _y;
-	
-	if (x != 0) { // Check left
-		const size_t	tX = x -1;
+
+	if (x != 0) {
+		const size_t	tX = x - 1;
 		if (arr[y][tX / 8] & MASK(tX % 8))
 			return (true);
-	} else if (x < width) {
+	}
+	if (x + 1 < width) {
 		if (arr[y][x / 8] & MASK(x % 8))
 			return (true);
 	}
@@ -70,8 +72,9 @@ static inline bool	_hasNeighbour(uint8_t *arr[], const size_t width, const size_
 		const size_t tY = y - 1;
 		if (arr[tY][x / 8] & MASK(x % 8))
 			return (true);
-	} else if (_y < height) {
-		if (arr[y][x / 8] & MASK(x % 8))
+	}
+	if (_y + 1 < height) {
+		if (arr[y + 1][x / 8] & MASK(x % 8))
 			return (true);
 	}
 	return (false);
@@ -84,11 +87,76 @@ uint8_t	getPossibility(uint8_t *arr[], const size_t width, const size_t height, 
 		if (!_hasNeighbour(arr, width, height, x - 1, y))
 			res |= MASK(LEFT);
 	}
+	if (x + 1 < width) { // Check right
+		if (!_hasNeighbour(arr, width, height, x + 1, y))
+			res |= MASK(RIGHT);
+	}
+	if (y != 0) { // Check up
+		if (!_hasNeighbour(arr, width, height, x, y - 1))
+			res |= MASK(UP);
+	}
+	if (y + 1 < height) { // Check down
+		// printf("Looking don\n");
+		if (!_hasNeighbour(arr, width, height, x, y + 1))
+			res |= MASK(DOWN);
+	}
 	return (res);
 }
 
+__always_inline
+uint8_t	_choseOnePossibility(const uint8_t poss, const uint8_t nPoss) {	
+	if (nPoss == 1)
+		return (__builtin_ctz(poss));
+	uint8_t	r = aRand(nPoss);
+	uint8_t	i;
+	for (i = 0; i < 4; ++i) {
+		if (poss & MASK(i)) {
+			if (!r) {
+				return (i);
+			}
+			--r;
+		}
+	}
+	return (i);
+}
+
+void	_joinPoint(t_petri *petri, const t_petriPoint *node, const uint8_t chose, uint8_t *tab[]) {
+	const size_t	bX = node->x;
+	const size_t	bY = node->y * 2;
+
+	if (chose == UP) {
+		tab[bY - 1][bX / 8] |= MASK(bX % 8);
+		petriAdd(petri, (t_petriPoint){bX, node->y - 1});
+	} else if (chose == DOWN) {
+		tab[bY + 1][bX / 8] |= MASK(bX % 8);
+		petriAdd(petri, (t_petriPoint){bX, node->y + 1});
+	} else if (chose == LEFT) {
+		const size_t	nX = bX - 1;
+		tab[bY][nX / 8] |= MASK(nX % 8);
+		petriAdd(petri, (t_petriPoint){nX, node->y});
+	} else if (chose == RIGHT) {
+		const size_t	nX = bX;
+		tab[bY][nX / 8] |= MASK(nX % 8);
+		petriAdd(petri, (t_petriPoint){bX + 1, node->y});
+	} else {
+		printf("Erorr\n");
+	}(void)petri;
+}
+
+
+static char trad[5] = "ULDR";
+char *strPoss(uint8_t poss) {
+	static char	c[5] = {};
+	for (int i = 0; i < 4 ; ++i) {
+		c[i] = ' ';
+		if (poss & MASK(i))
+			c[i] = trad[i];
+	}
+	return c;
+}
+
 void	genTabPetri(t_art *tab) {
-	static const size_t	nDot = 15;
+	static const size_t	nDot = 10;
 	t_petri	petri = {};
 
 	petri.ht = ht_create((tab->width * tab->height) / 8 + 4,
@@ -96,37 +164,39 @@ void	genTabPetri(t_art *tab) {
 	petri.vec = vec_create(sizeof(t_petriPoint));
 	
 	if (!petri.ht || !petri.vec) {
-		free(petri.vec);
-		free(petri.ht);
+		vec_destroy(petri.vec);
+		ht_destroy(petri.ht);
 		return ;
 	}
-
-	printf("[%lu, %lu]\n", tab->width, tab->height);
 	for (size_t i = 0; i < nDot; ++i) {
 		const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
-		petriAdd(&petri, &p);
+		petriAdd(&petri, p);
+		// tab->arrClr[p.y * 2][p.x * 2] = newColor()
 	}
-	printf(" -- \n");
-	for (size_t i = 0; i < petri.vec->size; ++i) {
-		t_petriPoint	*node = petri.vec->arr + i * sizeof(t_petriPoint);
-		
-		printf("[%lu, %lu]\n", node->x, node->y);
-	}
-	// return ;	// EXIT
+	// printf(" -- \n");
 	while (petri.ht->nItems != 0) {
 		const size_t	rItem = aRand(petri.ht->nItems);
-		t_petriPoint	*node = petri.vec->arr + rItem * sizeof(t_petriPoint);
-		
-		printf("[%lu, %lu]:", node->x, node->y);
-		fflush(stdout);
+		t_petriPoint	*node = vec_get(petri.vec, rItem);
 		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, node->x, node->y);
-		printf("%u\n", poss);
+		const uint8_t	nPoss = __builtin_popcount(poss);
+		
+		// printf("[%lu, %lu]: %s | %u \n", node->x, node->y, strPoss(poss), nPoss);
+		
+		if (nPoss == 0) {
+			petriRm(&petri, rItem, node);
+			continue;
+		} else {
+			const int  chose = _choseOnePossibility(poss, nPoss);
+			// printf("[%lu, %lu]: %s | %c \n", node->x, node->y, strPoss(poss), trad[chose]);
+			
+			_joinPoint(&petri, node, chose, tab->arr);
+			if (nPoss == 1) {
+				petriRm(&petri, rItem, node);
+			}
+		}
 		fflush(stdout);
-		// chose one poss
-		// expand
-		// add new link if it has poss
-		return;
 	}
-	free(petri.vec);
-	free(petri.ht);
+	// write(1, "\n", 1);
+	vec_destroy(petri.vec);
+	ht_destroy(petri.ht);
 }

@@ -1,17 +1,15 @@
 #include "hashtable.h"
 
+#include "stdio.h"
+
 t_ht	*ht_create(const size_t size,
 		size_t (*hashFn)(const void *),
 		void	*(*dupFn)(const void *),
 		bool (*cmpFn)(const void *, const void *),
 		void (*freeFn)(void *)) {
-	t_ht *res = malloc(sizeof(*res));
+	t_ht *res = calloc(1, sizeof(*res) + size * sizeof(t_bucket *));
 
-	if (res == NULL)
-		return (NULL);
-	res->buckets = calloc(size, sizeof(res->buckets[0]));
-	if (res->buckets == NULL) {
-		free(res);
+	if (res == NULL) {
 		return (NULL);
 	}
 	res->nBuckets = size;
@@ -25,6 +23,7 @@ t_ht	*ht_create(const size_t size,
 }
 
 void	ht_destroy(t_ht *ht) {
+	if (!ht)	return ;
 	for (size_t i = 0; i < ht->nBuckets; ++i) {
 		t_bucket	*item = ht->buckets[i];
 		t_bucket	*next;
@@ -36,7 +35,6 @@ void	ht_destroy(t_ht *ht) {
 			item = next;
 		}
 	}
-	free(ht->buckets);
 	free(ht);
 }
 
@@ -62,20 +60,30 @@ void	*ht_add(t_ht *ht, const void *data) {
 	return (new->data);
 }
 
+// typedef struct s_petriPoint {
+// 	size_t	x;
+// 	size_t	y;
+// }	t_petriPoint;
+
 void	ht_rm(t_ht *ht, const void *data) {
 	const size_t	hash = ht->hashFn(data);
 	t_bucket	**pItem = &ht->buckets[hash % ht->nBuckets];
 	
 	while (*pItem != NULL) {
+		// t_petriPoint *a = (*pItem)->data;
+		// printf("Item %lu %lu\n", a->x, a->y);
 		if (!ht->cmpFn((*pItem)->data, data)) {
 			t_bucket	*item = *pItem;
-
+			
 			*pItem = item->next;
 			ht->freeFn(item->data);
 			free(item);
 			--ht->nItems;
+			// printf("Rm hash");
 			return ;
 		}
+		// printf("Next\n");
+		pItem = &(*pItem)->next;
 	}
 }
 

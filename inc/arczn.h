@@ -60,6 +60,10 @@ struct s_art {
 	size_t	width;
 	size_t	height;
 	uint8_t	**arr;
+	
+	size_t	widthClr;
+	size_t	heightClr;
+	t_clr	**arrClr;
 };
 
 size_t	init(const int ac, char *av[], t_art *art);

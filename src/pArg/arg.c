@@ -133,13 +133,13 @@ size_t	_parsArg(const int ac, char *av[], t_art *art) {
 			case AT_GEN_PETRI:	art->gen = arg->fnPars(optVal);
 				break;
 			case AT_COLOR:
-			case AT_FRAME:	art->print = arg->fnPars(optVal);
+			case AT_FRAME:		art->print = arg->fnPars(optVal);
 				break;
 			case AT_CLR_DELTA:	art->clrSetting.delta = arg->fnPars(optVal);
 				break;
-			case AT_CLR_MIN:	art->clrSetting.max = arg->fnPars(optVal);
+			case AT_CLR_MIN:	art->clrSetting.min = arg->fnPars(optVal);
 				break;
-			case AT_CLR_MAX:	art->clrSetting.min = arg->fnPars(optVal);
+			case AT_CLR_MAX:	art->clrSetting.max = arg->fnPars(optVal);
 				break;
 			default:	fprintf(stderr, "Unknown opt `%s'\n", av[i]);
 				return (1);
@@ -165,6 +165,19 @@ size_t	_check(const t_art *art) {
 	return (0);
 }
 
+size_t	_allocClr(t_art *art) {
+	art->widthClr = art->width * 2 - 1;
+	art->heightClr = art->height * 2 - 1;
+	art->arrClr = calloc(art->heightClr, sizeof(art->arrClr[0]));
+	if (!art->arrClr)	return (1);
+	for (size_t i = 0; i < art->heightClr; ++i) {
+		art->arrClr[i] = calloc(art->widthClr, sizeof(art->arrClr[0][0]));
+		if (!art->arrClr[i])
+			return (1);
+	}
+	return (0);
+}
+
 size_t	init(const int ac, char *av[], t_art *art) {
 	if (_parsArg(ac, av, art))
 		return (1);
@@ -173,6 +186,8 @@ size_t	init(const int ac, char *av[], t_art *art) {
 	_fillSettings(&art->clrSetting);
 	art->arr = allocArray(art->width, art->height);
 	if (!art->arr)
+		return (1);
+	if (_allocClr(art))
 		return (1);
 	return (0);
 }

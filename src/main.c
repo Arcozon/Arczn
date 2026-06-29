@@ -6,6 +6,11 @@ void	freeArt(t_art *tab) {
 			free(tab->arr[i]);
 		free(tab->arr);
 	}
+	if (tab->arrClr != NULL) {
+		for (size_t i = 0; i < tab->heightClr; ++i)
+			free(tab->arrClr[i]);
+		free(tab->arrClr);
+	}
 	if (tab->fd != STDOUT_FILENO)
 		close(tab->fd);
 }
@@ -37,7 +42,7 @@ int main(int ac, char *av[], char *env[]) {
 	__attribute__((cleanup(freeArt)))
 	t_art	art	= {0, DEFAULT_PERCENT, G_RANDOM,
 		STDOUT_FILENO, {DEFAULT_MIN, DEFAULT_MAX, DEFAULT_DELTA, 0, 0}, P_NORMAL,
-		DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL};
+		DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL, 0, 0, NULL};
 
 	if (init(ac, av, &art))
 		exit(1);
