@@ -1,6 +1,6 @@
 #include "arczn.h"
 
-void	freeArt(t_art *tab) {
+void	freeArt(t_nonConstArt *tab) {
 	if (tab->arr != NULL) {
 		for (size_t i = 0; tab->arr[i]; ++i)
 			free(tab->arr[i]);
@@ -26,7 +26,8 @@ void	selectGenTab(t_art *tab) {
 typedef void	(*printTabFn)(const int, const t_art);
 void	selectPrintTab(t_art *tab) {
 	static const printTabFn _printTabFn[P_MAX] = {
-		printTab,	printTabColor,	printFrame
+		printTab,	printNColor,	printFrame
+		// printTab,	printTabColor,	printFrame
 	};
 	(*_printTabFn[tab->print])(tab->fd, *tab);
 }
@@ -40,13 +41,13 @@ void	selectPrintTab(t_art *tab) {
 #define DEFAULT_HEIGHT	5
 int main(int ac, char *av[], char *env[]) {
 	__attribute__((cleanup(freeArt)))
-	t_art	art	= {0, DEFAULT_PERCENT, G_RANDOM,
+	t_nonConstArt	nonConstArt	= {0, DEFAULT_PERCENT, G_RANDOM,
 		STDOUT_FILENO, {DEFAULT_MIN, DEFAULT_MAX, DEFAULT_DELTA, 0, 0}, P_NORMAL,
 		DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL, 0, 0, NULL};
 
-	if (init(ac, av, &art))
+	if (init(ac, av, &nonConstArt))
 		exit(1);
-	
+	t_art art = *(t_art*)&nonConstArt;
 	selectGenTab(&art);
 	selectPrintTab(&art);
 

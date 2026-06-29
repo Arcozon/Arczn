@@ -103,7 +103,7 @@ const t_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nx
 	return (&pArg[i]);
 }
 
-size_t	_parsArg(const int ac, char *av[], t_art *art) {
+size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 	const char	*optVal = NULL;
 	const struct s_parsArg	*arg = NULL;
 
@@ -158,16 +158,16 @@ void	_fillSettings(t_clrSet *set) {
 	// printf("%u-%u (%u) | %u (%u)\n", set->max, set->min, set->spanMinMax, set->delta, set->spanDelta);
 }
 
-size_t	_check(const t_art *art) {
+size_t	_check(const t_nonConstArt *art) {
 	if (art->fd < 0)			return (1);
 	else if (art->width == 0)	return (1);
 	else if (art->height == 0)	return (1);
 	return (0);
 }
 
-size_t	_allocClr(t_art *art) {
-	art->widthClr = art->width * 2 - 1;
-	art->heightClr = art->height * 2 - 1;
+size_t	_allocClr(t_nonConstArt *art) {
+	*(size_t *)&(art->widthClr) = art->width * 2 - 1;
+	*(size_t *)&(art->heightClr) = art->height * 2 - 1;
 	art->arrClr = calloc(art->heightClr, sizeof(art->arrClr[0]));
 	if (!art->arrClr)	return (1);
 	for (size_t i = 0; i < art->heightClr; ++i) {
@@ -178,12 +178,12 @@ size_t	_allocClr(t_art *art) {
 	return (0);
 }
 
-size_t	init(const int ac, char *av[], t_art *art) {
+size_t	init(const int ac, char *av[], t_nonConstArt *art) {
 	if (_parsArg(ac, av, art))
 		return (1);
 	if (_check(art))
 		return (1);
-	_fillSettings(&art->clrSetting);
+	_fillSettings((t_clrSet *)&art->clrSetting);
 	art->arr = allocArray(art->width, art->height);
 	if (!art->arr)
 		return (1);

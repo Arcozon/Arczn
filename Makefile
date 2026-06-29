@@ -8,7 +8,7 @@ S_GEN =  random.c  ivy.c  petri.c
 D_GEN =  gen/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
-S_PRINT =  print.c  color.c  frame.c
+S_PRINT =  print.c  color.c  frame.c  nColor.c
 D_PRINT =  print/
 PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
 

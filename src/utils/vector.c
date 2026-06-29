@@ -10,7 +10,7 @@ t_vec	*vec_create(const size_t sizeOfType) {
 	*(size_t *)&vec->sizeOfType = sizeOfType;
 	vec->size = 0;
 	vec->capacity = VECTOR_DEFAULT_SIZE;
-	vec->arr = malloc(sizeOfType * VECTOR_DEFAULT_SIZE);
+	vec->arr = malloc(sizeOfType * vec->capacity);
 	if (!vec->arr) {
 		free(vec);
 		return (NULL);
@@ -26,8 +26,8 @@ void	vec_destroy(t_vec *vec) {
 
 void	*vec_add(t_vec *vec, const void *val) {
 	if (vec->size >= vec->capacity) {
-		vec->capacity *= 2;
-		vec->arr = realloc(vec->arr, vec->capacity);
+		vec->capacity = vec->capacity + (vec->capacity >> 1);
+		vec->arr = realloc(vec->arr, vec->capacity * vec->sizeOfType);
 		if (!vec->arr)
 			return (NULL);
 	}
