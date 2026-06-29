@@ -4,7 +4,7 @@ t_clr	newColor(const uint8_t min, const uint8_t max) {
 	return ((t_clr){
 		aRandRange(min, max),
 		aRandRange(min, max),
-		min// aRandRange(min, max)
+		aRandRange(min, max)
 	});
 }
 
