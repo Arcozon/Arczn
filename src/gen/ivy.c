@@ -101,11 +101,9 @@ static void	_genClrIvyOdd(const uint8_t line[], t_clr dstClr[],
 		const t_clr srcClr[], const t_art *art) {
 	for (size_t i = 0; i < art->width; ++i) {
 		if (line[i / 8] & MASK(i % 8)) {
-			// printf("%lu ", i);
 			dstClr[2 * i] = seededNewColor(srcClr[2 * i], &art->clrSetting);
 		}
 	}
-	// printf("\n");
 }
 
 __always_inline
@@ -139,9 +137,7 @@ void	genClrIvy(t_art *art) {
 	_genClrIvyFirst(art->arrClr[0], art->widthClr, art->arr[0], art->width - 1, &art->clrSetting);
 
 	for (size_t i = 1; i < art->heightClr; i += 2) {
-		// printf("%lu: ", i);
 		_genClrIvyOdd(art->arr[i], art->arrClr[i], art->arrClr[i - 1], art);
 		_genClrIvyEven(art->arr[i + 1], art->arr[i], art->arrClr[i + 1], art->arrClr[i], art);
-		// printf(" -- \n");
 	}
 }

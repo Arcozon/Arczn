@@ -22,10 +22,17 @@ D_SRC = src/
 D_BUILD = .build/
 OBJ =  $(addprefix $(D_BUILD), $(SRC:.c=.o))
 
+D_SPNG	=  libspng/
+D_MESON_BUILD =  $(D_SPNG)build/
+SPNG_SO		  =  $(D_MESON_BUILD)$(SYML_SPNG_SO)
+SYML_SPNG_SO =  libspng.so
+
 CC =  cc
 FLAGS = -Wall -Wextra -Werror -MMD -g -O3
-INC_FLAGS =  $(addprefix -I, $(INC))
 INC = inc/
+INC_FLAGS =  $(addprefix -I, $(INC))
+LIB_FLAGS = -Wl,-rpath,$(shell pwd)
+# LIB_FLAGS = -L. -Wl,-rpath,$(shell pwd) -lspng
 
 RM =  rm -rf
 
@@ -33,26 +40,26 @@ MAKE += --no-print-directory
 
 all:	$(NAME)
 
-$(NAME):	$(OBJ)
-	echo $(SRC)
-	$(CC) -o$@ $^ $(LIB_FLAGS)
+$(NAME):	$(OBJ)	$(SYML_SPNG_SO)
+	$(CC) -o$@ $(OBJ) $(LIB_FLAGS)
 
 $(OBJ): $(D_BUILD)%.o:	$(D_SRC)%.c
 	@mkdir -p $(@D)
 	$(CC) $(FLAGS) $(INC_FLAGS) -c $< -o $@
 
-D_SPNG =  
 
-SYML_SPNG_SO =  ./libspng.so
+$(SYML_SPNG_SO):	$(SPNG_SO)
+	ln -s $< $@
 
-$(SYML_SPNG_SO):
-	ln -s $@ 
+$(SPNG_SO):
+	meson setup $(MESON_BUILD_DIR) $(SPNG_DIR)
+	meson compile -C $(MESON_BUILD_DIR)
 
 clean:
 	@$(RM) $(D_BUILD)
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) $(SYML_SPNG_SO)
 
 re: fclean
 	@$(MAKE) all
