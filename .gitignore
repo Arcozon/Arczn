@@ -1,3 +1,5 @@
 Arczn
 .build/
 vgcore.*
+libspng.so
+a.out
