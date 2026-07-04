@@ -35,11 +35,12 @@ void	genTabIvy(t_art *art) {
 	for (size_t i = height * 2 - 1; i > 0;) {
 		--i;
 		if (!(i & 1)){ // Horizontal Lines 
-			for (size_t j = 0; j < width / 8; ++j) {
+			const size_t	tWidth = width - 1;
+			for (size_t j = 0; j < tWidth / 8; ++j) {
 				art->arr[i][j] = genNBit(8, art->percent);
 			}
-			if (width % 8)
-				art->arr[i][width / 8] = genNBit(width % 8, art->percent);
+			if (tWidth % 8)
+				art->arr[i][tWidth / 8] = genNBit(tWidth % 8, art->percent);
 		} else {
 			for (size_t j = 0; j < width;) {
 				struct s_span s = getSpanNeighbours(j, art->arr[i + 1], width);
@@ -59,7 +60,9 @@ void	genTabIvy(t_art *art) {
 __always_inline
 static void	_genClrIvyFirst(t_clr cLine[], const size_t cSize, const uint8_t line[], const size_t lSize,
 		const t_clrSet *settings) {
+	printf("%lu\n", cSize);
 	for (size_t i = 0; i < cSize;) {
+		printf("%lu\n", i);
 		cLine[i] = newColor(settings->min, settings->max);
 		++i;
 		for (size_t j = i / 2; j < lSize; ++j) {

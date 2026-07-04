@@ -174,9 +174,6 @@ void	genTabPetri(t_art *tab) {
 	static const size_t	nDot = 1;
 	t_petri	petri = {};
 
-	printf("%lu\n", tab->width);
-	printf("%lu\n", tab->height);
-	printf("%lu\n", (tab->width * tab->height) / 8 + 4);
 	petri.ht = ht_create((tab->width * tab->height) / 8 + 4,
 				petriHash, petriDup, petriCmp, free);
 	petri.vec = vec_create(sizeof(t_petriPoint));
@@ -187,8 +184,8 @@ void	genTabPetri(t_art *tab) {
 		return ;
 	}
 	for (size_t i = 0; i < nDot; ++i) {
-		// const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
-		const t_petriPoint	p = {0, 0};
+		const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
+		// const t_petriPoint	p = {0, 0};
 		petriAdd(&petri, p);
 		tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
 	}

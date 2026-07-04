@@ -14,6 +14,6 @@ void	printNColor(const int fdOut, const t_art *tab) {
 			_print2Char(fdOut, &line[j], &line[j + 1]);
 		}
 		const t_clr	last = line[tab->widthClr - 1];	
-		dprintf(fdOut, "\033[48;2;%d;%d;%dm  \n", last.r, last.g, last.b);
+		dprintf(fdOut, "\033[48;2;%d;%d;%dm  \033[0m\n", last.r, last.g, last.b);
 	}
 }

@@ -40,7 +40,7 @@ void	selectPrintTab(const t_art *tab) {
 #define DEFAULT_WIDTH	5
 #define DEFAULT_HEIGHT	5
 int main(int ac, char *av[], char *env[]) {
-	// __attribute__((cleanup(freeArt)))
+	__attribute__((cleanup(freeArt)))
 	t_nonConstArt	nonConstArt	= {0, DEFAULT_PERCENT, G_RANDOM,
 		STDOUT_FILENO, P_NORMAL, DEFAULT_WIDTH, DEFAULT_HEIGHT, NULL,
 		{DEFAULT_MIN, DEFAULT_MAX, DEFAULT_DELTA, 0, 0}, 0, 0, NULL};
