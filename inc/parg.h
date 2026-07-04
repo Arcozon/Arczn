@@ -6,6 +6,7 @@
 enum	e_argType {
 	AT_PERCENT = 0,
 	AT_ORPHAN_PERCENT,
+	AT_NUM_START,
 	AT_WIDTH,
 	AT_HEIGHT,
 	AT_OUTPUT,
@@ -31,9 +32,9 @@ struct s_parsArg {
 };
 
 int	checkArg_int(const char *);
+int	checkArg_int_NotZero(const char *);
 int	checkArg_output(const char *);
 int	checkArg_gen(const char *);
-
 
 int	parsArg_output(const char *);
 

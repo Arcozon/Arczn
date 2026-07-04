@@ -9,6 +9,14 @@ int	checkArg_int(const char *str) {
 	return (0);
 }
 
+int	checkArg_int_NotZero(const char *str) {
+	for (size_t i = 0; str[i]; ++i) {
+		if (!isdigit(str[i]))
+			return (1);
+	}
+	return (0);
+}
+
 int	checkArg_output(const char *) {
 	return (0);
 }

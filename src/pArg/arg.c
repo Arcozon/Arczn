@@ -23,6 +23,7 @@ uint8_t	**allocArray(const size_t width, const size_t height) {
 
 static const char	*_strsPercent[] = {"-p", "--percent"};
 static const char	*_strsOrphan[] = {"-O", "--orphan"};
+static const char	*_strsNStart[] = {"-s", "--start"};
 static const char	*_strsWidth[] = {"-w", "--width"};
 static const char	*_strsHeight[] = {"-h", "--height"}	;
 static const char	*_strsOutput[] = {"-o", "--output"};
@@ -43,9 +44,11 @@ const t_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nx
 			.nStrs = sizeof(_strsPercent) / sizeof(char *), .strs  = _strsPercent},
 		[AT_ORPHAN_PERCENT] = {.argType = AT_ORPHAN_PERCENT, .fnCheck = checkArg_int, .fnPars  = atoi,
 			.nStrs = sizeof(_strsOrphan) / sizeof(char *), .strs  = _strsOrphan},
-		[AT_WIDTH] = {.argType = AT_WIDTH, .fnCheck = checkArg_int, .fnPars  = atoi,
+		[AT_NUM_START] = {.argType = AT_NUM_START, .fnCheck = checkArg_int_NotZero, .fnPars  = atoi,
+			.nStrs = sizeof(_strsNStart) / sizeof(char *), .strs  = _strsNStart},
+		[AT_WIDTH] = {.argType = AT_WIDTH, .fnCheck = checkArg_int_NotZero, .fnPars  = atoi,
 			.nStrs = sizeof(_strsWidth) / sizeof(char *), .strs  = _strsWidth},
-		[AT_HEIGHT] = {.argType = AT_HEIGHT, .fnCheck = checkArg_int, .fnPars  = atoi,
+		[AT_HEIGHT] = {.argType = AT_HEIGHT, .fnCheck = checkArg_int_NotZero, .fnPars  = atoi,
 			.nStrs = sizeof(_strsHeight) / sizeof(char *), .strs  = _strsHeight},
 		[AT_OUTPUT] = {.argType = AT_OUTPUT, .fnCheck = checkArg_output, .fnPars  = parsArg_output,
 			.nStrs = sizeof(_strsOutput) / sizeof(char *), .strs  = _strsOutput},
@@ -121,6 +124,8 @@ size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 			case AT_PERCENT:	art->percent = arg->fnPars(optVal);
 				break;
 			case AT_ORPHAN_PERCENT:	art->orphanPercent = arg->fnPars(optVal);
+				break;
+			case AT_NUM_START:	art->nStart = arg->fnPars(optVal);
 				break;
 			case AT_WIDTH:	art->width = arg->fnPars(optVal);
 				break;

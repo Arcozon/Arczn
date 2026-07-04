@@ -49,6 +49,7 @@ struct s_clrSet {
 };
 
 struct s_art {
+	const uint64_t	nStart;
 	const uint8_t	orphanPercent;
 	const uint8_t	percent;
 	const e_genType	gen;
@@ -67,6 +68,7 @@ struct s_art {
 };
 
 struct s_nonConstArt {
+	uint64_t	nStart;
 	uint8_t		orphanPercent;
 	uint8_t		percent;
 	e_genType	gen;

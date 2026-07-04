@@ -110,6 +110,7 @@ uint8_t	_choseOnePossibility(const uint8_t poss, const uint8_t nPoss) {
 		return (__builtin_ctz(poss));
 	uint8_t	r = aRand(nPoss);
 	uint8_t	i;
+
 	for (i = 0; i < 4; ++i) {
 		if (poss & MASK(i)) {
 			if (!r) {
@@ -171,7 +172,6 @@ char *strPoss(uint8_t poss) {
 }
 
 void	genTabPetri(t_art *tab) {
-	static const size_t	nDot = 1;
 	t_petri	petri = {};
 
 	petri.ht = ht_create((tab->width * tab->height) / 8 + 4,
@@ -183,27 +183,23 @@ void	genTabPetri(t_art *tab) {
 		ht_destroy(petri.ht);
 		return ;
 	}
-	for (size_t i = 0; i < nDot; ++i) {
+	for (size_t i = 0; i < tab->nStart; ++i) {
 		const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
-		// const t_petriPoint	p = {0, 0};
 		petriAdd(&petri, p);
-		tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
+		if (tab->arrClr != NULL)
+			tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
 	}
-	// printf(" -- \n");
 	while (petri.ht->nItems != 0) {
 		const size_t	rItem = aRand(petri.ht->nItems);
 		t_petriPoint	node = *(t_petriPoint *)vec_get(petri.vec, rItem);
 		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, node.x, node.y);
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		
-		// printf("[%lu, %lu]: %s | %u \n", node->x, node->y, strPoss(poss), nPoss);
-		
 		if (nPoss == 0) {
 			petriRm(&petri, rItem, &node);
 			continue;
 		} else {
 			const int  choice = _choseOnePossibility(poss, nPoss);
-			// printf("[%lu, %lu]: %s | %c \n", node->x, node->y, strPoss(poss), trad[choice]);
 			
 			_joinPoint(&petri, &node, choice, tab->arr, tab);
 			if (nPoss == 1) {
@@ -212,7 +208,6 @@ void	genTabPetri(t_art *tab) {
 		}
 		fflush(stdout);
 	}
-	// write(1, "\n", 1);
 	vec_destroy(petri.vec);
 	ht_destroy(petri.ht);
 }

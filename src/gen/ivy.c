@@ -1,6 +1,16 @@
 #include "arczn.h"
 
-static int	_checkBox(size_t n, const uint8_t pLine[], const size_t width) {
+void	_getTabIvyFirst(uint8_t line[], const size_t width, const size_t nStart) {
+	memset(line, 0xff, (width + 7) / 8);
+
+	for(size_t i = 0; i < nStart - 1; ++i) {
+		const size_t r = aRand(width - 1);
+		line[r / 8] &= ~MASK(r % 8);
+	}
+}
+
+__always_inline
+int	_checkBox(size_t n, const uint8_t pLine[], const size_t width) {
 	if (n >= width - 1)
 		return (0);
 	return (pLine[n / 8] & (MASK(n % 8)));
@@ -33,7 +43,7 @@ void	genTabIvy(t_art *art) {
 	const size_t	width = art->width;
 	const size_t	orphanPerc = art->orphanPercent;
 
-	for (size_t i = height * 2 - 1; i > 0;) {
+	for (size_t i = height * 2 - 1; i > 1;) {
 		--i;
 		if (!(i & 1)){ // Horizontal Lines 
 			const size_t	tWidth = width - 1;
@@ -53,10 +63,19 @@ void	genTabIvy(t_art *art) {
 			}
 		}
 	}
+	_getTabIvyFirst(art->arr[0], art->width, art->nStart);
 	if (art->arrClr)
 		genClrIvy(art);
 }
 
+__always_inline
+size_t _findParent(const uint8_t line[], const struct s_span pSpan) {
+	for (size_t i = pSpan.start; i <= pSpan.end; ++i) {
+		if (line[i / 8] & MASK(i % 8))
+			return (i);
+	}
+	return (pSpan.end + 1);
+}
 
 __always_inline
 static void	_genClrIvyFirst(t_clr cLine[], const size_t cSize, const uint8_t line[], const size_t lSize,
@@ -75,15 +94,6 @@ static void	_genClrIvyFirst(t_clr cLine[], const size_t cSize, const uint8_t lin
 			}
 		}
 	}
-}
-
-__always_inline
-size_t _findParent(const uint8_t line[], const struct s_span pSpan) {
-	for (size_t i = pSpan.start; i <= pSpan.end; ++i) {
-		if (line[i / 8] & MASK(i % 8))
-			return (i);
-	}
-	return (pSpan.end + 1);
 }
 
 __always_inline
@@ -124,8 +134,9 @@ static void	_genClrIvyEven(const uint8_t line[], const uint8_t pLine[],
 	}
 }
 
+__always_inline
 void	genClrIvy(t_art *art) {
-	_genClrIvyFirst(art->arrClr[0], art->widthClr, art->arr[0], art->width, &art->clrSetting);
+	_genClrIvyFirst(art->arrClr[0], art->widthClr, art->arr[0], art->width - 1, &art->clrSetting);
 
 	for (size_t i = 1; i < art->heightClr; i += 2) {
 		// printf("%lu: ", i);
