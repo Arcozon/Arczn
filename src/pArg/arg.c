@@ -27,7 +27,6 @@ static const char	*_strsNStart[] = {"-s", "--start"};
 static const char	*_strsWidth[] = {"-w", "--width"};
 static const char	*_strsHeight[] = {"-h", "--height"}	;
 static const char	*_strsOutput[] = {"-o", "--output"};
-static const char	*_strsGeneration[] = {"-g", "--gen", "--generation"};
 static const char	*_strsGenRandom[] = {"--random"};
 static const char	*_strsGenIvy[] = {"--ivy"};
 static const char	*_strsGenPetri[] = {"--petri"};
@@ -50,10 +49,6 @@ const t_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nx
 			.nStrs = sizeof(_strsWidth) / sizeof(char *), .strs  = _strsWidth},
 		[AT_HEIGHT] = {.argType = AT_HEIGHT, .fnCheck = checkArg_int_NotZero, .fnPars  = atoi,
 			.nStrs = sizeof(_strsHeight) / sizeof(char *), .strs  = _strsHeight},
-		[AT_OUTPUT] = {.argType = AT_OUTPUT, .fnCheck = checkArg_output, .fnPars  = parsArg_output,
-			.nStrs = sizeof(_strsOutput) / sizeof(char *), .strs  = _strsOutput},
-		[AT_GENERATION] = {.argType = AT_GENERATION, .fnCheck = checkArg_gen, .fnPars  = parsArg_gen,
-			.nStrs = sizeof(_strsGeneration) / sizeof(char *), .strs  = _strsGeneration},
 		[AT_GEN_RANDOM] = {.argType = AT_GEN_RANDOM, .fnCheck = NULL, .fnPars  = parsArg_genRandom,
 			.nStrs = sizeof(_strsGenRandom) / sizeof(char *), .strs  = _strsGenRandom},
 		[AT_GEN_IVY] = {.argType = AT_GEN_IVY, .fnCheck = NULL, .fnPars  = parsArg_genIvy,
@@ -62,6 +57,8 @@ const t_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nx
 			.nStrs = sizeof(_strsGenPetri) / sizeof(char *), .strs  = _strsGenPetri},
 		[AT_COLOR] = {.argType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
 			.nStrs = sizeof(_strsColor) / sizeof(char *), .strs  = _strsColor},
+		[AT_OUTPUT] = {.argType = AT_OUTPUT, .fnCheck = NULL, .fnPars  = parsArg_printSavePNG,
+			.nStrs = sizeof(_strsOutput) / sizeof(char *), .strs  = _strsOutput},
 		[AT_FRAME] = {.argType = AT_FRAME, .fnCheck = NULL, .fnPars  = parsArg_printFrame,
 			.nStrs = sizeof(_strsFrame) / sizeof(char *), .strs  = _strsFrame},
 		[AT_CLR_DELTA] = {.argType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = atoi,
@@ -106,6 +103,20 @@ const t_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nx
 	return (&pArg[i]);
 }
 
+char	*_getFname(char *arg, char *next) {
+	if (!strncmp("-o", arg, 2) && strlen(arg) > 2) {
+		return (arg + 2);
+	}
+	if (!next)
+		return (NULL);
+	const char	*b = NULL;
+	const int	pNext = _getArgVal(next, &b, NULL)->argType;
+
+	if (pNext == __AT_MAX__ || pNext == AT_HELP)
+		return (next);
+	return (NULL);
+}
+
 size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 	const char	*optVal = NULL;
 	const struct s_parsArg	*arg = NULL;
@@ -116,10 +127,6 @@ size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 			fprintf(stderr, "Unknown opt `%s'\n", av[i]);
 			return (1);
 		}
-		if (optVal == av[i + 1]) {
-			++i;
-		}
-
 		switch (arg->argType) {
 			case AT_PERCENT:	art->percent = arg->fnPars(optVal);
 				break;
@@ -131,11 +138,12 @@ size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 				break;
 			case AT_HEIGHT:	art->height = arg->fnPars(optVal);
 				break;
-			case AT_OUTPUT:	art->fd = arg->fnPars(optVal);
-				break;
-			case AT_GENERATION:
-			case AT_GEN_IVY:
-			case AT_GEN_PETRI:	art->gen = arg->fnPars(optVal);
+				case AT_GEN_IVY:
+				case AT_GEN_PETRI:	art->gen = arg->fnPars(optVal);
+			break;
+			case AT_OUTPUT:
+				art->fName = _getFname(av[i], av[i + 1]);
+				art->print = arg->fnPars(optVal);
 				break;
 			case AT_COLOR:
 			case AT_FRAME:		art->print = arg->fnPars(optVal);
@@ -148,6 +156,9 @@ size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 				break;
 			default:	fprintf(stderr, "Unknown opt `%s'\n", av[i]);
 				return (1);
+		}
+		if (optVal == av[i + 1]) {
+			++i;
 		}
 	}
 	return (0);
@@ -164,8 +175,7 @@ void	_fillSettings(t_clrSet *set) {
 }
 
 size_t	_check(const t_nonConstArt *art) {
-	if (art->fd < 0)			return (1);
-	else if (art->width == 0)	return (1);
+	if (art->width == 0)	return (1);
 	else if (art->height == 0)	return (1);
 	return (0);
 }

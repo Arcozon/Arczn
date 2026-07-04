@@ -13,7 +13,6 @@ t_nonConstArt	_defaultArt(void) {
 		.orphanPercent = 0,
 		.percent = DEFAULT_PERCENT,
 		.gen = G_RANDOM,
-		.fd = STDOUT_FILENO,
 		.print = P_COLOR,
 		.width = DEFAULT_WIDTH,
 		.height = DEFAULT_HEIGHT,
@@ -38,8 +37,6 @@ void	freeArt(t_nonConstArt *tab) {
 			free(tab->arrClr[i]);
 		free(tab->arrClr);
 	}
-	if (tab->fd != STDOUT_FILENO)
-		close(tab->fd);
 }
 
 typedef void	(*genTabFn)(t_art *);
@@ -50,13 +47,12 @@ void	selectGenTab(t_art *tab) {
 	(*_genTabFn[tab->gen])(tab);
 }
 
-typedef void	(*printTabFn)(const int, const t_art *);
+typedef void	(*printTabFn)(const t_art *);
 void	selectPrintTab(const t_art *tab) {
 	static const printTabFn _printTabFn[P_MAX] = {
-		printTab,	printNColor,	printFrame
-		// printTab,	printTabColor,	printFrame
+		printTab,	printNColor,	printFrame, printSavePng
 	};
-	(*_printTabFn[tab->print])(tab->fd, tab);
+	(*_printTabFn[tab->print])(tab);
 }
 
 

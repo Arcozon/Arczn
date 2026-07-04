@@ -8,7 +8,7 @@ S_GEN =  random.c  ivy.c  petri.c
 D_GEN =  gen/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
-S_PRINT =  print.c  color.c  frame.c  nColor.c
+S_PRINT =  print.c  frame.c  nColor.c  savePng.c
 D_PRINT =  print/
 PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
 
@@ -29,10 +29,9 @@ SYML_SPNG_SO =  libspng.so
 
 CC =  cc
 FLAGS = -Wall -Wextra -Werror -MMD -g -O3
-INC = inc/
+INC = inc/ $(D_SPNG)spng
 INC_FLAGS =  $(addprefix -I, $(INC))
-LIB_FLAGS = -Wl,-rpath,$(shell pwd)
-# LIB_FLAGS = -L. -Wl,-rpath,$(shell pwd) -lspng
+LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)/$(D_MESON_BUILD)  -Wl,-z,now
 
 RM =  rm -rf
 

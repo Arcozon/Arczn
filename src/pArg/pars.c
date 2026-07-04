@@ -28,20 +28,6 @@ int	parsArg_genPetri(const char *str) {
 	return (G_PETRI);
 }
 
-
-int	parsArg_gen(const char *str) {
-	static const struct s_pType	typeList[G_MAX] = {
-		{"r", "random", G_RANDOM},
-		{"i", "ivy", G_IVY}
-	};
-	for (size_t i = 0; i < G_MAX; ++i) {
-		if (!strcmp(typeList[i].c, str)
-			|| !strcmp(typeList[i].str, str))
-			return (typeList[i].type);
-	}
-	return (G_RANDOM);
-}
-
 int	parsArg_printColor(const char *str) {
 	(void)str;
 	return (P_COLOR);
@@ -50,4 +36,9 @@ int	parsArg_printColor(const char *str) {
 int	parsArg_printFrame(const char *str) {
 	(void)str;
 	return (P_FRAME);
+}
+
+int	parsArg_printSavePNG(const char *str) {
+	(void)str;
+	return (P_PNG);
 }

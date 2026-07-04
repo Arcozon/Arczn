@@ -9,13 +9,12 @@ enum	e_argType {
 	AT_NUM_START,
 	AT_WIDTH,
 	AT_HEIGHT,
-	AT_OUTPUT,
-	AT_GENERATION,
 	AT_GEN_RANDOM,
 	AT_GEN_IVY,
 	AT_GEN_PETRI,
 	AT_COLOR,
 	AT_FRAME,
+	AT_OUTPUT,
 	AT_CLR_DELTA,
 	AT_CLR_MIN,
 	AT_CLR_MAX,
@@ -38,12 +37,12 @@ int	checkArg_gen(const char *);
 
 int	parsArg_output(const char *);
 
-int	parsArg_gen(const char *);
 int	parsArg_genRandom(const char *);
 int	parsArg_genIvy(const char *);
 int	parsArg_genPetri(const char *);
 
 int	parsArg_printColor(const char *);
 int	parsArg_printFrame(const char *);
+int	parsArg_printSavePNG(const char *);
 
 #endif

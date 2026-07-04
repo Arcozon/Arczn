@@ -8,7 +8,7 @@ typedef char	aChar[sizeof("██") - 1];
 static const aChar fullAChar __attribute__((nonstring)) = _FULLACHAR;
 static const aChar emptyAChar __attribute__((nonstring)) = _MTYACHAR;
 
-static void	_printLineEven(const int fdOut, const uint8_t lineTab[], const size_t _width) {
+static void	_printLineEven( const uint8_t lineTab[], const size_t _width) {
 	static const aChar	bLine[]  __attribute__((nonstring)) = {
 		"██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██", "██"};
 	aChar line[sizeof(bLine) / sizeof(aChar)]  __attribute__((nonstring)) = {};
@@ -21,7 +21,7 @@ static void	_printLineEven(const int fdOut, const uint8_t lineTab[], const size_
 				memcpy(line + (2 * j + 1), emptyAChar, sizeof(aChar));
 			}
 		}
-		write(fdOut, line, sizeof(line));
+		write(0, line, sizeof(line));
 		// printf("b\n");
 	}
 	{
@@ -31,12 +31,12 @@ static void	_printLineEven(const int fdOut, const uint8_t lineTab[], const size_
 				memcpy(line + (2 * j + 1), emptyAChar, sizeof(aChar));
 			}
 		}
-		write(fdOut, line, sizeof(aChar) * (2 * (width % 8) + 1));
+		write(0, line, sizeof(aChar) * (2 * (width % 8) + 1));
 	}
-	write(fdOut, "\n", 1);
+	write(0, "\n", 1);
 }
 
-static void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t width) {
+static void	_printLineOdd(const uint8_t lineTab[], const size_t width) {
 	static const aChar	bLine[]  __attribute__((nonstring)) = {
 		_MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR,
 		_MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR, _MTYACHAR
@@ -50,7 +50,7 @@ static void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t
 				memcpy(line + (2 * j), fullAChar, sizeof(aChar));
 			}
 		}
-		write(fdOut, line, sizeof(line));
+		write(0, line, sizeof(line));
 	}
 	{
 		memcpy(line, bLine, sizeof(bLine));
@@ -59,17 +59,17 @@ static void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t
 				memcpy(line + (2 * j), fullAChar, sizeof(aChar));
 			}
 		}
-		write(fdOut, line, sizeof(aChar) * (2 *(width % 8) + 1));
+		write(0, line, sizeof(aChar) * (2 *(width % 8) + 1));
 	}
-	write(fdOut, "\n", 1);
+	write(0, "\n", 1);
 }
 
-void	printTab(const int fdOut, const t_art *tab) {
+void	printTab(const t_art *tab) {
 	for (size_t i = 0; tab->arr[i]; ++i) {
 		if (i & 1) {
-			_printLineOdd(fdOut, tab->arr[i], tab->width);
+			_printLineOdd(tab->arr[i], tab->width);
 		} else {
-			_printLineEven(fdOut, tab->arr[i], tab->width);
+			_printLineEven(tab->arr[i], tab->width);
 		}
 	}
 }

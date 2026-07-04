@@ -9,6 +9,8 @@
 # include <fcntl.h>
 # include <time.h>
 
+# include "spng.h"
+
 # include "types.h"
 # include "color.h"
 # include "random.h"
@@ -36,6 +38,8 @@ enum e_printType {
 # define P_COLOR	P_COLOR
 	P_FRAME,
 # define P_FRAME	P_FRAME
+	P_PNG,
+# define P_PNG	P_PNG
 	P_MAX
 # define P_MAX		P_MAX
 };
@@ -54,7 +58,7 @@ struct s_art {
 	const uint8_t	percent;
 	const e_genType	gen;
 	
-	const int			fd;
+	const char			*fName;
 	const e_printType	print;
 	
 	const size_t	width;
@@ -73,7 +77,7 @@ struct s_nonConstArt {
 	uint8_t		percent;
 	e_genType	gen;
 	
-	int			fd;
+	char		*fName;
 	e_printType	print;
 	
 	size_t	width;
@@ -87,15 +91,17 @@ struct s_nonConstArt {
 };
 
 size_t	init(const int ac, char *av[], t_nonConstArt *art);
-void	printTab(const int fdOut, const t_art *tab);
-void	printTabColor(const int fdOut, const t_art *tab);
-void	printNColor(const int fdOut, const t_art *tab);
-void	printFrame(const int fdOut, const t_art *tab);
 
 uint8_t	genNBit(const uint8_t nBit, const uint8_t percent);
 void	genTabRandom(t_art *tab);
 void	genTabIvy(t_art *tab);
 void	genTabPetri(t_art *tab);
+
+void	printTab(const t_art *tab);
+// void	printTabColor(const int fdOut, const t_art *tab);
+void	printNColor(const t_art *tab);
+void	printFrame(const t_art *tab);
+void	printSavePng(const t_art *tab);
 
 #endif
  
