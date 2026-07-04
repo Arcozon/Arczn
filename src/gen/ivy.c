@@ -11,7 +11,8 @@ struct s_span {
 	size_t end;
 };
 
-static struct s_span	getSpanNeighbours(const size_t n, const uint8_t pLine[], const size_t width) {
+__always_inline
+static struct s_span	_getSpanNeighbours(const size_t n, const uint8_t pLine[], const size_t width) {
 	size_t	start;
 	size_t	end;
 
@@ -43,7 +44,7 @@ void	genTabIvy(t_art *art) {
 				art->arr[i][tWidth / 8] = genNBit(tWidth % 8, art->percent);
 		} else {
 			for (size_t j = 0; j < width;) {
-				struct s_span s = getSpanNeighbours(j, art->arr[i + 1], width);
+				struct s_span s = _getSpanNeighbours(j, art->arr[i + 1], width);
 				if (((size_t)aRand(100)) >= orphanPerc * 10 * (s.end - s.start) / width) {
 					size_t res = aRandRange(s.start, s.end);
 					art->arr[i][res / 8] |= MASK(res % 8);
@@ -60,9 +61,7 @@ void	genTabIvy(t_art *art) {
 __always_inline
 static void	_genClrIvyFirst(t_clr cLine[], const size_t cSize, const uint8_t line[], const size_t lSize,
 		const t_clrSet *settings) {
-	printf("%lu\n", cSize);
 	for (size_t i = 0; i < cSize;) {
-		printf("%lu\n", i);
 		cLine[i] = newColor(settings->min, settings->max);
 		++i;
 		for (size_t j = i / 2; j < lSize; ++j) {
@@ -79,15 +78,59 @@ static void	_genClrIvyFirst(t_clr cLine[], const size_t cSize, const uint8_t lin
 }
 
 __always_inline
-static void	_genClrIvyOdd(t_art *art) {
-	(void)art;
+size_t _findParent(const uint8_t line[], const struct s_span pSpan) {
+	for (size_t i = pSpan.start; i <= pSpan.end; ++i) {
+		if (line[i / 8] & MASK(i % 8))
+			return (i);
+	}
+	return (pSpan.end + 1);
 }
 
 __always_inline
-static void	_genClrIvyEven(t_art *art) {
-	(void)art;
+static void	_genClrIvyOdd(const uint8_t line[], t_clr dstClr[],
+		const t_clr srcClr[], const t_art *art) {
+	for (size_t i = 0; i < art->width; ++i) {
+		if (line[i / 8] & MASK(i % 8)) {
+			// printf("%lu ", i);
+			dstClr[2 * i] = seededNewColor(srcClr[2 * i], &art->clrSetting);
+		}
+	}
+	// printf("\n");
+}
+
+__always_inline
+static void	_genClrIvyEven(const uint8_t line[], const uint8_t pLine[],
+		t_clr dstClr[], const t_clr srcClr[], const t_art *art) {
+	for (size_t i = 0; i < art->width;) {
+		const struct s_span	arrSpan		= _getSpanNeighbours(i, line, art->width);
+		const size_t		arrParent	= _findParent(pLine, arrSpan);
+		const struct s_span	clrSpan		= {arrSpan.start * 2, arrSpan.end * 2};
+		size_t				clrParent	= 2 * arrParent;
+
+		if (arrParent <= arrSpan.end) {
+			dstClr[clrParent] = seededNewColor(srcClr[clrParent], &art->clrSetting);
+			for (size_t d = 1; d <= clrParent - clrSpan.start; ++d) {
+				dstClr[clrParent - d] = seededNewColor(dstClr[clrParent - d + 1], &art->clrSetting);
+			}
+		}
+		// else {	// Orphan
+		// 	clrParent = clrSpan.start;
+		// 	dstClr[clrParent] = newColor(art->clrSetting->min, art->clrSetting->max);
+		// }
+		for (size_t d = 1; d <= clrSpan.end - clrParent; ++d) {
+			dstClr[clrParent + d] = seededNewColor(dstClr[clrParent + d - 1], &art->clrSetting);
+		}
+		i = arrSpan.end + 1;
+	}
 }
 
 void	genClrIvy(t_art *art) {
 	_genClrIvyFirst(art->arrClr[0], art->widthClr, art->arr[0], art->width, &art->clrSetting);
+
+	for (size_t i = 1; i < art->heightClr; i += 2) {
+		// printf("%lu: ", i);
+		_genClrIvyOdd(art->arr[i], art->arrClr[i], art->arrClr[i - 1], art);
+		_genClrIvyEven(art->arr[i + 1], art->arr[i], art->arrClr[i + 1], art->arrClr[i], art);
+		// printf(" -- \n");
+	}
 }
