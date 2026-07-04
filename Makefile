@@ -41,6 +41,13 @@ $(OBJ): $(D_BUILD)%.o:	$(D_SRC)%.c
 	@mkdir -p $(@D)
 	$(CC) $(FLAGS) $(INC_FLAGS) -c $< -o $@
 
+D_SPNG =  
+
+SYML_SPNG_SO =  ./libspng.so
+
+$(SYML_SPNG_SO):
+	ln -s $@ 
+
 clean:
 	@$(RM) $(D_BUILD)
 

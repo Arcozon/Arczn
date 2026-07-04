@@ -49,18 +49,18 @@ struct s_clrSet {
 };
 
 struct s_art {
-	const uint8_t		orphanPercent;
-	const uint8_t		percent;
+	const uint8_t	orphanPercent;
+	const uint8_t	percent;
 	const e_genType	gen;
 	
 	const int			fd;
-	const t_clrSet		clrSetting;
 	const e_printType	print;
-
+	
 	const size_t	width;
 	const size_t	height;
 	uint8_t	**arr;
 	
+	const t_clrSet		clrSetting;
 	const size_t	widthClr;
 	const size_t	heightClr;
 	t_clr	**arrClr;
@@ -72,23 +72,23 @@ struct s_nonConstArt {
 	e_genType	gen;
 	
 	int			fd;
-	t_clrSet		clrSetting;
 	e_printType	print;
-
+	
 	size_t	width;
 	size_t	height;
 	uint8_t	**arr;
 	
+	t_clrSet	clrSetting;
 	size_t	widthClr;
 	size_t	heightClr;
 	t_clr	**arrClr;
 };
 
 size_t	init(const int ac, char *av[], t_nonConstArt *art);
-void	printTab(const int fdOut, const t_art tab);
-void	printTabColor(const int fdOut, const t_art tab);
-void	printNColor(const int fdOut, const t_art tab);
-void	printFrame(const int fdOut, const t_art tab);
+void	printTab(const int fdOut, const t_art *tab);
+void	printTabColor(const int fdOut, const t_art *tab);
+void	printNColor(const int fdOut, const t_art *tab);
+void	printFrame(const int fdOut, const t_art *tab);
 
 uint8_t	genNBit(const uint8_t nBit, const uint8_t percent);
 void	genTabRandom(t_art *tab);
@@ -96,3 +96,4 @@ void	genTabIvy(t_art *tab);
 void	genTabPetri(t_art *tab);
 
 #endif
+ 

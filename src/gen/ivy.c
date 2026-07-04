@@ -26,29 +26,65 @@ static struct s_span	getSpanNeighbours(const size_t n, const uint8_t pLine[], co
 	return ((struct s_span){start + 1, end});
 }
 
-
-void	genTabIvy(t_art *tab) {
-	const size_t	height = tab->height;
-	const size_t	width = tab->width;
-	const size_t	orphanPerc = tab->orphanPercent;
+void	genClrIvy(t_art *art);
+void	genTabIvy(t_art *art) {
+	const size_t	height = art->height;
+	const size_t	width = art->width;
+	const size_t	orphanPerc = art->orphanPercent;
 
 	for (size_t i = height * 2 - 1; i > 0;) {
 		--i;
 		if (!(i & 1)){ // Horizontal Lines 
 			for (size_t j = 0; j < width / 8; ++j) {
-				tab->arr[i][j] = genNBit(8, tab->percent);
+				art->arr[i][j] = genNBit(8, art->percent);
 			}
 			if (width % 8)
-				tab->arr[i][width / 8] = genNBit(width % 8, tab->percent);
+				art->arr[i][width / 8] = genNBit(width % 8, art->percent);
 		} else {
 			for (size_t j = 0; j < width;) {
-				struct s_span s = getSpanNeighbours(j, tab->arr[i + 1], width);
+				struct s_span s = getSpanNeighbours(j, art->arr[i + 1], width);
 				if (((size_t)aRand(100)) >= orphanPerc * 10 * (s.end - s.start) / width) {
 					size_t res = aRandRange(s.start, s.end);
-					tab->arr[i][res / 8] |= MASK(res % 8);
+					art->arr[i][res / 8] |= MASK(res % 8);
 				}
 				j = s.end + 1;
 			}
 		}
 	}
+	if (art->arrClr)
+		genClrIvy(art);
+}
+
+
+__always_inline
+static void	_genClrIvyFirst(t_clr cLine[], const size_t cSize, const uint8_t line[], const size_t lSize,
+		const t_clrSet *settings) {
+	for (size_t i = 0; i < cSize;) {
+		cLine[i] = newColor(settings->min, settings->max);
+		++i;
+		for (size_t j = i / 2; j < lSize; ++j) {
+			if (line[j / 8] & MASK(j % 8)) {
+				cLine[i] = seededNewColor(cLine[i - 1], settings);
+				cLine[i + 1] = seededNewColor(cLine[i], settings);
+				i += 2;
+			} else {
+				++i;
+				break ;
+			}
+		}
+	}
+}
+
+__always_inline
+static void	_genClrIvyOdd(t_art *art) {
+	(void)art;
+}
+
+__always_inline
+static void	_genClrIvyEven(t_art *art) {
+	(void)art;
+}
+
+void	genClrIvy(t_art *art) {
+	_genClrIvyFirst(art->arrClr[0], art->widthClr, art->arr[0], art->width, &art->clrSetting);
 }

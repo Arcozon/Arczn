@@ -76,20 +76,20 @@ static void	_printN(const int fdOut, const size_t n, const aChar patern[]) {
 	write(fdOut, patern, sizeof(aChar) * (n % (sizeof(fullLine) / sizeof(fullLine[0]))));
 }
 
-void	printFrame(const int fdOut, const t_art tab) {
-	const size_t trueWidth = tab.width * 2 - 1;
+void	printFrame(const int fdOut, const t_art *tab) {
+	const size_t trueWidth = tab->width * 2 - 1;
 	_printN(fdOut, trueWidth + 4, fullLine);
 	write(fdOut, "\n", 1);
 	write(fdOut, leftBorder, sizeof(leftBorder));
 	_printN(fdOut, trueWidth, emptyLine);
 	write(fdOut, rightBorder, sizeof(rightBorder));
 	write(fdOut, "\n", 1);
-	for (size_t i = 0; tab.arr[i]; ++i) {
+	for (size_t i = 0; tab->arr[i]; ++i) {
 		write(fdOut, leftBorder, sizeof(leftBorder));
 		if (i & 1) {
-			_printLineOdd(fdOut, tab.arr[i], tab.width);
+			_printLineOdd(fdOut, tab->arr[i], tab->width);
 		} else {
-			_printLineEven(fdOut, tab.arr[i], tab.width);
+			_printLineEven(fdOut, tab->arr[i], tab->width);
 		}
 		write(fdOut, rightBorder, sizeof(rightBorder));
 		write(fdOut, "\n", 1);

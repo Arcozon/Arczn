@@ -1,9 +1,9 @@
 #include "arczn.h"
 
 void _fillFirstClrL(t_clr *clrL, const size_t sizeClrL, const uint8_t line[], const size_t sizeLine,
-		const t_clrSet settings) {
+		const t_clrSet *settings) {
 	for (size_t i = 0; i < sizeClrL;) {
-		clrL[i] = newColor(settings.min, settings.max);
+		clrL[i] = newColor(settings->min, settings->max);
 		++i;
 		for (size_t j = i / 2; j < sizeLine; ++j) {
 			if (line[j / 8] & MASK(j % 8)) {
@@ -19,7 +19,7 @@ void _fillFirstClrL(t_clr *clrL, const size_t sizeClrL, const uint8_t line[], co
 }
 
 void	_fillClrLineOdd(const uint8_t line[], const size_t arrWidth, t_clr dstClr[],
-		const t_clr srcClr[], const size_t clrWidth, const t_clrSet	settings) {
+		const t_clr srcClr[], const size_t clrWidth, const t_clrSet	*settings) {
 	for (size_t i = 0; i < arrWidth; ++i) {
 		if (line[i / 8] & MASK(i % 8)) {
 			dstClr[2 * i] = seededNewColor(srcClr[2 * i], settings);
@@ -62,7 +62,7 @@ static size_t _findParent(const uint8_t line[], const struct s_span pSpan) {
 }
 
 void	_fillClrLineEven(const uint8_t line[], const uint8_t prevLine[], const size_t arrWidth,
-		t_clr dstClr[], const t_clr srcClr[], const size_t clrWidth, const t_clrSet	settings) {
+		t_clr dstClr[], const t_clr srcClr[], const size_t clrWidth, const t_clrSet	*settings) {
 	for (size_t i = 0; i < arrWidth;) {
 		const struct s_span	arrSpan = _getSpanNeighbours(i, line, arrWidth);
 		const size_t	arrParent = _findParent(prevLine, arrSpan);
@@ -77,7 +77,7 @@ void	_fillClrLineEven(const uint8_t line[], const uint8_t prevLine[], const size
 		}
 		else {
 			clrParent = clrSpan.start;
-			dstClr[clrParent] = newColor(settings.min, settings.max);
+			dstClr[clrParent] = newColor(settings->min, settings->max);
 		}
 		for (size_t d = 1; d <= clrSpan.end - clrParent; ++d) {
 			dstClr[clrParent + d] = seededNewColor(dstClr[clrParent + d - 1], settings);
@@ -121,23 +121,23 @@ void	_printClrLineEven(const int fdOut, const uint8_t line[], const size_t width
 	}
 }
 
-void	printTabColor(const int fdOut, const t_art tab) {
-	const size_t	clrWidth = tab.width * 2 - 1;
+void	printTabColor(const int fdOut, const t_art *tab) {
+	const size_t	clrWidth = tab->width * 2 - 1;
 	t_clr	*clrL[2] = {calloc(clrWidth, sizeof(*clrL)),
 					calloc(clrWidth, sizeof(*clrL))};
 
 	if (clrL[0] == NULL || clrL[1] == NULL)	return ;
 
-	_fillFirstClrL(clrL[0], clrWidth, tab.arr[0], tab.width - 1, tab.clrSetting);
+	_fillFirstClrL(clrL[0], clrWidth, tab->arr[0], tab->width - 1, &tab->clrSetting);
 
-	for (size_t i = 0; tab.arr[i]; ++i) {
+	for (size_t i = 0; tab->arr[i]; ++i) {
 		if (i & 1) {
-			_printClrLineOdd(fdOut, tab.arr[i], tab.width, clrL[1]);
-			_fillClrLineEven(tab.arr[i + 1], tab.arr[i], tab.width, clrL[0], clrL[1], clrWidth, tab.clrSetting);
+			_printClrLineOdd(fdOut, tab->arr[i], tab->width, clrL[1]);
+			_fillClrLineEven(tab->arr[i + 1], tab->arr[i], tab->width, clrL[0], clrL[1], clrWidth, &tab->clrSetting);
 		} else {
-			_printClrLineEven(fdOut, tab.arr[i], tab.width - 1, clrL[0]);
-			if (tab.arr[i + 1])
-				_fillClrLineOdd(tab.arr[i + 1], tab.width, clrL[1], clrL[0], clrWidth, tab.clrSetting);
+			_printClrLineEven(fdOut, tab->arr[i], tab->width - 1, clrL[0]);
+			if (tab->arr[i + 1])
+				_fillClrLineOdd(tab->arr[i + 1], tab->width, clrL[1], clrL[0], clrWidth, &tab->clrSetting);
 		}
 	}
 	free(clrL[0]);

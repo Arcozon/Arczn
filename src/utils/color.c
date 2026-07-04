@@ -9,19 +9,24 @@ t_clr	newColor(const uint8_t min, const uint8_t max) {
 }
 
 
-t_clr	seededNewColor(t_clr oldClr, const t_clrSet set) {
-	int32_t	deltaRed = aRand(set.spanDelta) - set.delta;
-	int32_t	deltaGreen = aRand(set.spanDelta) - set.delta;
-	int32_t	deltaBlue = aRand(set.spanDelta) - set.delta;
+__attribute__((const, hot, always_inline)) static inline
+uint8_t	_boundValue(const uint32_t nVal, const uint8_t min, const uint8_t max) {
+	if (nVal <= min) {
+		return (min);
+	} else if (nVal >= max) {
+		return (max);
+	} else {
+		return (nVal);
+	}
+}
+
+t_clr	seededNewColor(t_clr oldClr, const t_clrSet *set) {
+	const int32_t	deltaRed = aRand(set->spanDelta) - set->delta;
+	const int32_t	deltaGreen = aRand(set->spanDelta) - set->delta;
+	const int32_t	deltaBlue = aRand(set->spanDelta) - set->delta;
 	
-	if (deltaRed + oldClr.r <= set.min)		oldClr.r = set.min;
-	else if (deltaRed + oldClr.r >= set.max)	oldClr.r = set.max;
-	else										oldClr.r = deltaRed + oldClr.r;
-	if (deltaGreen + oldClr.g <= set.min)		oldClr.g = set.min;
-	else if (deltaGreen + oldClr.g >= set.max)	oldClr.g = set.max;
-	else											oldClr.g = deltaGreen + oldClr.g;
-	if (deltaBlue + oldClr.b <= set.min)		oldClr.b = set.min;
-	else if (deltaBlue + oldClr.b >= set.max)	oldClr.b = set.max;
-	else										oldClr.b = deltaBlue + oldClr.b;
+	oldClr.r = _boundValue(deltaRed + oldClr.r, set->min, set->max);
+	oldClr.g = _boundValue(deltaGreen + oldClr.g, set->min, set->max);
+	oldClr.b = _boundValue(deltaBlue + oldClr.b, set->min, set->max);
 	return (oldClr);
 }

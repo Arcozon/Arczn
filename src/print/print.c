@@ -64,12 +64,12 @@ static void	_printLineOdd(const int fdOut, const uint8_t lineTab[], const size_t
 	write(fdOut, "\n", 1);
 }
 
-void	printTab(const int fdOut, const t_art tab) {
-	for (size_t i = 0; tab.arr[i]; ++i) {
+void	printTab(const int fdOut, const t_art *tab) {
+	for (size_t i = 0; tab->arr[i]; ++i) {
 		if (i & 1) {
-			_printLineOdd(fdOut, tab.arr[i], tab.width);
+			_printLineOdd(fdOut, tab->arr[i], tab->width);
 		} else {
-			_printLineEven(fdOut, tab.arr[i], tab.width);
+			_printLineEven(fdOut, tab->arr[i], tab->width);
 		}
 	}
 }

@@ -56,7 +56,7 @@ void	petriRm(t_petri *petri, const size_t index, const void *item) {
 	vec_rm(petri->vec, index);
 }
 
-__attribute__((always_inline))
+__always_inline
 static inline bool	_hasNeighbour(uint8_t *arr[], const size_t width, const size_t height, const size_t x, const size_t _y) {
 	const size_t y = 2 * _y;
 
@@ -126,8 +126,8 @@ void	_joinPointColor(t_art *art, const t_petriPoint *node, const int dX, const i
 	const size_t	sX = node->x * 2;
 	const size_t	sY = node->y * 2;
 
-	art->arrClr[sY + dY][sX + dX] = seededNewColor(art->arrClr[sY][sX], art->clrSetting);
-	art->arrClr[sY + 2 * dY][sX + 2 * dX] = seededNewColor(art->arrClr[sY + dY][sX + dX], art->clrSetting);
+	art->arrClr[sY + dY][sX + dX] = seededNewColor(art->arrClr[sY][sX], &art->clrSetting);
+	art->arrClr[sY + 2 * dY][sX + 2 * dX] = seededNewColor(art->arrClr[sY + dY][sX + dX], &art->clrSetting);
 }
 
 __always_inline
@@ -171,9 +171,12 @@ char *strPoss(uint8_t poss) {
 }
 
 void	genTabPetri(t_art *tab) {
-	static const size_t	nDot = 7;
+	static const size_t	nDot = 1;
 	t_petri	petri = {};
 
+	printf("%lu\n", tab->width);
+	printf("%lu\n", tab->height);
+	printf("%lu\n", (tab->width * tab->height) / 8 + 4);
 	petri.ht = ht_create((tab->width * tab->height) / 8 + 4,
 				petriHash, petriDup, petriCmp, free);
 	petri.vec = vec_create(sizeof(t_petriPoint));
@@ -184,7 +187,8 @@ void	genTabPetri(t_art *tab) {
 		return ;
 	}
 	for (size_t i = 0; i < nDot; ++i) {
-		const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
+		// const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
+		const t_petriPoint	p = {0, 0};
 		petriAdd(&petri, p);
 		tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
 	}
