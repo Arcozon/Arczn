@@ -9,6 +9,7 @@
 typedef enum e_optType		e_optType;
 typedef enum e_genType		e_genType;
 typedef enum e_printType	e_printType;
+typedef enum e_colorType	e_colorType;
 
 typedef struct s_parsArg	t_parsArg;
 

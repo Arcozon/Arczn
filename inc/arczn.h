@@ -34,14 +34,23 @@ enum e_genType {
 enum e_printType {
 	P_NORMAL = 0,
 # define P_NORMAL	P_NORMAL
-	P_COLOR,
-# define P_COLOR	P_COLOR
 	P_FRAME,
 # define P_FRAME	P_FRAME
 	P_PNG,
-# define P_FRAME	P_FRAME
+# define P_PNG	P_PNG
 	P_MAX
 # define P_MAX		P_MAX
+};
+
+enum e_colorType {
+	CLR_NONE = 0,
+# define CLR_NONE	CLR_NONE
+	CLR_GRADIENT,
+# define CLR_GRADIENT	CLR_GRADIENT
+	CLR_BASE_IMG,
+# define CLR_BASE_IMG	CLR_BASE_IMG
+	CLR_MAX
+# define CLR_MAX		CLR_MAX
 };
 
 struct s_clrSet {
@@ -57,18 +66,21 @@ struct s_art {
 	const uint8_t	orphanPercent;
 	const uint8_t	percent;
 	const e_genType	gen;
-	
-	const char			*fName;
-	const e_printType	print;
-	
+
 	const size_t	width;
 	const size_t	height;
-	uint8_t	**arr;
+	uint8_t			**arr;
 	
+	const char			*fNameBase;
+	const e_colorType	color;
+
 	const t_clrSet		clrSetting;
-	const size_t	widthClr;
-	const size_t	heightClr;
-	t_clr	**arrClr;
+	const size_t		widthClr;
+	const size_t		heightClr;
+	t_clr				**arrClr;
+
+	const char			*fNameOut;
+	const e_printType	print;
 };
 
 struct s_nonConstArt {
@@ -77,17 +89,20 @@ struct s_nonConstArt {
 	uint8_t		percent;
 	e_genType	gen;
 	
-	const char		*fName;
-	e_printType	print;
-	
 	size_t	width;
 	size_t	height;
 	uint8_t	**arr;
+
+	const char	*fNameBase;
+	e_colorType	color;
 	
 	t_clrSet	clrSetting;
-	size_t	widthClr;
-	size_t	heightClr;
-	t_clr	**arrClr;
+	size_t		widthClr;
+	size_t		heightClr;
+	t_clr		**arrClr;
+
+	const char	*fNameOut;
+	e_printType	print;
 };
 
 size_t	init(const int ac, char *av[], t_nonConstArt *art);

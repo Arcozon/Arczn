@@ -30,8 +30,9 @@ static const char	*_strsOutput[] = {"-o", "--output"};
 static const char	*_strsGenRandom[] = {"--random"};
 static const char	*_strsGenIvy[] = {"--ivy"};
 static const char	*_strsGenPetri[] = {"--petri"};
-static const char	*_strsColor[] = {"-c", "--color"};
 static const char	*_strsFrame[] = {"--frame"};
+static const char	*_strsBaseImg[] = {"-b", "--base"};
+static const char	*_strsColor[] = {"-c", "--color"};
 static const char	*_strsClrDelta[] = {"-d", "--delta"};
 static const char	*_strsClrMin[] = {"-m", "--min"};
 static const char	*_strsClrMax[] = {"-M", "--max"};
@@ -54,12 +55,14 @@ static const t_parsArg	pArg[__AT_MAX__] = {
 			.nStrs = sizeof(_strsGenIvy) / sizeof(char *), .strs  = _strsGenIvy},
 		[AT_GEN_PETRI] = {.optType = AT_GEN_PETRI, .fnCheck = NULL, .fnPars  = parsArg_genPetri,
 			.nStrs = sizeof(_strsGenPetri) / sizeof(char *), .strs  = _strsGenPetri},
-		[AT_COLOR] = {.optType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
-			.nStrs = sizeof(_strsColor) / sizeof(char *), .strs  = _strsColor},
 		[AT_OUTPUT] = {.optType = AT_OUTPUT, .fnCheck = checkArg_output, .fnPars  = parsArg_output,
 			.nStrs = sizeof(_strsOutput) / sizeof(char *), .strs  = _strsOutput},
 		[AT_FRAME] = {.optType = AT_FRAME, .fnCheck = NULL, .fnPars  = parsArg_printFrame,
 			.nStrs = sizeof(_strsFrame) / sizeof(char *), .strs  = _strsFrame},
+		[AT_BASE_IMG] = {.optType = AT_BASE_IMG, .fnCheck = checkArg_baseImg, .fnPars = parsArg_baseImg,
+			.nStrs = sizeof(_strsBaseImg) / sizeof(char *), .strs  = _strsBaseImg},
+		[AT_COLOR] = {.optType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
+			.nStrs = sizeof(_strsColor) / sizeof(char *), .strs  = _strsColor},
 		[AT_CLR_DELTA] = {.optType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = parsArg_clrDelta,
 			.nStrs = sizeof(_strsClrDelta) / sizeof(char *), .strs  = _strsClrDelta},
 		[AT_CLR_MIN] = {.optType = AT_CLR_MIN, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMin,
@@ -82,7 +85,6 @@ e_optType	_getOptType(char *av[], const int argN, const char **toPars) {
 			if (!strncmp(toCmp, "--", 2)) {	// If starts with '--'
 				if (!strcmp(toCmp, arg)) {
 					*toPars = av[argN + 1];
-					printf("Found large opt `%s`\n", *toPars);
 					return (i);
 				}
 			} else {	// Starts with -
@@ -102,8 +104,6 @@ struct s_arg	_getArgVal(char *av[], const int argN) {
 			.parsArg = NULL, .optArgument = av[argN + 1]};
 	
 	res.optType = _getOptType(av, argN, &res.optArgument);
-	// printf("Opt: %u | [%s]\n", res.optType, res.optArgument);
-	// printf("`%s` | `%s` \n", av[argN], res.optArgument);
 	if (res.optType == __AT_MAX__) {
 		res.err = PERR_UNKNOWN_OPT;
 	} else {
@@ -130,17 +130,13 @@ size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 		if (arg.parsArg->fnPars)
 			arg.parsArg->fnPars(arg.optArgument, art);
 		if (arg.optArgument && (arg.optArgument < av[i] || arg.optArgument > av[i] + strlen(av[i]))) {
-			printf("Skip\n");
 			++i;
 		}
-		else
-			printf("Dont Skip\n");
-		printf("`%s` | `%s` \n", av[i], arg.optArgument);
 	}
 	return (0);
 }
 
-void	_fillSettings(t_clrSet *set) {
+void	_fillClrSettings(t_clrSet *set) {
 	if (set->max < set->min)
 		set->max = set->min;
 	set->spanMinMax = set->max - set->min + 1;
@@ -173,11 +169,17 @@ size_t	init(const int ac, char *av[], t_nonConstArt *art) {
 		return (1);
 	if (_check(art))
 		return (1);
-	_fillSettings((t_clrSet *)&art->clrSetting);
+	_fillClrSettings((t_clrSet *)&art->clrSetting);
+	if (art->color != CLR_NONE) {
+		if (art->color == CLR_BASE_IMG) {
+			if (parsBaseImage(art->fNameBase, art))
+				return (1);
+		} else if (_allocClr(art)) {
+			return (1);
+		}
+	}
 	art->arr = allocArray(art->width, art->height);
 	if (!art->arr)
-		return (1);
-	if (_allocClr(art))
 		return (1);
 	return (0);
 }

@@ -6,8 +6,8 @@ const char	*_getFName(const t_art *art) {
 	static const char	format[] = "png/%04d%02d%02d-%02d:%02d:%02d_%s_%lux%lu";
 	static char	fName[F_NAME_SIZE] = {};
 
-	if (art->fName)
-		return (art->fName);
+	if (art->fNameOut)
+		return (art->fNameOut);
 
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
@@ -31,6 +31,7 @@ void	printSavePng(const t_art *art) {
 	ihdr.width = art->widthClr;
 	ihdr.height = art->heightClr;
 	ihdr.bit_depth = 8;
+
 	if (sizeof(t_clr) == 3)			ihdr.color_type = SPNG_COLOR_TYPE_TRUECOLOR;
 	else if (sizeof(t_clr) == 4)	ihdr.color_type = SPNG_COLOR_TYPE_TRUECOLOR_ALPHA;
 

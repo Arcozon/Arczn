@@ -1,6 +1,6 @@
 NAME =  Arczn
 
-S_PARG =  arg.c  pars.c  check.c
+S_PARG =  parsOpt.c  parsOptArg.c  checkOptArg.c  parsBaseImg.c
 D_PARG =  pArg/
 PARG = $(addprefix $(D_PARG), $(S_PARG))
 

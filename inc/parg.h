@@ -12,9 +12,10 @@ enum	e_optType {
 	AT_GEN_RANDOM,
 	AT_GEN_IVY,
 	AT_GEN_PETRI,
-	AT_COLOR,
 	AT_FRAME,
 	AT_OUTPUT,
+	AT_BASE_IMG,
+	AT_COLOR,
 	AT_CLR_DELTA,
 	AT_CLR_MIN,
 	AT_CLR_MAX,
@@ -44,10 +45,14 @@ struct s_arg {
 	const char			*optArgument;
 };
 
+size_t	_allocClr(t_nonConstArt *art);
+
 int	checkArg_int(const char *);
 int	checkArg_int_NotZero(const char *);
 int	checkArg_output(const char *);
 int	checkArg_gen(const char *);
+
+int	checkArg_baseImg(const char *);
 
 void	parsArg_percent(const char *, t_nonConstArt *);
 void	parsArg_percentOrphan(const char *, t_nonConstArt *);
@@ -63,8 +68,12 @@ void	parsArg_genRandom(const char *, t_nonConstArt *);
 void	parsArg_genIvy(const char *, t_nonConstArt *);
 void	parsArg_genPetri(const char *, t_nonConstArt *);
 
+void	parsArg_baseImg(const char *, t_nonConstArt *);
 void	parsArg_printColor(const char *, t_nonConstArt *);
+
 void	parsArg_printFrame(const char *, t_nonConstArt *);
 void	parsArg_output(const char *, t_nonConstArt *);
+
+int	parsBaseImage(const char *baseFName, t_nonConstArt *art);
 
 #endif

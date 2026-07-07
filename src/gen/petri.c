@@ -97,7 +97,6 @@ uint8_t	getPossibility(uint8_t *arr[], const size_t width, const size_t height, 
 			res |= MASK(UP);
 	}
 	if (y + 1 < height) { // Check down
-		// printf("Looking don\n");
 		if (!_hasNeighbour(arr, width, height, x, y + 1))
 			res |= MASK(DOWN);
 	}
@@ -127,8 +126,10 @@ void	_joinPointColor(t_art *art, const t_petriPoint *node, const int dX, const i
 	const size_t	sX = node->x * 2;
 	const size_t	sY = node->y * 2;
 
-	art->arrClr[sY + dY][sX + dX] = seededNewColor(art->arrClr[sY][sX], &art->clrSetting);
-	art->arrClr[sY + 2 * dY][sX + 2 * dX] = seededNewColor(art->arrClr[sY + dY][sX + dX], &art->clrSetting);
+	if (art->color == CLR_GRADIENT) {
+		art->arrClr[sY + dY][sX + dX] = seededNewColor(art->arrClr[sY][sX], &art->clrSetting);
+		art->arrClr[sY + 2 * dY][sX + 2 * dX] = seededNewColor(art->arrClr[sY + dY][sX + dX], &art->clrSetting);
+	}
 }
 
 __always_inline
@@ -156,7 +157,7 @@ void	_joinPoint(t_petri *petri, const t_petriPoint *node, const uint8_t choice, 
 		_joinPointColor(art, node, 1, 0);
 	} else {
 		printf("Erorr\n");
-	}(void)petri;
+	}
 }
 
 
@@ -186,7 +187,7 @@ void	genTabPetri(t_art *tab) {
 	for (size_t i = 0; i < tab->nStart; ++i) {
 		const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
 		petriAdd(&petri, p);
-		if (tab->arrClr != NULL)
+		if (tab->color == CLR_GRADIENT)
 			tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
 	}
 	while (petri.ht->nItems != 0) {

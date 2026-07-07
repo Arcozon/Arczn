@@ -21,6 +21,15 @@ int	checkArg_output(const char *) {
 	return (0);
 }
 
+int	checkArg_baseImg(const char *str) {
+	if (str == NULL)
+		return (1);
+	if (access(str, R_OK) != 0)
+		return (1);
+	return (0);
+}
+
+
 int	checkArg_gen(const char *str) {
 	static const char	*typeList[G_MAX * 2] = {
 		"random", "r",
