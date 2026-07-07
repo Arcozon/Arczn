@@ -1,20 +1,21 @@
 #include "arczn.h"
 
+#define F_NAME_SIZE	512
 const char	*_getFName(const t_art *art) {
-	static const char	format[] = "Arczn_%lux%lu_%02d-%02d-%02d:%02d:%02d";
+	static const char	*genType[G_MAX] = {"Random", "Ivy", "Petri"};
+	static const char	format[] = "png/%04d%02d%02d-%02d:%02d:%02d_%s_%lux%lu";
+	static char	fName[F_NAME_SIZE] = {};
 
 	if (art->fName)
 		return (art->fName);
 
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
-	printf("now: \n", );
-
-	const int rLen = snprintf(NULL, 0, format, art->width, art->height, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-	char *res = malloc(sizeof(char) * (rLen + 1));
-	printf("%d\n", rLen);
-	sprintf(res, format, art->width, art->height, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-	return (res);
+	snprintf(fName, sizeof(fName), format,
+		tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec,
+		genType[art->gen], art->width, art->height);
+	// printf("[%s]\n", fName);
+	return (fName);
 }
 
 void	printSavePng(const t_art *art) {
@@ -49,7 +50,9 @@ void	printSavePng(const t_art *art) {
 	
 	err:	fprintf(stderr, "Err(%d): %s\n", err, spng_strerror(err));
 	done:
-	fclose(pngFile);
+	if (pngFile)
+		fclose(pngFile);
 	free(buff);
-	spng_ctx_free(ctx);
+	if (ctx)
+		spng_ctx_free(ctx);
 }
