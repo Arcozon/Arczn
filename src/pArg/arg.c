@@ -37,129 +37,105 @@ static const char	*_strsClrMin[] = {"-m", "--min"};
 static const char	*_strsClrMax[] = {"-M", "--max"};
 static const char	*_strsHelp[] =	{"--help"} ;
 
-const t_parsArg	*_getArgVal(const char str[], const char *pStr[], const char *nxt) {
-	static const t_parsArg	pArg[__AT_MAX__] = {
-		[AT_PERCENT] = {.argType = AT_PERCENT, .fnCheck = checkArg_int, .fnPars  = atoi,
+static const t_parsArg	pArg[__AT_MAX__] = {
+		[AT_PERCENT] = {.optType = AT_PERCENT, .fnCheck = checkArg_int, .fnPars  = parsArg_percent,
 			.nStrs = sizeof(_strsPercent) / sizeof(char *), .strs  = _strsPercent},
-		[AT_ORPHAN_PERCENT] = {.argType = AT_ORPHAN_PERCENT, .fnCheck = checkArg_int, .fnPars  = atoi,
+		[AT_ORPHAN_PERCENT] = {.optType = AT_ORPHAN_PERCENT, .fnCheck = checkArg_int, .fnPars  = parsArg_percentOrphan,
 			.nStrs = sizeof(_strsOrphan) / sizeof(char *), .strs  = _strsOrphan},
-		[AT_NUM_START] = {.argType = AT_NUM_START, .fnCheck = checkArg_int_NotZero, .fnPars  = atoi,
+		[AT_NUM_START] = {.optType = AT_NUM_START, .fnCheck = checkArg_int_NotZero, .fnPars  = parsArg_nStart,
 			.nStrs = sizeof(_strsNStart) / sizeof(char *), .strs  = _strsNStart},
-		[AT_WIDTH] = {.argType = AT_WIDTH, .fnCheck = checkArg_int_NotZero, .fnPars  = atoi,
+		[AT_WIDTH] = {.optType = AT_WIDTH, .fnCheck = checkArg_int_NotZero, .fnPars  = parsArg_width,
 			.nStrs = sizeof(_strsWidth) / sizeof(char *), .strs  = _strsWidth},
-		[AT_HEIGHT] = {.argType = AT_HEIGHT, .fnCheck = checkArg_int_NotZero, .fnPars  = atoi,
+		[AT_HEIGHT] = {.optType = AT_HEIGHT, .fnCheck = checkArg_int_NotZero, .fnPars  = parsArg_height,
 			.nStrs = sizeof(_strsHeight) / sizeof(char *), .strs  = _strsHeight},
-		[AT_GEN_RANDOM] = {.argType = AT_GEN_RANDOM, .fnCheck = NULL, .fnPars  = parsArg_genRandom,
+		[AT_GEN_RANDOM] = {.optType = AT_GEN_RANDOM, .fnCheck = NULL, .fnPars  = parsArg_genRandom,
 			.nStrs = sizeof(_strsGenRandom) / sizeof(char *), .strs  = _strsGenRandom},
-		[AT_GEN_IVY] = {.argType = AT_GEN_IVY, .fnCheck = NULL, .fnPars  = parsArg_genIvy,
+		[AT_GEN_IVY] = {.optType = AT_GEN_IVY, .fnCheck = NULL, .fnPars  = parsArg_genIvy,
 			.nStrs = sizeof(_strsGenIvy) / sizeof(char *), .strs  = _strsGenIvy},
-		[AT_GEN_PETRI] = {.argType = AT_GEN_PETRI, .fnCheck = NULL, .fnPars  = parsArg_genPetri,
+		[AT_GEN_PETRI] = {.optType = AT_GEN_PETRI, .fnCheck = NULL, .fnPars  = parsArg_genPetri,
 			.nStrs = sizeof(_strsGenPetri) / sizeof(char *), .strs  = _strsGenPetri},
-		[AT_COLOR] = {.argType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
+		[AT_COLOR] = {.optType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
 			.nStrs = sizeof(_strsColor) / sizeof(char *), .strs  = _strsColor},
-		[AT_OUTPUT] = {.argType = AT_OUTPUT, .fnCheck = NULL, .fnPars  = parsArg_printSavePNG,
+		[AT_OUTPUT] = {.optType = AT_OUTPUT, .fnCheck = checkArg_output, .fnPars  = parsArg_output,
 			.nStrs = sizeof(_strsOutput) / sizeof(char *), .strs  = _strsOutput},
-		[AT_FRAME] = {.argType = AT_FRAME, .fnCheck = NULL, .fnPars  = parsArg_printFrame,
+		[AT_FRAME] = {.optType = AT_FRAME, .fnCheck = NULL, .fnPars  = parsArg_printFrame,
 			.nStrs = sizeof(_strsFrame) / sizeof(char *), .strs  = _strsFrame},
-		[AT_CLR_DELTA] = {.argType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = atoi,
+		[AT_CLR_DELTA] = {.optType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = parsArg_clrDelta,
 			.nStrs = sizeof(_strsClrDelta) / sizeof(char *), .strs  = _strsClrDelta},
-		[AT_CLR_MIN] = {.argType = AT_CLR_MIN, .fnCheck = checkArg_int, .fnPars  = atoi,
+		[AT_CLR_MIN] = {.optType = AT_CLR_MIN, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMin,
 			.nStrs = sizeof(_strsClrMin) / sizeof(char *), .strs  = _strsClrMin},
-		[AT_CLR_MAX] = {.argType = AT_CLR_MAX, .fnCheck = checkArg_int, .fnPars  = atoi,
+		[AT_CLR_MAX] = {.optType = AT_CLR_MAX, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMax,
 			.nStrs = sizeof(_strsClrMax) / sizeof(char *), .strs  = _strsClrMax},
-		[AT_HELP] = {.argType = AT_HELP, .fnCheck = NULL, .fnPars  = NULL,
+		[AT_HELP] = {.optType = AT_HELP, .fnCheck = NULL, .fnPars  = NULL,
 			.nStrs = sizeof(_strsHelp) / sizeof(char *), .strs  = _strsHelp},
 	};
+	
+e_optType	_getOptType(char *av[], const int argN, const char **toPars) {
+	const char	*arg = av[argN];
 	size_t	i = 0;
 	size_t	j = 0;
 
-	*pStr = NULL;
+	*toPars = av[argN + 1];
 	for (i = 0; i < __AT_MAX__; ++i) {
 		for (j = 0; j < pArg[i].nStrs; ++j) {
 			const char	*toCmp = pArg[i].strs[j];
 			if (!strncmp(toCmp, "--", 2)) {	// If starts with '--'
-				if (!strcmp(toCmp, str)) {
-					break ;
+				if (!strcmp(toCmp, arg)) {
+					*toPars = av[argN + 1];
+					printf("Found large opt `%s`\n", *toPars);
+					return (i);
 				}
 			} else {	// Starts with -
-				if (!strncmp(toCmp, str, strlen(toCmp))) {
-					if (str[strlen(toCmp)])
-						*pStr = &str[strlen(toCmp)];
-					break ;
+				if (!strncmp(toCmp, arg, strlen(toCmp))) {
+					if (arg[strlen(toCmp)])
+						*toPars = &arg[strlen(toCmp)];
+					return (i);
 				}
 			}
 		}
-		if (j != pArg[i].nStrs)	// Found Match
-			break ;
 	}
-	if (i == __AT_MAX__)
-		return (NULL);
-	if (pArg[i].fnCheck) {
-		if (!*pStr)
-			*pStr = nxt;
-		if (!*pStr || pArg[i].fnCheck(*pStr))
-			return (NULL);
-	}
-	return (&pArg[i]);
+	return (__AT_MAX__);
 }
 
-char	*_getFname(char *arg, char *next) {
-	if (!strncmp("-o", arg, 2) && strlen(arg) > 2) {
-		return (arg + 2);
+struct s_arg	_getArgVal(char *av[], const int argN) {
+	struct s_arg	res = { .err = PERR_NONE, .optType = __AT_MAX__,
+			.parsArg = NULL, .optArgument = av[argN + 1]};
+	
+	res.optType = _getOptType(av, argN, &res.optArgument);
+	// printf("Opt: %u | [%s]\n", res.optType, res.optArgument);
+	// printf("`%s` | `%s` \n", av[argN], res.optArgument);
+	if (res.optType == __AT_MAX__) {
+		res.err = PERR_UNKNOWN_OPT;
+	} else {
+		res.parsArg = &pArg[res.optType];
+		if (!res.parsArg->fnCheck) {
+			res.optArgument = NULL;
+		} else if (res.parsArg->fnCheck(res.optArgument)){
+			res.err = PERR_INVALID_ARG;
+		}
 	}
-	if (!next)
-		return (NULL);
-	const char	*b = NULL;
-	const int	pNext = _getArgVal(next, &b, NULL)->argType;
-
-	if (pNext == __AT_MAX__ || pNext == AT_HELP)
-		return (next);
-	return (NULL);
+	return (res);
 }
 
 size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
-	const char	*optVal = NULL;
-	const struct s_parsArg	*arg = NULL;
-
 	for (int i = 1; i < ac; ++i) {
-		arg = _getArgVal(av[i], &optVal, av[i + 1]);
-		if (!arg) {
-			fprintf(stderr, "Unknown opt `%s'\n", av[i]);
+		const struct s_arg	arg = _getArgVal(av, i);
+		if (arg.err == PERR_UNKNOWN_OPT || arg.parsArg == NULL) {
+			fprintf(stderr, "%s: Unknown option `%s'\n", av[0], av[i]);
+			return (1);
+		} else if (arg.err == PERR_INVALID_ARG) {
+			fprintf(stderr, "%s: Invalid argument to option %s: `%s'\n", av[0], av[i], arg.optArgument);
 			return (1);
 		}
-		switch (arg->argType) {
-			case AT_PERCENT:	art->percent = arg->fnPars(optVal);
-				break;
-			case AT_ORPHAN_PERCENT:	art->orphanPercent = arg->fnPars(optVal);
-				break;
-			case AT_NUM_START:	art->nStart = arg->fnPars(optVal);
-				break;
-			case AT_WIDTH:	art->width = arg->fnPars(optVal);
-				break;
-			case AT_HEIGHT:	art->height = arg->fnPars(optVal);
-				break;
-				case AT_GEN_IVY:
-				case AT_GEN_PETRI:	art->gen = arg->fnPars(optVal);
-			break;
-			case AT_OUTPUT:
-				art->fName = _getFname(av[i], av[i + 1]);
-				art->print = arg->fnPars(optVal);
-				break;
-			case AT_COLOR:
-			case AT_FRAME:		art->print = arg->fnPars(optVal);
-				break;
-			case AT_CLR_DELTA:	art->clrSetting.delta = arg->fnPars(optVal);
-				break;
-			case AT_CLR_MIN:	art->clrSetting.min = arg->fnPars(optVal);
-				break;
-			case AT_CLR_MAX:	art->clrSetting.max = arg->fnPars(optVal);
-				break;
-			default:	fprintf(stderr, "Unknown opt `%s'\n", av[i]);
-				return (1);
-		}
-		if (optVal == av[i + 1]) {
+		if (arg.parsArg->fnPars)
+			arg.parsArg->fnPars(arg.optArgument, art);
+		if (arg.optArgument && (arg.optArgument < av[i] || arg.optArgument > av[i] + strlen(av[i]))) {
+			printf("Skip\n");
 			++i;
 		}
+		else
+			printf("Dont Skip\n");
+		printf("`%s` | `%s` \n", av[i], arg.optArgument);
 	}
 	return (0);
 }
@@ -171,7 +147,6 @@ void	_fillSettings(t_clrSet *set) {
 	if (set->delta > set->spanMinMax)
 		set->delta = set->spanMinMax;
 	set->spanDelta = set->delta * 2 + 1;
-	// printf("%u-%u (%u) | %u (%u)\n", set->max, set->min, set->spanMinMax, set->delta, set->spanDelta);
 }
 
 size_t	_check(const t_nonConstArt *art) {

@@ -6,7 +6,7 @@
 # include <ctype.h>
 # include <stdbool.h>
 
-typedef enum e_argType		e_argType;
+typedef enum e_optType		e_optType;
 typedef enum e_genType		e_genType;
 typedef enum e_printType	e_printType;
 

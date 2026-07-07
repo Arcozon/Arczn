@@ -1,44 +1,64 @@
 #include "arczn.h"
 #include "parg.h"
 
-int	parsArg_output(const char *str) {
-	int fd = open(str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	
-	if (fd < 0)
-		return (0);
-	return (fd);
+void	parsArg_percent(const char *arg, t_nonConstArt *art){
+	art->percent = atoi(arg);
 }
 
-struct s_pType {
-	char	*c;
-	char	*str;
-	e_genType	type;
-};
-
-int	parsArg_genRandom(const char *str) {
-	(void)str;
-	return (G_RANDOM);
-}
-int	parsArg_genIvy(const char *str) {
-	(void)str;
-	return (G_IVY);
-}
-int	parsArg_genPetri(const char *str) {
-	(void)str;
-	return (G_PETRI);
+void	parsArg_percentOrphan(const char *arg, t_nonConstArt *art){
+	art->orphanPercent = atoi(arg);
 }
 
-int	parsArg_printColor(const char *str) {
-	(void)str;
-	return (P_COLOR);
+void	parsArg_width(const char *arg, t_nonConstArt *art){
+	art->width = atoi(arg);
 }
 
-int	parsArg_printFrame(const char *str) {
-	(void)str;
-	return (P_FRAME);
+void	parsArg_height(const char *arg, t_nonConstArt *art){
+	art->height = atoi(arg);
 }
 
-int	parsArg_printSavePNG(const char *str) {
-	(void)str;
-	return (P_PNG);
+void	parsArg_nStart(const char *arg, t_nonConstArt *art){
+	art->nStart = atoi(arg);
+}
+
+void	parsArg_clrMin(const char *arg, t_nonConstArt *art){
+	art->clrSetting.min = atoi(arg);
+}
+
+void	parsArg_clrMax(const char *arg, t_nonConstArt *art){
+	art->clrSetting.max = atoi(arg);
+}
+
+void	parsArg_clrDelta(const char *arg, t_nonConstArt *art){
+	art->clrSetting.delta = atoi(arg);
+}
+
+
+void	parsArg_genRandom(const char *arg, t_nonConstArt *art){
+	art->gen = G_RANDOM;
+	(void)arg;
+}
+void	parsArg_genIvy(const char *arg, t_nonConstArt *art){
+	art->gen = G_IVY;
+	(void)arg;
+}
+void	parsArg_genPetri(const char *arg, t_nonConstArt *art){
+	art->gen = G_PETRI;
+	(void)arg;
+}
+
+void	parsArg_printColor(const char *arg, t_nonConstArt *art){
+	art->print = P_COLOR;
+	(void)arg;
+}
+
+void	parsArg_printFrame(const char *arg, t_nonConstArt *art){
+	art->print = P_COLOR;
+	(void)arg;
+}
+
+void	parsArg_output(const char *arg, t_nonConstArt *art) {
+	art->fName = arg;
+	art->print = P_PNG;
+
 }

@@ -3,7 +3,7 @@
 
 #include 	"types.h"
 
-enum	e_argType {
+enum	e_optType {
 	AT_PERCENT = 0,
 	AT_ORPHAN_PERCENT,
 	AT_NUM_START,
@@ -22,12 +22,26 @@ enum	e_argType {
 	__AT_MAX__
 };
 
+enum e_parsErr {
+	PERR_NONE,
+	PERR_UNKNOWN_OPT,
+	PERR_INVALID_ARG,
+	PERR_MAX
+};
+
 struct s_parsArg {
-	e_argType	argType;
+	e_optType	optType;
 	size_t		nStrs;
 	const char	**strs;
 	int		(*fnCheck)(const char *);
-	int		(*fnPars)(const char *);
+	void	(*fnPars)(const char *, t_nonConstArt *);
+};
+
+struct s_arg {
+	enum e_parsErr		err;
+	e_optType			optType;
+	const struct s_parsArg	*parsArg;
+	const char			*optArgument;
 };
 
 int	checkArg_int(const char *);
@@ -35,14 +49,22 @@ int	checkArg_int_NotZero(const char *);
 int	checkArg_output(const char *);
 int	checkArg_gen(const char *);
 
-int	parsArg_output(const char *);
+void	parsArg_percent(const char *, t_nonConstArt *);
+void	parsArg_percentOrphan(const char *, t_nonConstArt *);
+void	parsArg_nStart(const char *, t_nonConstArt *);
+void	parsArg_width(const char *, t_nonConstArt *);
+void	parsArg_height(const char *, t_nonConstArt *);
 
-int	parsArg_genRandom(const char *);
-int	parsArg_genIvy(const char *);
-int	parsArg_genPetri(const char *);
+void	parsArg_clrMin(const char *, t_nonConstArt *);
+void	parsArg_clrMax(const char *, t_nonConstArt *);
+void	parsArg_clrDelta(const char *, t_nonConstArt *);
 
-int	parsArg_printColor(const char *);
-int	parsArg_printFrame(const char *);
-int	parsArg_printSavePNG(const char *);
+void	parsArg_genRandom(const char *, t_nonConstArt *);
+void	parsArg_genIvy(const char *, t_nonConstArt *);
+void	parsArg_genPetri(const char *, t_nonConstArt *);
+
+void	parsArg_printColor(const char *, t_nonConstArt *);
+void	parsArg_printFrame(const char *, t_nonConstArt *);
+void	parsArg_output(const char *, t_nonConstArt *);
 
 #endif

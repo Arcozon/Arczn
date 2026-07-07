@@ -39,7 +39,7 @@ enum e_printType {
 	P_FRAME,
 # define P_FRAME	P_FRAME
 	P_PNG,
-# define P_PNG	P_PNG
+# define P_FRAME	P_FRAME
 	P_MAX
 # define P_MAX		P_MAX
 };
@@ -77,7 +77,7 @@ struct s_nonConstArt {
 	uint8_t		percent;
 	e_genType	gen;
 	
-	char		*fName;
+	const char		*fName;
 	e_printType	print;
 	
 	size_t	width;
@@ -98,7 +98,6 @@ void	genTabIvy(t_art *tab);
 void	genTabPetri(t_art *tab);
 
 void	printTab(const t_art *tab);
-// void	printTabColor(const int fdOut, const t_art *tab);
 void	printNColor(const t_art *tab);
 void	printFrame(const t_art *tab);
 void	printSavePng(const t_art *tab);
