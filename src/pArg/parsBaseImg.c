@@ -2,29 +2,20 @@
 #include "parg.h"
 
 __always_inline
-void	_cpy_TRUECOLOR(const void *img, const size_t imgWidth, t_clr *clr[], const size_t heightClr) {
+void	_cpy_TRUECOLOR(const void *img, const size_t imgWidth, t_clr *clr[], const size_t heightClr, const size_t widthClr) {
 	for (size_t i = 0; i < heightClr; ++i) {
-		memcpy(clr[i], img + (i * imgWidth), imgWidth);
+		memcpy(clr[i], img + (i * imgWidth), widthClr * sizeof(t_clr));
 	}
 }
 
 __always_inline
 void	_cpy_TRUECOLOR_ALPHA(const void *img, const size_t imgWidth,
 		t_clr *clr[], const size_t heightClr, const size_t widthClr) {
-	// const size_t nPixel = imgWidth / 4;
-
-	printf("ImgW / 4 %lu\n", imgWidth / 4);
-	// printf("From: %lu to %lu\n", widthClr, heightClr);
 	for (size_t i = 0; i < heightClr; ++i) {
 		for (size_t j = 0; j < widthClr; ++j) {
 			memcpy(&clr[i][j], img + (i * imgWidth) + j * 4, sizeof(t_clr));
 		}
 	}
-	printf("last: %lu\n", (heightClr - 1) * imgWidth + (widthClr - 1) * 4);
-	printf("L1: %lu\n", (0) * imgWidth + (0) * 4);
-	printf("l2: %lu\n", (1) * imgWidth + (0) * 4);
-	printf("L1l: %lu\n", (0) * imgWidth + (widthClr) * 4);
-	printf("l2l: %lu\n", (1) * imgWidth + (widthClr) * 4);
 }
 
 const char *color_type_str(enum spng_color_type color_type)
@@ -64,7 +55,6 @@ int	parsBaseImage(const char *baseFName, t_nonConstArt *art) {
 		fprintf(stderr, "Err spng_get_ihdr\n");
 		goto err;
 	}
-	// printf("%ux%u | %u| %s\n", ihdr.width, ihdr.height, ihdr.bit_depth, color_type_str(ihdr.color_type));
 	if (ihdr.bit_depth != 8
 		|| (ihdr.color_type != SPNG_COLOR_TYPE_TRUECOLOR
 		&& ihdr.color_type != SPNG_COLOR_TYPE_TRUECOLOR_ALPHA)) {
@@ -82,7 +72,7 @@ int	parsBaseImage(const char *baseFName, t_nonConstArt *art) {
 		printf("Malloc err");
 		return (err);
 	}
-	if ((err = spng_decode_image(ctx, img, imgSize, SPNG_FMT_RGB8, 0))) {
+	if ((err = spng_decode_image(ctx, img, imgSize, SPNG_FMT_PNG, 0))) {
 		fprintf(stderr, "Err spng_decode_image\n");
 		goto err;
 	}
@@ -92,12 +82,9 @@ int	parsBaseImage(const char *baseFName, t_nonConstArt *art) {
 		err = 1;
 		goto err;
 	}
-	printf("%ux%u\n", ihdr.width, ihdr.height);
-	printf("%lu - %lu - %lu\n", imgSize, imgWidth, imgWidth / ihdr.width);
-	printf("%lu - %lu: %lu\n", art->widthClr, art->heightClr, art->widthClr * art->heightClr * 4);
 	switch (ihdr.color_type) {
 		case SPNG_COLOR_TYPE_TRUECOLOR:
-			_cpy_TRUECOLOR(img, imgWidth, art->arrClr, art->heightClr);
+			_cpy_TRUECOLOR(img, imgWidth, art->arrClr, art->heightClr, art->widthClr);
 			break;
 			case SPNG_COLOR_TYPE_TRUECOLOR_ALPHA:	
 			_cpy_TRUECOLOR_ALPHA(img, imgWidth, art->arrClr, art->heightClr, art->widthClr);
@@ -108,12 +95,10 @@ int	parsBaseImage(const char *baseFName, t_nonConstArt *art) {
 			goto err;
 			break;
 	}
-	
-
 
 	goto done;
 	err:
-	fprintf(stderr, "BaseImg: Err(%d): %s\n", err, spng_strerror(err));
+		fprintf(stderr, "BaseImg: Err(%d): %s\n", err, spng_strerror(err));
 	done:
 	if (f)			fclose(f);
 	if (ctx)		spng_ctx_free(ctx);

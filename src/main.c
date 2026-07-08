@@ -65,6 +65,9 @@ int main(int ac, char *av[], char *env[]) {
 		exit(1);
 	t_art art = *(t_art*)&nonConstArt;
 	selectGenTab(&art);
+	if (art.color != CLR_NONE && art.arrClr) {
+		applyClr(&art);
+	}
 	selectPrintTab(&art);
 	return (0);
 	(void)env;

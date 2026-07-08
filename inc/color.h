@@ -12,4 +12,16 @@ struct s_clr {
 t_clr	newColor(const uint8_t min, const uint8_t max)		__attribute__((hot, flatten));
 t_clr	seededNewColor(t_clr oldClr, const t_clrSet *set)	__attribute__((hot, flatten));
 
+struct s_oneClrRules {
+	uint8_t	max;
+	uint8_t	min;
+	uint8_t	delta;
+};
+
+struct s_clrRules {
+	struct s_oneClrRules	r;
+	struct s_oneClrRules	g;
+	struct s_oneClrRules	b;
+};
+
 #endif

@@ -14,6 +14,7 @@
 # include "types.h"
 # include "color.h"
 # include "random.h"
+# include "start.h"
 
 # define MASK(bit)			(1 << (bit))
 # define GETB(var, bit)		((var) & MASK(bit))
@@ -111,6 +112,8 @@ uint8_t	genNBit(const uint8_t nBit, const uint8_t percent);
 void	genTabRandom(t_art *tab);
 void	genTabIvy(t_art *tab);
 void	genTabPetri(t_art *tab);
+
+void	applyClr(t_art *art);
 
 void	printTab(const t_art *tab);
 void	printNColor(const t_art *tab);

@@ -16,7 +16,7 @@ S_UTILS =  random.c  color.c  hashtable.c  vector.c
 D_UTILS =  utils/
 UTILS = $(addprefix $(D_UTILS), $(S_UTILS))
 
-SRC =  $(PARG)  $(GEN)  $(PRINT)  $(UTILS)  main.c
+SRC =  $(PARG)  $(GEN)  $(PRINT)  $(UTILS)  main.c  applyColor.c
 D_SRC = src/
 
 D_BUILD = .build/
