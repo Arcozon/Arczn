@@ -119,7 +119,8 @@ void	genTabRandom(t_art *tab);
 void	genTabIvy(t_art *tab);
 void	genTabPetri(t_art *tab);
 
-void	applyClr(t_art *art);
+void	applyColorGradient(t_art *art);
+void	applyColorBaseFile(t_art *art);
 
 void	printTab(const t_art *tab);
 void	printNColor(const t_art *tab);

@@ -38,6 +38,7 @@ void	freeArt(t_nonConstArt *tab) {
 			free(tab->arrClr[i]);
 		free(tab->arrClr);
 	}
+	free(tab->starts);
 }
 
 typedef void	(*genTabFn)(t_art *);
@@ -46,6 +47,16 @@ void	selectGenTab(t_art *tab) {
 		genTabRandom,	genTabIvy,	genTabPetri
 	};
 	(*_genTabFn[tab->gen])(tab);
+}
+
+
+typedef void	(*selectGenColor)(t_art *);
+void	selectApplyColor(t_art *tab) {
+	static const genTabFn _genTabFn[CLR_MAX] = {
+		NULL,	applyColorGradient,	applyColorBaseFile
+	};
+	if (_genTabFn[tab->color])
+		(*_genTabFn[tab->color])(tab);
 }
 
 typedef void	(*printTabFn)(const t_art *);
@@ -65,10 +76,9 @@ int main(int ac, char *av[], char *env[]) {
 		exit(1);
 	t_art art = *(t_art*)&nonConstArt;
 	selectGenTab(&art);
-	if (art.color != CLR_NONE && art.arrClr) {
-		applyClr(&art);
-	}
+	selectApplyColor(&art);
 	selectPrintTab(&art);
+	// printFrame(&art);
 	return (0);
 	(void)env;
 }

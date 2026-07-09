@@ -10,7 +10,7 @@ t_clr	newColor(const uint8_t min, const uint8_t max) {
 
 
 __attribute__((const, hot, always_inline)) static inline
-uint8_t	_boundValue(const uint32_t nVal, const uint8_t min, const uint8_t max) {
+uint8_t	_boundValue(const int32_t nVal, const uint8_t min, const uint8_t max) {
 	if (nVal <= min) {
 		return (min);
 	} else if (nVal >= max) {
@@ -33,7 +33,9 @@ t_clr	seededNewColor(t_clr oldClr, const t_clrSet *set) {
 
 __attribute__((const, hot, always_inline)) static inline
 uint8_t	_nColor_Rule(const uint8_t oldVal, const t_oneClrRules * restrict rule) {
-	const int32_t	deltaRed = aRand(rule->delta * 2 - 1) - rule->delta;
+	const int32_t	deltaRed = aRand(rule->delta * 2 + 1) - rule->delta;
+	// if (deltaRed < 0)
+	// 	printf("%d\n", deltaRed);
 
 	return (_boundValue(deltaRed + oldVal, rule->min, rule->max));
 }
@@ -44,4 +46,6 @@ t_clr	seededNewColor_Rules(t_clr oldCLr, const t_clrRules * restrict rules) {
 	oldCLr.b = _nColor_Rule(oldCLr.b, &rules->b);
 	return (oldCLr);
 }
+
+// {{0x2f, 0xef, 1}, {0x2f, 0xff, 15}, {0x00, 0xf0, 1}}
 

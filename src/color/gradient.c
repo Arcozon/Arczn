@@ -29,40 +29,52 @@ void	_spreadP(enum e_dir dir, const size_t bX, const size_t bY, const t_clr bClr
 __always_inline
 void	_checkPSide(const t_art *art, t_vec *vec, const t_petriPoint p, const t_clrRules *rules) {
 	const size_t xArr = p.x / 2;
+	// printf("Point %lu - %lu: ", p.x, p.y);
 	if (p.dir != UP && p.y > 0) {	// Check Up
+		// printf(" u?");
 		if (art->arr[p.y - 1][xArr / 8] & MASK(xArr % 8)) {
 			_spreadP(UP, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
 			vec_add(vec, &(t_petriPoint){.x = p.x, .y = p.y - 2, .dir = DOWN});
+			// printf("U");
 		}
 	}
 	if (p.dir != LEFT && p.x > 0) {	// Check Up
-		if (art->arr[p.y][xArr / 8] & MASK(xArr % 8)) {
+		// printf(" l?");
+		const size_t	NxArr = xArr - 1;
+		if (art->arr[p.y][NxArr / 8] & MASK(NxArr % 8)) {
 			_spreadP(LEFT, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
 			vec_add(vec, &(t_petriPoint){.x = p.x - 2, .y = p.y, .dir = RIGHT});
+			// printf("L");
 		}
 	}
-	if (p.dir != DOWN && p.y + 1 < art->height) {	// Check Up
+	if (p.dir != DOWN && p.y + 1 < art->heightClr) {	// Check Up
+		// printf(" d?");
 		if (art->arr[p.y + 1][xArr / 8] & MASK(xArr % 8)) {
 			_spreadP(DOWN, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
 			vec_add(vec, &(t_petriPoint){.x = p.x, .y = p.y + 2, .dir = UP});
+			// printf("D");
 		}
 	}
-	if (p.dir != RIGHT && p.y > art->width) {	// Check Up
-		const size_t	NxArr = xArr + 1;
-		if (art->arr[p.y][NxArr / 8] & MASK(NxArr % 8)) {
+	if (p.dir != RIGHT && p.x + 1 < art->widthClr) {	// Check Up
+		// printf(" r?");
+		if (art->arr[p.y][xArr / 8] & MASK(xArr % 8)) {
 			_spreadP(RIGHT, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
 			vec_add(vec, &(t_petriPoint){.x = p.x + 2, .y = p.y, .dir = LEFT});
+			// printf("R");
 		}
 	}
+	// printf("\n");
 }
 
 
-void	colorGradient(const t_art *art) {
+void	applyColorGradient(t_art *art) {
 	const t_startList	*starts = art->starts;
 	t_vec	*vec = vec_create(sizeof(t_petriPoint));
 
 	for (size_t i = 0; i < starts->n; ++i) {
 		const t_clrRules	rules = starts->lStart[i].rules;
+		printf("%lu %lu\n", starts->n, i);
+		printf("%u %u\n", rules.r.min, rules.r.max);
 		const t_petriPoint	p_ = {.x = starts->lStart[i].x, .y = starts->lStart[i].y, .dir = NONE};
 		
 		art->arrClr[p_.y][p_.x] = starts->lStart[i].baseClr;	// Copy First
@@ -75,4 +87,5 @@ void	colorGradient(const t_art *art) {
 		}
 		// recursive not recusive shit
 	}
+	vec_destroy(vec);
 }

@@ -125,7 +125,7 @@ void	_joinPointColor(t_art *art, const t_petriPoint *node, const int dX, const i
 	const size_t	sX = node->x * 2;
 	const size_t	sY = node->y * 2;
 
-	if (art->color == CLR_GRADIENT) {
+	if (art->color == CLR_GRADIENT && 0) {
 		art->arrClr[sY + dY][sX + dX] = seededNewColor(art->arrClr[sY][sX], &art->clrSetting);
 		art->arrClr[sY + 2 * dY][sX + 2 * dX] = seededNewColor(art->arrClr[sY + dY][sX + dX], &art->clrSetting);
 	}
@@ -174,9 +174,9 @@ void	genTabPetri(t_art *tab) {
 	{
 		const t_startList	*startL = tab->starts;
 		for (size_t i = 0; i < startL->n; ++i) {
-			const t_petriPoint	p = {startL->lStart[i].x, startL->lStart[i].x};
+			const t_petriPoint	p = {startL->lStart[i].x / 2, startL->lStart[i].y / 2};
 			petriAdd(&petri, p);
-			if (tab->color == CLR_GRADIENT)
+			if (tab->color == CLR_GRADIENT && 0)
 				tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
 		}
 	}
