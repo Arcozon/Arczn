@@ -181,5 +181,7 @@ size_t	init(const int ac, char *av[], t_nonConstArt *art) {
 	art->arr = allocArray(art->width, art->height);
 	if (!art->arr)
 		return (1);
+	if (genStarts(art))
+		return (1);
 	return (0);
 }

@@ -13,8 +13,10 @@ struct s_start {
 
 struct s_startList {
 	size_t	n;
-	s_start	lStart[];
+	t_start	lStart[];
 };
+
+size_t	genStarts(t_nonConstArt *art);
 
 
 #endif

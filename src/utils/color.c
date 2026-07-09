@@ -30,3 +30,18 @@ t_clr	seededNewColor(t_clr oldClr, const t_clrSet *set) {
 	oldClr.b = _boundValue(deltaBlue + oldClr.b, set->min, set->max);
 	return (oldClr);
 }
+
+__attribute__((const, hot, always_inline)) static inline
+uint8_t	_nColor_Rule(const uint8_t oldVal, const t_oneClrRules * restrict rule) {
+	const int32_t	deltaRed = aRand(rule->delta * 2 - 1) - rule->delta;
+
+	return (_boundValue(deltaRed + oldVal, rule->min, rule->max));
+}
+
+t_clr	seededNewColor_Rules(t_clr oldCLr, const t_clrRules * restrict rules) {
+	oldCLr.r = _nColor_Rule(oldCLr.r, &rules->r);
+	oldCLr.g = _nColor_Rule(oldCLr.g, &rules->g);
+	oldCLr.b = _nColor_Rule(oldCLr.b, &rules->b);
+	return (oldCLr);
+}
+

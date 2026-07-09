@@ -37,7 +37,6 @@ bool	petriCmp(const void *d1, const void *d2) {
 }
 
 void	*petriAdd(t_petri *petri, t_petriPoint p) {
-	// const t_petriPoint p = _p;
 	void	*search = ht_get(petri->ht, &p);
 
 	if (!search) {
@@ -160,18 +159,6 @@ void	_joinPoint(t_petri *petri, const t_petriPoint *node, const uint8_t choice, 
 	}
 }
 
-
-static char trad[5] = "ULDR";
-char *strPoss(uint8_t poss) {
-	static char	c[5] = {};
-	for (int i = 0; i < 4 ; ++i) {
-		c[i] = ' ';
-		if (poss & MASK(i))
-			c[i] = trad[i];
-	}
-	return c;
-}
-
 void	genTabPetri(t_art *tab) {
 	t_petri	petri = {};
 
@@ -184,11 +171,14 @@ void	genTabPetri(t_art *tab) {
 		ht_destroy(petri.ht);
 		return ;
 	}
-	for (size_t i = 0; i < tab->nStart; ++i) {
-		const t_petriPoint	p = {aRand(tab->width), aRand(tab->height)};
-		petriAdd(&petri, p);
-		if (tab->color == CLR_GRADIENT)
-			tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
+	{
+		const t_startList	*startL = tab->starts;
+		for (size_t i = 0; i < startL->n; ++i) {
+			const t_petriPoint	p = {startL->lStart[i].x, startL->lStart[i].x};
+			petriAdd(&petri, p);
+			if (tab->color == CLR_GRADIENT)
+				tab->arrClr[p.y * 2][p.x * 2] = newColor(tab->clrSetting.min, tab->clrSetting.max);
+		}
 	}
 	while (petri.ht->nItems != 0) {
 		const size_t	rItem = aRand(petri.ht->nItems);
@@ -207,7 +197,6 @@ void	genTabPetri(t_art *tab) {
 				petriRm(&petri, rItem, &node);
 			}
 		}
-		fflush(stdout);
 	}
 	vec_destroy(petri.vec);
 	ht_destroy(petri.ht);

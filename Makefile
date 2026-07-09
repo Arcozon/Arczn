@@ -1,22 +1,26 @@
 NAME =  Arczn
 
-S_PARG =  parsOpt.c  parsOptArg.c  checkOptArg.c  parsBaseImg.c
-D_PARG =  pArg/
-PARG = $(addprefix $(D_PARG), $(S_PARG))
+S_INIT =  parsOpt.c  parsOptArg.c  checkOptArg.c  parsBaseImg.c  genStart.c
+D_INIT =  init/
+INIT = $(addprefix $(D_INIT), $(S_INIT))
 
-S_GEN =  random.c  ivy.c  petri.c
-D_GEN =  gen/
+S_GEN =  random.c  ivy.c  petri.c  
+D_GEN =  generation/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
-S_PRINT =  print.c  frame.c  nColor.c  savePng.c
-D_PRINT =  print/
-PRINT = $(addprefix $(D_PRINT), $(S_PRINT))
+S_COLOR =  applyColor.c  gradient.c
+D_COLOR =  color/
+COLOR = $(addprefix $(D_COLOR), $(S_COLOR))
+
+S_OUTPUT =  print.c  frame.c  nColor.c  savePng.c
+D_OUTPUT =  output/
+OUTPUT = $(addprefix $(D_OUTPUT), $(S_OUTPUT))
 
 S_UTILS =  random.c  color.c  hashtable.c  vector.c
 D_UTILS =  utils/
 UTILS = $(addprefix $(D_UTILS), $(S_UTILS))
 
-SRC =  $(PARG)  $(GEN)  $(PRINT)  $(UTILS)  main.c  applyColor.c
+SRC =  $(INIT)  $(GEN)  $(COLOR)  $(OUTPUT)  $(UTILS)  main.c
 D_SRC = src/
 
 D_BUILD = .build/

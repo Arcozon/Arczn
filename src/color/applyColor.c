@@ -25,13 +25,6 @@ void	_applyClrOdd(t_clr lClr[], const uint8_t line[], const size_t width) {
 	}
 }
 
-typedef struct s_iClr	t_iClr;
-struct s_iClr {
-	uint32_t	r;
-	uint32_t	g;
-	uint32_t	b;
-};
-
 __always_inline
 __attribute__((hot, const))
 uint8_t	_addClr(const uint8_t c, const uint32_t i)  {
@@ -60,9 +53,9 @@ void	_applyClr_4b4(t_clr *clr[], const uint8_t *arr[], const size_t w, const siz
 				buff.b += clr[i + 1][J].b;
 				++count;
 			}
-			buff.r /= 4 - count;
-			buff.g /= 4 - count;
-			buff.b /= 4 - count;
+			buff.r /= 5 - count;
+			buff.g /= 5 - count;
+			buff.b /= 5 - count;
 			if (arr[i][j / 8] & (MASK(j % 8))) {
 				clr[i][J + 1].r  = _addClr(clr[i][J + 1].r, buff.r);
 				clr[i][J + 1].g  = _addClr(clr[i][J + 1].g, buff.g);
@@ -77,17 +70,43 @@ void	_applyClr_4b4(t_clr *clr[], const uint8_t *arr[], const size_t w, const siz
 			}  else {
 				clr[i + 1][J] = (t_clr){0};
 			}
+			clr[i][J].r  = _addClr(clr[i][J].r, buff.r);
+			clr[i][J].g  = _addClr(clr[i][J].g, buff.g);
+			clr[i][J].b  = _addClr(clr[i][J].b, buff.b);
+		}
+	}
+}
+
+__always_inline
+void	_negateClr(t_clr *clr) {
+	clr->r = 255 - clr->r;
+	clr->g = 255 - clr->g;
+	clr->b = 255 - clr->b;
+}
+
+void	_negative(t_clr *clr[], const uint8_t *arr[], const size_t w, const size_t h) {
+	for (size_t i = 0; i < h ; ++i) {
+		for (size_t j = 0; j < w; ++j) {
+			const size_t	J = j / 2;
+			if ((i & 1) == 0) { // even
+				if (j & 1) {
+					if (!(arr[i][J / 8] & (MASK(J % 8))))
+					   _negateClr(&clr[i][j]);
+				} 
+			} else { //Off
+				if ((j & 1) == 0) {
+					if (!(arr[i][J / 8] & (MASK(J % 8))))
+						_negateClr(&clr[i][j]);
+				} else {
+					_negateClr(&clr[i][j]);
+					printf("%lu %lu\n", j, i);
+				}
+			}
 		}
 	}
 }
 
 void	applyClr(t_art *art) {
 	_applyClr_4b4(art->arrClr, (const uint8_t **)art->arr, art->width, 2 * art->height - 1);
-	// for (size_t i = 0; i < art->heightClr; ++i) {
-	// 	if (i & 1) {
-	// 		_applyClrOdd(art->arrClr[i], art->arr[i], art->width);
-	// 	} else {
-	// 		_applyClrEven(art->arrClr[i], art->arr[i], art->width);
-	// 	}
-	// }
+	// _negative(art->arrClr, (const uint8_t **)art->arr, art->widthClr, art->heightClr);
 }

@@ -64,7 +64,7 @@ void	genTabIvy(t_art *art) {
 		}
 	}
 	_getTabIvyFirst(art->arr[0], art->width, art->nStart);
-	if (art->arrClr)
+	if (art->color == CLR_GRADIENT)
 		genClrIvy(art);
 }
 
