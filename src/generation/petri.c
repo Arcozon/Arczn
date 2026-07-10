@@ -1,6 +1,7 @@
 #include "arczn.h"
 #include "hashtable.h"
 #include "vector.h"
+#include "fenwick_tree.h"
 
 typedef struct s_petriPoint {
 	size_t	x;
