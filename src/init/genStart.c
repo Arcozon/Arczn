@@ -1,5 +1,58 @@
 #include "arczn.h"
 
+__always_inline static __attribute__((const))
+uint8_t	_reboundCLR(const uint8_t clr, const uint8_t min, const uint8_t max) {
+	if (clr <= min)
+		return (min);
+	else if (clr >= max)
+		return (max);
+	return  (clr);
+}
+
+__always_inline static
+void	_reboundRGB_Start(t_start *s) {
+	s->baseClr.r = _reboundCLR(s->baseClr.r, s->rules.r.min, s->rules.r.max);
+	s->baseClr.g = _reboundCLR(s->baseClr.g, s->rules.g.min, s->rules.g.max);
+	s->baseClr.b = _reboundCLR(s->baseClr.b, s->rules.b.min, s->rules.b.max);
+}
+
+__always_inline static
+void	_fixOneRule(t_oneClrRules *r) {
+	if (r->max < r->min)
+		r->max = r->min;
+	const uint8_t	range = r->max - r->min;
+	if (range < r->delta) {
+		r->delta = range;
+	}
+}
+
+__always_inline static
+void	_fixRules_Start(t_start *s) {
+	_fixOneRule(&s->rules.r);
+	_fixOneRule(&s->rules.g);
+	_fixOneRule(&s->rules.b);
+}
+
+__always_inline static
+void	_fixCoordinate_Start(t_start *s, const size_t w, const size_t h) {
+	if (s->x >= w)
+		s->x = w -1;
+	if (s->y >= h)
+		s->y = h -1;
+}
+
+__always_inline static
+void	_fixStarts(t_start starts[], const size_t nStart, const t_nonConstArt *art) {
+	const uint64_t	w = art->width * 2 - 1;
+	const uint64_t	h = art->height * 2 - 1;
+
+	for (size_t i = 0; i < nStart; ++i) {
+		_fixCoordinate_Start(&starts[i], w, h);
+		_fixRules_Start(&starts[i]);
+		_reboundRGB_Start(&starts[i]);
+	}
+}
+
 size_t	genStarts(t_nonConstArt *art) {
 	t_startList *starts = malloc(sizeof(starts->n) + sizeof(starts->lStart[0]) * art->nStart);
 	if (!starts)
@@ -12,24 +65,24 @@ size_t	genStarts(t_nonConstArt *art) {
 		starts->lStart[i] = (t_start){
 			.x = aRand(art->width) * 2,
 			.y = aRand(art->height) * 2,
-			.baseClr = {0x46,0xb2, 0x3c},
-			// .baseClr = {0xef,0xff, 0xf0},
-			// .rules = {{0x2f, 0xef, 1}, {0x2f, 0xff, 15}, {0x00, 0xf0, 1}}
-			// .rules = (t_clrRules){{0x00, 0x3f, 6}, {0x70, 0xff, aRand(6)}, {0x00, 0x3f, 2}}
-			// .rules = (t_clrRules){{0x00, 0x3f, 6}, {0x70, 0xff, 1}, {0x00, 0x3f, 2}}
-			.rules = {{0x56, 0x8f, 6}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}}
-			// .rules = {{0x2f, 0xff, 2}, {0x2f, 0xff, 2}, {0x00, 0x4f, 4}}
+			.baseClr = {0x96,0xb2, 0x3c},
+			.rules = (t_clrRules){{0x40, 0xbf, 5}, {0x36, 0x80, 2}, {0x83, 0xce, 1}}
+			// .rules = (t_clrRules){{0x60, 0xff, 10}, {0x49, 0x9f, 4}, {0x77, 0x75, 9}}
 		};
-		// printf("Start %lu: [%lu : %lu]\n", i, starts->lStart[i].x, starts->lStart[i].y);
 	}
 	if (art->nStart > 1)
 		starts->lStart[1].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
-	starts->lStart[0].rules = (t_clrRules){{0x9f, 0xff, 1}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
-	for (size_t i = 0; i < art->nStart; ++i) {
-		t_clrRules rules = starts->lStart[i].rules;
-		printf("%lu: %u %u\n", i, rules.r.min, rules.r.max);
-	}
 	
+	_fixStarts(starts->lStart, starts->n, art);
+
+	for (size_t i = 0; i < art->nStart; ++i) {
+		const t_clr			bClr = starts->lStart[i].baseClr;
+		const t_clrRules	rules = starts->lStart[i].rules;
+		printf("%lu: [%lu, %lu] #%2X%2X%2X\n", i, starts->lStart[i].x, starts->lStart[i].y, bClr.r, bClr.g, bClr.b);
+		printf("	R: [%u-%u](%u)\n", rules.r.min, rules.r.max, rules.r.delta);
+		printf("	G: [%u-%u](%u)\n", rules.g.min, rules.g.max, rules.g.delta);
+		printf("	B: [%u-%u](%u)\n", rules.b.min, rules.b.max, rules.b.delta);
+	}
 	return (0);
 }
 

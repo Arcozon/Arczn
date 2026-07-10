@@ -3,7 +3,7 @@
 #define F_NAME_SIZE	512
 const char	*_getFName(const t_art *art) {
 	static const char	*genType[G_MAX] = {"Random", "Ivy", "Petri"};
-	static const char	format[] = "png/%04d%02d%02d-%02d:%02d:%02d_%s_%lux%lu";
+	static const char	format[] = "png/%04d%02d%02d-%02d:%02d:%02d_%s_%lux%lu.png";
 	static char	fName[F_NAME_SIZE] = {};
 
 	if (art->fNameOut)
