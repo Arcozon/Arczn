@@ -16,7 +16,7 @@ S_OUTPUT =  print.c  frame.c  nColor.c  savePng.c
 D_OUTPUT =  output/
 OUTPUT = $(addprefix $(D_OUTPUT), $(S_OUTPUT))
 
-S_UTILS =  random.c  color.c  hashtable.c  vector.c
+S_UTILS =  random.c  color.c  hashtable.c  vector.c  fenwick_tree.c
 D_UTILS =  utils/
 UTILS = $(addprefix $(D_UTILS), $(S_UTILS))
 

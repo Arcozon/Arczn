@@ -9,7 +9,7 @@
 # include <fcntl.h>
 # include <time.h>
 
-# include "spng.h"
+# include <spng.h>
 
 # include "types.h"
 # include "color.h"

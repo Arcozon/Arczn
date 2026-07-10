@@ -67,7 +67,6 @@ void	selectPrintTab(const t_art *tab) {
 	(*_printTabFn[tab->print])(tab);
 }
 
-
 int main(int ac, char *av[], char *env[]) {
 	__attribute__((cleanup(freeArt)))
 	t_nonConstArt	nonConstArt	= _defaultArt();
