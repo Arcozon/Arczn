@@ -35,7 +35,7 @@ CC =  cc
 FLAGS = -Wall -Wextra -Werror -MMD -g -O3
 INC = inc/ $(D_SPNG)spng
 INC_FLAGS =  $(addprefix -I, $(INC))
-LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)/$(D_MESON_BUILD)  -Wl,-z,now
+LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)/$(D_MESON_BUILD)  -Wl,-z,now -lm
 
 RM =  rm -rf
 

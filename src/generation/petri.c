@@ -48,11 +48,12 @@ bool	clusterCmp(const void *d1, const void *d2) {
 	return (!(p1->x == p2->x && p1->y == p2->y));
 }
 
-void	*clusterAdd(t_cluster *cluster, t_point p) {
-	void	*search = ht_get(cluster->ht, &p);
+void	*clusterAdd(t_cluster *cluster, const t_point *p) {
+	void	*search = ht_get(cluster->ht, p);
 
 	if (!search) {
-		search = ht_add(cluster->ht, &p);
+		search = ht_add(cluster->ht, p);
+		if (!search)	abort();
 		vec_add(cluster->vec, search);
 	}
 	return (search);
@@ -139,18 +140,18 @@ void	_joinPoint(t_cluster *cluster, const t_point *node, const uint8_t choice, u
 
 	if (choice == UP) {
 		tab[bY - 1][bX / 8] |= MASK(bX % 8);
-		clusterAdd(cluster, (t_point){bX, node->y - 1, node->origin});
+		clusterAdd(cluster, &(t_point){bX, node->y - 1, node->origin});
 	} else if (choice == DOWN) {
 		tab[bY + 1][bX / 8] |= MASK(bX % 8);
-		clusterAdd(cluster, (t_point){bX, node->y + 1, node->origin});
+		clusterAdd(cluster, &(t_point){bX, node->y + 1, node->origin});
 	} else if (choice == LEFT) {
 		const size_t	nX = bX - 1;
 		tab[bY][nX / 8] |= MASK(nX % 8);
-		clusterAdd(cluster, (t_point){nX, node->y, node->origin});
+		clusterAdd(cluster, &(t_point){nX, node->y, node->origin});
 	} else if (choice == RIGHT) {
 		const size_t	nX = bX;
 		tab[bY][nX / 8] |= MASK(nX % 8);
-		clusterAdd(cluster, (t_point){bX + 1, node->y, node->origin});
+		clusterAdd(cluster, &(t_point){bX + 1, node->y, node->origin});
 	} else {
 		printf("Erorr\n");
 	}
@@ -163,14 +164,21 @@ void	_initPetri(t_petri *petri, t_art *art) {
 	{
 		const t_startList	*startL = art->starts;
 		for (size_t i = 0; i < startL->n; ++i) {
-			t_cluster		cluster = {.weight = 3, .xOrigin = startL->lStart[i].x / 2, .yOrigin = startL->lStart[i].y / 2};
-			const t_point	sPoint = {startL->lStart[i].x / 2, startL->lStart[i].y / 2, &cluster};
+			const t_start *start = &startL->lStart[i];
+			t_cluster		*cluster = calloc(1, sizeof(*cluster));
+			const t_point	sPoint = {start->x / 2, start->y / 2, cluster};
+			
+			if (!cluster)	abort();
+			cluster->weight = start->weight;
+			cluster->xOrigin = start->x / 2;
+			cluster->yOrigin = start->y / 2;
+			cluster->ht = ht_create(sqrt(art->height * art->width) / startL->n + 1, clusterHash, clusterDup, clusterCmp, free);
+			cluster->vec = vec_create(sizeof(t_point));
 
-			cluster.ht = ht_create(sqrt(art->height * art->width), clusterHash, clusterDup, clusterCmp, free);
-			cluster.vec = vec_create(sizeof(t_point));
-
-			vec_add(petri->vStart, &cluster);
-			fTree_append(&petri->weightStarts, cluster.weight, &cluster);
+			if (!cluster->ht || ! cluster->vec)	abort();
+			clusterAdd(cluster, &sPoint);
+			vec_add(petri->vStart, cluster);
+			fTree_append(&petri->weightStarts, cluster->weight, cluster);
 		}
 	}
 }
@@ -179,28 +187,52 @@ void	genTabPetri(t_art *tab) {
 	t_petri	petri = {};
 	_initPetri(&petri, tab);
 	size_t	totalWeight = petri.weightStarts.BIT[petri.weightStarts.cap - 1];
-	
+	const size_t	tStart = 50;
+	size_t	count[tStart] = {};
 	while (totalWeight != 0) {
 		const uint64_t	index = fTree_getIndex(&petri.weightStarts, aRand(totalWeight));
-		const t_cluster	*cluster = petri.weightStarts.val[index].data;
+		++count[index];
+		t_cluster	*cluster = petri.weightStarts.val[index].data;
 		const size_t	rItem = aRand(cluster->ht->nItems);
-		t_point	node = *(t_point *)vec_get(cluster->vec, rItem);
-		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, node.x, node.y);
+
+		const t_point	*node = vec_get(cluster->vec, rItem);
+		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, node->x, node->y);
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		
 		if (nPoss == 0) {
-			clusterRm(cluster, rItem, &node);
+			clusterRm(cluster, rItem, node);
+			if (cluster->ht->nItems == 0) {
+				fTree_update(&petri.weightStarts, index, 0);
+				totalWeight = petri.weightStarts.BIT[petri.weightStarts.cap - 1];
+			}
 			continue;
 		} else {
 			const int  choice = _choseOnePossibility(poss, nPoss);
-			
-			_joinPoint(cluster, &node, choice, tab->arr);
+
+			_joinPoint(cluster, node, choice, tab->arr);
 			if (nPoss == 1) {
-				clusterRm(cluster, rItem, &node);
+				clusterRm(cluster, rItem, node);
 			}
 		}
+		if (cluster->ht->nItems == 0) {
+			fTree_update(&petri.weightStarts, index, 0);
+			totalWeight = petri.weightStarts.BIT[petri.weightStarts.cap - 1];
+		}
 	}
-	// free hash and vec from clusters
+	{
+		size_t tt = 0;
+		for (size_t i = 0; i < tStart; ++i) {
+			printf("%lu: %lu\n", i, count[i]);
+			tt += count[i];
+		}
+		printf("total: %lu\n", tt);
+	}
+	for (size_t i = 0; i < petri.vStart->size; ++i) {
+		const t_cluster	*cluster = vec_get(petri.vStart, i);
+
+		vec_destroy(cluster->vec);
+		ht_destroy(cluster->ht);
+	}
 	fTree_destroy(&petri.weightStarts);
 	vec_destroy(petri.vStart);
 }

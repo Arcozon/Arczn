@@ -4,8 +4,9 @@
 #include "types.h"
 
 struct s_start {
-	size_t x;
-	size_t y;
+	size_t	x;
+	size_t	y;
+	size_t	weight;
 
 	t_clr		baseClr;
 	t_clrRules	rules;

@@ -59,19 +59,20 @@ size_t	genStarts(t_nonConstArt *art) {
 		return (1);
 	art->starts = starts;
 	starts->n = art->nStart;
-	// printf("%lu - %lu\n", art->width, art->height);
-	// printf("%lu - %lu\n", art->width * 2 - 1, art->height * 2 - 1);
 	for (size_t i = 0; i < art->nStart; ++i) {
 		starts->lStart[i] = (t_start){
 			.x = aRand(art->width) * 2,
 			.y = aRand(art->height) * 2,
+			.weight = 3,
 			.baseClr = {0x96,0xb2, 0x3c},
 			.rules = (t_clrRules){{0x40, 0xbf, 5}, {0x36, 0x80, 2}, {0x83, 0xce, 1}}
 			// .rules = (t_clrRules){{0x60, 0xff, 10}, {0x49, 0x9f, 4}, {0x77, 0x75, 9}}
 		};
 	}
-	if (art->nStart > 1)
+	if (art->nStart > 1) {
 		starts->lStart[1].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
+		starts->lStart[1].weight = 100;
+	}
 	
 	_fixStarts(starts->lStart, starts->n, art);
 

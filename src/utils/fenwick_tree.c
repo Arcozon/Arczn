@@ -52,6 +52,7 @@ uint32_t	fTree_append(t_fTree *tree, const uint64_t weight, void *data) {
 		nTree.BIT[tree->cap * 2 - 1] = nTree.BIT[tree->cap - 1];
 		*tree = nTree;
 	}
+	// printf("data")
 	tree->val[tree->n].data = data;
 	fTree_update(tree, tree->n, weight);
 	++tree->n;

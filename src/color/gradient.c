@@ -73,8 +73,8 @@ void	applyColorGradient(t_art *art) {
 
 	for (size_t i = 0; i < starts->n; ++i) {
 		const t_clrRules	rules = starts->lStart[i].rules;
-		printf("%lu %lu\n", starts->n, i);
-		printf("%u %u\n", rules.r.min, rules.r.max);
+		// printf("%lu %lu\n", starts->n, i);
+		// printf("%u %u\n", rules.r.min, rules.r.max);
 		const t_petriPoint	p_ = {.x = starts->lStart[i].x, .y = starts->lStart[i].y, .dir = NONE};
 		
 		art->arrClr[p_.y][p_.x] = starts->lStart[i].baseClr;	// Copy First
