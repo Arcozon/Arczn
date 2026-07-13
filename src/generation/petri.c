@@ -54,7 +54,7 @@ void	*clusterAdd(t_cluster *cluster, const t_point *p) {
 	if (!search) {
 		search = ht_add(cluster->ht, p);
 		if (!search)	abort();
-		vec_add(cluster->vec, search);
+		vec_add(cluster->vec, &search);
 	}
 	return (search);
 }
@@ -63,7 +63,7 @@ void	clusterRm(t_cluster *cluster, const size_t index, const void *item) {
 	if (item != NULL) {
 		ht_rm(cluster->ht, item);
 	} else {
-		ht_rm(cluster->ht, vec_get(cluster->vec, index));
+		ht_rm(cluster->ht, *(void **)vec_get(cluster->vec, index));
 	}
 	vec_rm(cluster->vec, index);
 }
@@ -165,20 +165,21 @@ void	_initPetri(t_petri *petri, t_art *art) {
 		const t_startList	*startL = art->starts;
 		for (size_t i = 0; i < startL->n; ++i) {
 			const t_start *start = &startL->lStart[i];
-			t_cluster		*cluster = calloc(1, sizeof(*cluster));
-			const t_point	sPoint = {start->x / 2, start->y / 2, cluster};
+			t_cluster		cluster = {};
 			
-			if (!cluster)	abort();
-			cluster->weight = start->weight;
-			cluster->xOrigin = start->x / 2;
-			cluster->yOrigin = start->y / 2;
-			cluster->ht = ht_create(sqrt(art->height * art->width) / startL->n + 1, clusterHash, clusterDup, clusterCmp, free);
-			cluster->vec = vec_create(sizeof(t_point));
+			cluster.weight = start->weight;
+			cluster.xOrigin = start->x / 2;
+			cluster.yOrigin = start->y / 2;
+			cluster.ht = ht_create(sqrt(art->height * art->width) / startL->n + 1, clusterHash, clusterDup, clusterCmp, free);
+			cluster.vec = vec_create(sizeof(t_point*));
 
-			if (!cluster->ht || ! cluster->vec)	abort();
-			clusterAdd(cluster, &sPoint);
-			vec_add(petri->vStart, cluster);
-			fTree_append(&petri->weightStarts, cluster->weight, cluster);
+			if (!cluster.ht || ! cluster.vec)	abort();
+			vec_add(petri->vStart, &cluster);
+			t_cluster	*pCluster = vec_get(petri->vStart, i);
+			
+			const t_point	sPoint = {start->x / 2, start->y / 2, pCluster};
+			clusterAdd(pCluster, &sPoint);
+			fTree_append(&petri->weightStarts, cluster.weight, pCluster);
 		}
 	}
 }
@@ -195,7 +196,7 @@ void	genTabPetri(t_art *tab) {
 		t_cluster	*cluster = petri.weightStarts.val[index].data;
 		const size_t	rItem = aRand(cluster->ht->nItems);
 
-		const t_point	*node = vec_get(cluster->vec, rItem);
+		const t_point	*node = *(void **)vec_get(cluster->vec, rItem);
 		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, node->x, node->y);
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		
@@ -228,10 +229,11 @@ void	genTabPetri(t_art *tab) {
 		printf("total: %lu\n", tt);
 	}
 	for (size_t i = 0; i < petri.vStart->size; ++i) {
-		const t_cluster	*cluster = vec_get(petri.vStart, i);
+		t_cluster	*cluster = vec_get(petri.vStart, i);
 
 		vec_destroy(cluster->vec);
 		ht_destroy(cluster->ht);
+		// free(cluster);
 	}
 	fTree_destroy(&petri.weightStarts);
 	vec_destroy(petri.vStart);
