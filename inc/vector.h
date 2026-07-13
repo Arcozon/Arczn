@@ -6,7 +6,7 @@
 
 # include "types.h"
 
-#define VECTOR_DEFAULT_SIZE	(8096)
+#define VECTOR_DEFAULT_SIZE	(128)
 
 typedef struct s_vector	t_vec;
 struct s_vector	{

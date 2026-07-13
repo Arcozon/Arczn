@@ -37,8 +37,9 @@ void	*clusterDup(const void *_toDup) {
 	const t_point *toDup = _toDup;
 	t_point	*res = malloc(sizeof(t_point));
 
-	if (res)
-		*res = *toDup;
+	if (res) {
+		memcpy(res, toDup, sizeof(*res));
+	}
 	return (res);
 }
 
@@ -188,8 +189,10 @@ void	genTabPetri(t_art *tab) {
 	t_petri	petri = {};
 	_initPetri(&petri, tab);
 	size_t	totalWeight = petri.weightStarts.BIT[petri.weightStarts.cap - 1];
+
 	const size_t	tStart = 50;
 	size_t	count[tStart] = {};
+
 	while (totalWeight != 0) {
 		const uint64_t	index = fTree_getIndex(&petri.weightStarts, aRand(totalWeight));
 		++count[index];
