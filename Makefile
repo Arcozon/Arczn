@@ -67,6 +67,32 @@ fclean: clean
 re: fclean
 	@$(MAKE) all
 
+NAME_PARS = parsConfig
+YACC_SRC =  config_parser.y
+LEX_SRC	 =  config_lexer.l
+
+D_GEN	   =  gen/
+YACC_C_GEN =  $(D_GEN)$(YACC_SRC:.y=.c)
+LEX_C_GEN  =  $(D_GEN)$(LEX_SRC:.l=.c)
+INC_GEN	   =  $(YACC_C_GEN:.c=.h) 
+
+YACC	=  bison -d #-Wother -Wconflicts-rr -Wconflicts-sr -Wcounterexamples 
+LEX		=  flex
+
+.DEFAULT_GOAL =  pars
+pars:	$(NAME_PARS)
+
+$(NAME_PARS):	$(YACC_C_GEN)	$(LEX_C_GEN)
+	cc $^ -I$(D_GEN) -I$(D_SRC) -o $@
+
+$(YACC_C_GEN): $(YACC_SRC)
+	@mkdir -p $(@D)
+	$(YACC) -o$@ -- $<
+
+$(LEX_C_GEN): $(LEX_SRC) $(INC_GEN)
+	@mkdir -p $(@D)
+	$(LEX) -o$@ $<
+
 DEPS = $(addprefix $(D_BUILD), $(SRC:.c=.d))
 -include $(DEPS)
 
