@@ -75,29 +75,37 @@ void	_joinPoint(t_cluster *cluster, const t_point *node, const uint8_t choice, u
 	}
 }
 
+__always_inline static
+t_cluster	*_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClusters) {
+	t_cluster		cluster = {};
+		
+	cluster.weight = start->weight;
+	cluster.xOrigin = start->x / 2;
+	cluster.yOrigin = start->y / 2;
+	cluster.ht = ht_create(HashTableSize, pointHash, pointDup, pointCmp, free);
+	cluster.vec = vec_create(sizeof(t_point*));
+	if (!cluster.ht || ! cluster.vec)
+		abort();
+
+	t_cluster	*pCluster = vec_add(vClusters, &cluster);
+		
+	const t_point	sPoint = {start->x / 2, start->y / 2, pCluster};
+	clusterAdd(pCluster, &sPoint);
+
+	return (pCluster);
+}
+
 void	_initPetri(t_petri *petri, t_art *art) {
+	const t_startList	*startL = art->starts;
+	const size_t	HashTableSize = sqrt(art->height * art->width) / startL->n + 1;
+
 	petri->vClusters = vec_create(sizeof(t_cluster));
 	fTree_create(&petri->weightClusters);
-	
 	{
-		const t_startList	*startL = art->starts;
 		for (size_t i = 0; i < startL->n; ++i) {
-			const t_start *start = &startL->lStart[i];
-			t_cluster		cluster = {};
+			t_cluster	*nCluster = _initCluster(&startL->lStart[i], HashTableSize, petri->vClusters);
 			
-			cluster.weight = start->weight;
-			cluster.xOrigin = start->x / 2;
-			cluster.yOrigin = start->y / 2;
-			cluster.ht = ht_create(sqrt(art->height * art->width) / startL->n + 1, pointHash, pointDup, pointCmp, free);
-			cluster.vec = vec_create(sizeof(t_point*));
-
-			if (!cluster.ht || ! cluster.vec)	abort();
-			vec_add(petri->vClusters, &cluster);
-			t_cluster	*pCluster = vec_get(petri->vClusters, i);
-			
-			const t_point	sPoint = {start->x / 2, start->y / 2, pCluster};
-			clusterAdd(pCluster, &sPoint);
-			fTree_append(&petri->weightClusters, cluster.weight, pCluster);
+			fTree_append(&petri->weightClusters, nCluster->weight, nCluster);
 		}
 	}
 }
@@ -110,9 +118,14 @@ void	genTabPetri(t_art *tab) {
 	const size_t	tStart = 50;
 	size_t	count[tStart] = {};
 
+	const t_cluster	*oldCluster = NULL;
 	while (totalWeight != 0) {
 		const uint64_t	index = fTree_getIndex(&petri.weightClusters, aRand(totalWeight));
 		t_cluster		*cluster = petri.weightClusters.val[index].data;
+		if (cluster != oldCluster) {
+			oldCluster = cluster;
+			// Calc wieghts newCluster
+		}
 		
 		const size_t	rItem = aRand(cluster->ht->nItems);
 		const t_point	*node = *(void **)vec_get(cluster->vec, rItem);

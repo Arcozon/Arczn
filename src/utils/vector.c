@@ -33,7 +33,7 @@ void	*vec_add(t_vec *vec, const void *val) {
 	}
 	memcpy(vec->arr + (vec->size * vec->sizeOfType), val, vec->sizeOfType);
 	++vec->size;
-	return (vec->arr);
+	return (vec->arr + ((vec->size - 1) * vec->sizeOfType));
 }
 
 void	vec_rm(t_vec *vec, const size_t index) {
