@@ -29,6 +29,9 @@ void	*clusterAdd(t_cluster *cluster, const t_point *p) {
 		search = ht_add(cluster->ht, p);
 		if (!search)	abort();
 		vec_add(cluster->vec, &search);
+		fTree_append(&cluster->weightPoints, cluster->getPointWeightFn(search, cluster), search);
+	} else {
+		// Update weight
 	}
 	return (search);
 }
@@ -40,4 +43,5 @@ void	clusterRm(t_cluster *cluster, const size_t index, const void *item) {
 		ht_rm(cluster->ht, *(void **)vec_get(cluster->vec, index));
 	}
 	vec_rm(cluster->vec, index);
+	// fTree_update(&cluster->weightPoints, index, 0);
 }

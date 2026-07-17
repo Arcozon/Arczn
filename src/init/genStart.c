@@ -64,15 +64,22 @@ size_t	genStarts(t_nonConstArt *art) {
 			.x = aRand(art->width) * 2,
 			.y = aRand(art->height) * 2,
 			.weight = 3,
-			.baseClr = {0x96,0xb2, 0x3c},
+			.baseClr = {0x9 * i + 15 * i, 0xb2* i + 25 * i, 0x3c* i + 45 * i},
+			// .baseClr = {0x9,0xb2, 0x3c},
 			.rules = (t_clrRules){{0x40, 0xbf, 5}, {0x36, 0x80, 2}, {0x83, 0xce, 1}}
 			// .rules = (t_clrRules){{0x60, 0xff, 10}, {0x49, 0x9f, 4}, {0x77, 0x75, 9}}
 		};
+		if (i % 20 == 1) {
+			starts->lStart[i].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
+		} else {
+			starts->lStart[i].rules = (t_clrRules){{0x60, 0x7e, 1}, {0x68, 0x7f, 1}, {0x95, 0xff, 3}};
+			// starts->lStart[i].rules = (t_clrRules){{0x35, 0x55, 2}, {0x78, 0xb2, 4}, {0x15, 0x32, 6}};
+		}
 	}
-	if (art->nStart > 1) {
-		starts->lStart[1].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
-		starts->lStart[1].weight = 200;
-	}
+	// if (art->nStart > 1) {
+	// 	starts->lStart[1].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
+	// 	starts->lStart[1].weight = 20;
+	// }
 	
 	_fixStarts(starts->lStart, starts->n, art);
 
