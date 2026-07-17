@@ -85,13 +85,13 @@ uint64_t fTree_getIndex(const t_fTree *tree, uint64_t weight) {
 		return (tree->n - 1);
 	}
 
-    while (bitmask != 0) {
-        size_t next_index = index + bitmask;
-        if (next_index <= tree->cap && BIT0[next_index] <= weight) {
-            index = next_index;
-            weight -= BIT0[index];
-        }
-        bitmask >>= 1;
-    }
-    return (index);
+	while (bitmask != 0) {
+		size_t next_index = index + bitmask;
+		if (next_index <= tree->cap && BIT0[next_index] <= weight) {
+			index = next_index;
+			weight -= BIT0[index];
+		}
+		bitmask >>= 1;
+	}
+	return (index);
 }

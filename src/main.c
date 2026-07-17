@@ -12,7 +12,7 @@ t_nonConstArt	_defaultArt(void) {
 		.nStart = 1,
 		.orphanPercent = 0,
 		.percent = DEFAULT_PERCENT,
-		.gen = G_RANDOM,
+		.gen = G_PETRI,
 		.print = P_NORMAL,
 		.color = CLR_GRADIENT,
 		.width = DEFAULT_WIDTH,

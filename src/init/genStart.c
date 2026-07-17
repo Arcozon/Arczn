@@ -71,7 +71,7 @@ size_t	genStarts(t_nonConstArt *art) {
 	}
 	if (art->nStart > 1) {
 		starts->lStart[1].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
-		starts->lStart[1].weight = 100;
+		starts->lStart[1].weight = 200;
 	}
 	
 	_fixStarts(starts->lStart, starts->n, art);
