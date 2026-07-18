@@ -70,8 +70,6 @@ void	ht_rm(t_ht *ht, const void *data) {
 	t_bucket	**pItem = &ht->buckets[hash % ht->nBuckets];
 	
 	while (*pItem != NULL) {
-		// t_petriPoint *a = (*pItem)->data;
-		// printf("Item %lu %lu\n", a->x, a->y);
 		if (!ht->cmpFn((*pItem)->data, data)) {
 			t_bucket	*item = *pItem;
 			
@@ -79,10 +77,8 @@ void	ht_rm(t_ht *ht, const void *data) {
 			ht->freeFn(item->data);
 			free(item);
 			--ht->nItems;
-			// printf("Rm hash");
 			return ;
 		}
-		// printf("Next\n");
 		pItem = &(*pItem)->next;
 	}
 }
