@@ -79,14 +79,14 @@ __always_inline static
 t_cluster	*_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClusters) {
 	t_cluster		cluster = {.xOrigin = start->x /2, .yOrigin = start->y / 2,
 						.chosePossibilityFn = CPF_random,
-						.getPointWeightFn = GPW_One};
+						// .getPointWeightFn = GPW_One};
+						.getPointWeightFn = GPW_distance};
 		
 	cluster.weight = start->weight;
 	cluster.ht = ht_create(HashTableSize, pointHash, pointDup, pointCmp, free);
-	// cluster.vec = vec_create(sizeof(t_point*));
-	fTree_create(&cluster.weightPoints);
-	// if (!cluster.ht || ! cluster.vec)
-	// 	abort();
+	;
+	if (!cluster.ht || fTree_create(&cluster.weightPoints))
+		abort();
 
 	t_cluster	*pCluster = vec_add(vClusters, &cluster);
 		
@@ -127,7 +127,7 @@ void	genTabPetri(t_art *tab) {
 		
 		if (cluster != oldCluster) {
 			oldCluster = cluster;
-			// Calc wieghts newCluster
+			// TODO: Calc wieghts newCluster
 		}
 		
 		const size_t	rItem = fTree_getRandomIndex(&cluster->weightPoints);
@@ -146,7 +146,7 @@ void	genTabPetri(t_art *tab) {
 			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss);
 
 			_joinPoint(cluster, node, choice, tab->arr); // Maje it return a vec
-			// If new point, get new point weight
+			// TODO: If new point, get new point weight
 			// update old point weight
 
 		}
