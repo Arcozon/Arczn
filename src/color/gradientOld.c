@@ -15,34 +15,15 @@ struct s_vecDir{
 };
 static const struct s_vecDir	vecDirs[NONE] = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
 
-__always_inline
-void	getDirFirstP(const uint8_t *arr[], uint64_t w, uint64_t h, uint64_t X, uint64_t Y) {
-	const size_t xArr = X / 2;
+// __always_inline
+// void	_spreadP(enum e_dir dir, const size_t bX, const size_t bY, const t_clr *bClr,
+// 		t_clr *arrClr[], const t_clrRules *rules) {
+// 	static const struct s_vecDir	vecDirs[NONE] = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+// 	const struct s_vecDir	vecDir = vecDirs[dir];
 
-	if (Y > 0) {	// Check Up
-		if (arr[Y - 1][xArr / 8] & MASK(xArr % 8)) {
-			vec_add(vec, &(t_petriPoint){.x = X, .y = Y - 2, .dir = DOWN});
-		}
-	}
-	if (X > 0) {	// Check Up
-		const size_t	NxArr = xArr - 1;
-		if (arr[Y][NxArr / 8] & MASK(NxArr % 8)) {
-			vec_add(vec, &(t_petriPoint){.x = X - 2, .y = Y, .dir = RIGHT});
-		}
-	}
-	if (Y + 1 < h) {	// Check Up
-		if (arr[Y + 1][xArr / 8] & MASK(xArr % 8)) {
-			vec_add(vec, &(t_petriPoint){.x = X, .y = Y + 2, .dir = UP});
-		}
-	}
-	if (X + 1 < w) {	// Check Up
-		if (arr[Y][xArr / 8] & MASK(xArr % 8)) {
-			vec_add(vec, &(t_petriPoint){.x = p.x + 2, .y = Y, .dir = LEFT});
-		}
-	}
-}
-
-
+// 	newSeededNewColor_Rules_2(&arrClr[bY + vecDir.dy][bX + vecDir.dx], &arrClr[bY + 2 * vecDir.dy][bX + 2 * vecDir.dx], bClr, rules);
+// 	// newSeededNewColor_Rules(, &arrClr[bY + vecDir.dy][bX + vecDir.dx], rules);
+// }
 
 __always_inline
 void	_spreadP(int64_t dX, int64_t dY, uint64_t bX, uint64_t bY, const t_clr *bClr,
@@ -52,7 +33,7 @@ void	_spreadP(int64_t dX, int64_t dY, uint64_t bX, uint64_t bY, const t_clr *bCl
 }
 
 __always_inline
-void	_FillLine(const t_art *art, t_vec *vec, const t_petriPoint p, const t_clrRules *rules) {
+void	_checkPSide(const t_art *art, t_vec *vec, const t_petriPoint p, const t_clrRules *rules) {
 	const size_t xArr = p.x / 2;
 
 	if (p.dir != UP && p.y > 0) {	// Check Up
