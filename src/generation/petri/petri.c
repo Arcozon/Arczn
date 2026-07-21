@@ -1,6 +1,13 @@
 #include "arczn.h"
 #include "petri.h"
 
+static const int64_t	dirVec[NONE + 1][2] = {
+		[UP]	= {0, -1},
+		[LEFT]	= {-1, 0},
+		[DOWN]	= {0, 1},
+		[RIGHT]	= {1, 0},
+		[NONE]	= {0, 0}
+};
 
 __always_inline static inline
 bool	_hasNeighbour(uint8_t *arr[], const size_t width, const size_t height, const size_t x, const size_t _y) {
@@ -51,27 +58,45 @@ uint8_t	getPossibility(uint8_t *arr[], const size_t width, const size_t height, 
 }
 
 
-__always_inline
-void	_joinPoint(t_cluster *cluster, const t_point *node, const uint8_t choice, uint8_t *tab[]) {
-	const size_t	bX = node->x;
-	const size_t	bY = node->y * 2;
 
+__always_inline static inline
+void	_addPoint(t_cluster *restrict cluster, const t_point *restrict oldPoint, size_t direction) {
+	static t_point	newPoint;
+	
+	newPoint = *oldPoint;
+	newPoint.x += dirVec[direction][0];
+	newPoint.y += dirVec[direction][1];
+	newPoint.distance += 1;
+	clusterAdd(cluster, &newPoint);
+}
+
+__always_inline
+void	_joinPoint(t_cluster *cluster, t_point nPoint, const uint8_t choice, uint8_t *tab[]) {
+	const size_t	bX = nPoint.x;
+	const size_t	bY = nPoint.y * 2;
+
+	nPoint.distance += 1;
 	if (choice == UP) {
 		tab[bY - 1][bX / 8] |= MASK(bX % 8);
-		clusterAdd(cluster, &(t_point){bX, node->y - 1, node->origin});
+		nPoint.y -= 1;
+		clusterAdd(cluster, &nPoint);
 	} else if (choice == DOWN) {
 		tab[bY + 1][bX / 8] |= MASK(bX % 8);
-		clusterAdd(cluster, &(t_point){bX, node->y + 1, node->origin});
+		nPoint.y += 1;
+		clusterAdd(cluster, &nPoint);
 	} else if (choice == LEFT) {
 		const size_t	nX = bX - 1;
 		tab[bY][nX / 8] |= MASK(nX % 8);
-		clusterAdd(cluster, &(t_point){nX, node->y, node->origin});
+		nPoint.x -= 1;
+		clusterAdd(cluster, &nPoint);
 	} else if (choice == RIGHT) {
 		const size_t	nX = bX;
 		tab[bY][nX / 8] |= MASK(nX % 8);
-		clusterAdd(cluster, &(t_point){bX + 1, node->y, node->origin});
+		nPoint.x += 1;
+		clusterAdd(cluster, &nPoint);
 	} else {
-		printf("Erorr\n");
+		printf("Error: "__FILE_NAME__":%d\n", __LINE__);
+		abort();
 	}
 }
 
@@ -84,13 +109,15 @@ t_cluster	*_initCluster(const t_start *start, const size_t HashTableSize, t_vec 
 		
 	cluster.weight = start->weight;
 	cluster.ht = ht_create(HashTableSize, pointHash, pointDup, pointCmp, free);
-	;
+
 	if (!cluster.ht || fTree_create(&cluster.weightPoints))
 		abort();
 
 	t_cluster	*pCluster = vec_add(vClusters, &cluster);
 		
-	const t_point	sPoint = {start->x / 2, start->y / 2, pCluster};
+	const t_point	sPoint = {	.x = start->x / 2,
+								.y = start->y / 2,
+								.distance = 0};
 	clusterAdd(pCluster, &sPoint);
 
 	return (pCluster);
@@ -132,12 +159,12 @@ void	genTabPetri(t_art *tab) {
 		
 		const size_t	rItem = fTree_getRandomIndex(&cluster->weightPoints);
 		// const size_t	rItem = aRand(cluster->ht->nItems);
-		const t_point	*node = cluster->weightPoints.val[rItem].data;
+		const t_point	*point = cluster->weightPoints.val[rItem].data;
 		
 		// printf("Chose point %lu (%lu): ", rItem, cluster->weightPoints.val[rItem].weight);
 		// fflush(stdout);
-		// printf("[%lu:%lu]", node->x, node->y);
-		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, node->x, node->y);
+		// printf("[%lu:%lu]", point->x, point->y);
+		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, point->x, point->y);
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		// printf("-> nPos %u\n", nPoss);
 		
@@ -145,13 +172,13 @@ void	genTabPetri(t_art *tab) {
 			// const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : CPF_first(poss);
 			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss);
 
-			_joinPoint(cluster, node, choice, tab->arr); // Maje it return a vec
+			_joinPoint(cluster, *point, choice, tab->arr); // Maje it return a vec
 			// TODO: If new point, get new point weight
 			// update old point weight
 
 		}
 		if (nPoss <= 1) {
-			clusterRm(cluster, rItem, node);
+			clusterRm(cluster, rItem, point);
 			// printf("Cluster has %lu items now\n", cluster->ht->nItems);
 			if (cluster->ht->nItems == 0) {
 				fTree_update(&petri.weightClusters, index, 0);

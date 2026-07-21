@@ -34,8 +34,7 @@ struct s_cluster {
 struct s_point {
 	size_t	x;
 	size_t	y;
-	// size_t	distance;
-	t_cluster	*origin;	// remove
+	size_t	distance;
 };
 
 
