@@ -47,5 +47,15 @@ t_clr	seededNewColor_Rules(t_clr oldCLr, const t_clrRules * restrict rules) {
 	return (oldCLr);
 }
 
-// {{0x2f, 0xef, 1}, {0x2f, 0xff, 15}, {0x00, 0xf0, 1}}
 
+inline
+void	newSeededNewColor_Rules(t_clr *restrict pClr,const t_clr *restrict oldCLr, const t_clrRules * restrict rules) {
+	pClr->r = _nColor_Rule(oldCLr->r, &rules->r);
+	pClr->g = _nColor_Rule(oldCLr->g, &rules->g);
+	pClr->b = _nColor_Rule(oldCLr->b, &rules->b);
+}
+
+void	newSeededNewColor_Rules_2(t_clr *restrict pClr1, t_clr *restrict pClr2, const t_clr *restrict oldCLr, const t_clrRules * restrict rules) {
+	newSeededNewColor_Rules(pClr1, oldCLr, rules);
+	newSeededNewColor_Rules(pClr2, pClr1, rules);
+}

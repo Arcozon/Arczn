@@ -1,0 +1,373 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 36.19      2.32     2.32        1     2.32     5.03  genTabPetri
+ 25.43      3.95     1.63 72722344     0.00     0.00  fTree_getRandomIndex
+  6.86      4.39     0.44        1     0.44     1.03  applyColorGradient
+  5.46      4.74     0.35 49999998     0.00     0.00  seededNewColor_Rules
+  4.68      5.04     0.30 25000000     0.00     0.00  fTree_remove
+  4.21      5.31     0.27                             _init
+  4.06      5.57     0.26 234083512     0.00     0.00  aRand
+  2.81      5.75     0.18 170262916     0.00     0.00  pointCmp
+  2.03      5.88     0.13 25000000     0.00     0.00  ht_rm
+  1.56      5.98     0.10 25000001     0.00     0.00  fTree_append
+  1.56      6.08     0.10 25000000     0.00     0.00  ht_get
+  1.25      6.16     0.08 25000000     0.00     0.00  ht_add
+  1.25      6.24     0.08                             __popcountdi2
+  0.62      6.28     0.04 11361172     0.00     0.00  CPF_random
+  0.47      6.31     0.03 25000001     0.00     0.00  vec_add
+  0.31      6.33     0.02 25000002     0.00     0.00  vec_get
+  0.31      6.35     0.02 25000000     0.00     0.00  GPW_distance
+  0.31      6.37     0.02 25000000     0.00     0.00  pointDup
+  0.31      6.39     0.02 25000000     0.00     0.00  vec_rm
+  0.16      6.40     0.01 75000000     0.00     0.00  pointHash
+  0.16      6.41     0.01 25000000     0.00     0.00  clusterAdd
+  0.00      6.41     0.00 25000000     0.00     0.00  clusterRm
+  0.00      6.41     0.00        3     0.00     0.00  _getOptType
+  0.00      6.41     0.00        3     0.00     0.00  checkArg_int_NotZero
+  0.00      6.41     0.00        3     0.00     0.00  vec_destroy
+  0.00      6.41     0.00        2     0.00     0.00  fTree_create
+  0.00      6.41     0.00        2     0.00     0.00  fTree_destroy
+  0.00      6.41     0.00        2     0.00     0.00  vec_create
+  0.00      6.41     0.00        1     0.00     0.00  _initPetri
+  0.00      6.41     0.00        1     0.00     0.00  _parsArg
+  0.00      6.41     0.00        1     0.00     0.00  fTree_update
+  0.00      6.41     0.00        1     0.00     0.00  freeArt
+  0.00      6.41     0.00        1     0.00     0.00  genStarts
+  0.00      6.41     0.00        1     0.00     0.00  ht_create
+  0.00      6.41     0.00        1     0.00     0.00  ht_destroy
+  0.00      6.41     0.00        1     0.00     0.00  init
+  0.00      6.41     0.00        1     0.00     0.00  parsArg_height
+  0.00      6.41     0.00        1     0.00     0.00  parsArg_nStart
+  0.00      6.41     0.00        1     0.00     0.00  parsArg_width
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2025 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.16% of 6.41 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     94.5    0.00    6.06                 main [1]
+                2.32    2.71       1/1           genTabPetri [2]
+                0.44    0.59       1/1           applyColorGradient [4]
+                0.00    0.00       1/1           init [26]
+                0.00    0.00       1/3           vec_destroy [28]
+                0.00    0.00       1/1           freeArt [33]
+-----------------------------------------------
+                2.32    2.71       1/1           main [1]
+[2]     78.5    2.32    2.71       1         genTabPetri [2]
+                1.63    0.08 72722344/72722344     fTree_getRandomIndex [3]
+                0.01    0.45 24999999/25000000     clusterAdd [6]
+                0.00    0.30 25000000/25000000     clusterRm [7]
+                0.13    0.06 25000000/25000000     ht_rm [11]
+                0.04    0.01 11361172/11361172     CPF_random [17]
+                0.00    0.00       1/1           _initPetri [24]
+                0.00    0.00       1/25000002     vec_get [22]
+                0.00    0.00       2/3           vec_destroy [28]
+                0.00    0.00       2/2           fTree_destroy [30]
+                0.00    0.00       1/1           fTree_update [32]
+                0.00    0.00       1/1           ht_destroy [35]
+-----------------------------------------------
+                1.63    0.08 72722344/72722344     genTabPetri [2]
+[3]     26.7    1.63    0.08 72722344         fTree_getRandomIndex [3]
+                0.08    0.00 72722344/234083512     aRand [10]
+-----------------------------------------------
+                0.44    0.59       1/1           main [1]
+[4]     16.0    0.44    0.59       1         applyColorGradient [4]
+                0.35    0.17 49999998/49999998     seededNewColor_Rules [5]
+                0.03    0.00 25000000/25000001     vec_add [18]
+                0.02    0.00 25000000/25000000     vec_rm [21]
+                0.02    0.00 25000000/25000002     vec_get [22]
+                0.00    0.00       1/2           vec_create [31]
+-----------------------------------------------
+                0.35    0.17 49999998/49999998     applyColorGradient [4]
+[5]      8.1    0.35    0.17 49999998         seededNewColor_Rules [5]
+                0.17    0.00 149999994/234083512     aRand [10]
+-----------------------------------------------
+                0.00    0.00       1/25000000     _initPetri [24]
+                0.01    0.45 24999999/25000000     genTabPetri [2]
+[6]      7.2    0.01    0.45 25000000         clusterAdd [6]
+                0.10    0.06 25000000/25000000     ht_get [14]
+                0.08    0.08 25000000/25000000     ht_add [13]
+                0.10    0.00 25000000/25000001     fTree_append [15]
+                0.02    0.00 25000000/25000000     GPW_distance [19]
+-----------------------------------------------
+                0.00    0.30 25000000/25000000     genTabPetri [2]
+[7]      4.7    0.00    0.30 25000000         clusterRm [7]
+                0.30    0.00 25000000/25000000     fTree_remove [8]
+-----------------------------------------------
+                0.30    0.00 25000000/25000000     clusterRm [7]
+[8]      4.7    0.30    0.00 25000000         fTree_remove [8]
+-----------------------------------------------
+                                                 <spontaneous>
+[9]      4.2    0.27    0.00                 _init [9]
+-----------------------------------------------
+                0.00    0.00       2/234083512     genStarts [25]
+                0.01    0.00 11361172/234083512     CPF_random [17]
+                0.08    0.00 72722344/234083512     fTree_getRandomIndex [3]
+                0.17    0.00 149999994/234083512     seededNewColor_Rules [5]
+[10]     4.1    0.26    0.00 234083512         aRand [10]
+-----------------------------------------------
+                0.13    0.06 25000000/25000000     genTabPetri [2]
+[11]     3.0    0.13    0.06 25000000         ht_rm [11]
+                0.06    0.00 55034666/170262916     pointCmp [12]
+                0.00    0.00 25000000/75000000     pointHash [23]
+-----------------------------------------------
+                0.06    0.00 55034666/170262916     ht_rm [11]
+                0.06    0.00 57614125/170262916     ht_add [13]
+                0.06    0.00 57614125/170262916     ht_get [14]
+[12]     2.8    0.18    0.00 170262916         pointCmp [12]
+-----------------------------------------------
+                0.08    0.08 25000000/25000000     clusterAdd [6]
+[13]     2.6    0.08    0.08 25000000         ht_add [13]
+                0.06    0.00 57614125/170262916     pointCmp [12]
+                0.02    0.00 25000000/25000000     pointDup [20]
+                0.00    0.00 25000000/75000000     pointHash [23]
+-----------------------------------------------
+                0.10    0.06 25000000/25000000     clusterAdd [6]
+[14]     2.6    0.10    0.06 25000000         ht_get [14]
+                0.06    0.00 57614125/170262916     pointCmp [12]
+                0.00    0.00 25000000/75000000     pointHash [23]
+-----------------------------------------------
+                0.00    0.00       1/25000001     _initPetri [24]
+                0.10    0.00 25000000/25000001     clusterAdd [6]
+[15]     1.6    0.10    0.00 25000001         fTree_append [15]
+-----------------------------------------------
+                                                 <spontaneous>
+[16]     1.2    0.08    0.00                 __popcountdi2 [16]
+-----------------------------------------------
+                0.04    0.01 11361172/11361172     genTabPetri [2]
+[17]     0.8    0.04    0.01 11361172         CPF_random [17]
+                0.01    0.00 11361172/234083512     aRand [10]
+-----------------------------------------------
+                0.00    0.00       1/25000001     _initPetri [24]
+                0.03    0.00 25000000/25000001     applyColorGradient [4]
+[18]     0.5    0.03    0.00 25000001         vec_add [18]
+-----------------------------------------------
+                0.02    0.00 25000000/25000000     clusterAdd [6]
+[19]     0.3    0.02    0.00 25000000         GPW_distance [19]
+-----------------------------------------------
+                0.02    0.00 25000000/25000000     ht_add [13]
+[20]     0.3    0.02    0.00 25000000         pointDup [20]
+-----------------------------------------------
+                0.02    0.00 25000000/25000000     applyColorGradient [4]
+[21]     0.3    0.02    0.00 25000000         vec_rm [21]
+-----------------------------------------------
+                0.00    0.00       1/25000002     _initPetri [24]
+                0.00    0.00       1/25000002     genTabPetri [2]
+                0.02    0.00 25000000/25000002     applyColorGradient [4]
+[22]     0.3    0.02    0.00 25000002         vec_get [22]
+-----------------------------------------------
+                0.00    0.00 25000000/75000000     ht_add [13]
+                0.00    0.00 25000000/75000000     ht_rm [11]
+                0.00    0.00 25000000/75000000     ht_get [14]
+[23]     0.2    0.01    0.00 75000000         pointHash [23]
+-----------------------------------------------
+                0.00    0.00       1/1           genTabPetri [2]
+[24]     0.0    0.00    0.00       1         _initPetri [24]
+                0.00    0.00       1/25000000     clusterAdd [6]
+                0.00    0.00       1/25000001     fTree_append [15]
+                0.00    0.00       1/25000001     vec_add [18]
+                0.00    0.00       1/25000002     vec_get [22]
+                0.00    0.00       2/2           fTree_create [29]
+                0.00    0.00       1/2           vec_create [31]
+                0.00    0.00       1/1           ht_create [34]
+-----------------------------------------------
+                0.00    0.00       1/1           init [26]
+[25]     0.0    0.00    0.00       1         genStarts [25]
+                0.00    0.00       2/234083512     aRand [10]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[26]     0.0    0.00    0.00       1         init [26]
+                0.00    0.00       1/1           genStarts [25]
+                0.00    0.00       1/1           _parsArg [85]
+-----------------------------------------------
+                0.00    0.00       3/3           _parsArg [85]
+[27]     0.0    0.00    0.00       3         checkArg_int_NotZero [27]
+-----------------------------------------------
+                0.00    0.00       1/3           main [1]
+                0.00    0.00       2/3           genTabPetri [2]
+[28]     0.0    0.00    0.00       3         vec_destroy [28]
+-----------------------------------------------
+                0.00    0.00       2/2           _initPetri [24]
+[29]     0.0    0.00    0.00       2         fTree_create [29]
+-----------------------------------------------
+                0.00    0.00       2/2           genTabPetri [2]
+[30]     0.0    0.00    0.00       2         fTree_destroy [30]
+-----------------------------------------------
+                0.00    0.00       1/2           _initPetri [24]
+                0.00    0.00       1/2           applyColorGradient [4]
+[31]     0.0    0.00    0.00       2         vec_create [31]
+-----------------------------------------------
+                0.00    0.00       1/1           genTabPetri [2]
+[32]     0.0    0.00    0.00       1         fTree_update [32]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[33]     0.0    0.00    0.00       1         freeArt [33]
+-----------------------------------------------
+                0.00    0.00       1/1           _initPetri [24]
+[34]     0.0    0.00    0.00       1         ht_create [34]
+-----------------------------------------------
+                0.00    0.00       1/1           genTabPetri [2]
+[35]     0.0    0.00    0.00       1         ht_destroy [35]
+-----------------------------------------------
+                0.00    0.00       1/1           _parsArg [85]
+[36]     0.0    0.00    0.00       1         parsArg_height [36]
+-----------------------------------------------
+                0.00    0.00       1/1           _parsArg [85]
+[37]     0.0    0.00    0.00       1         parsArg_nStart [37]
+-----------------------------------------------
+                0.00    0.00       1/1           _parsArg [85]
+[38]     0.0    0.00    0.00       1         parsArg_width [38]
+-----------------------------------------------
+                0.00    0.00       3/3           _parsArg [85]
+[84]     0.0    0.00    0.00       3         _getOptType [84]
+-----------------------------------------------
+                0.00    0.00       1/1           init [26]
+[85]     0.0    0.00    0.00       1         _parsArg [85]
+                0.00    0.00       3/3           checkArg_int_NotZero [27]
+                0.00    0.00       3/3           _getOptType [84]
+                0.00    0.00       1/1           parsArg_nStart [37]
+                0.00    0.00       1/1           parsArg_height [36]
+                0.00    0.00       1/1           parsArg_width [38]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2025 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [17] CPF_random             [29] fTree_create           [26] init
+  [19] GPW_distance           [30] fTree_destroy          [36] parsArg_height
+  [16] __popcountdi2           [3] fTree_getRandomIndex   [37] parsArg_nStart
+  [84] _getOptType             [8] fTree_remove           [38] parsArg_width
+   [9] _init                  [32] fTree_update           [12] pointCmp
+  [24] _initPetri             [33] freeArt                [20] pointDup
+  [85] _parsArg               [25] genStarts              [23] pointHash
+  [10] aRand                   [2] genTabPetri             [5] seededNewColor_Rules
+   [4] applyColorGradient     [13] ht_add                 [18] vec_add
+  [27] checkArg_int_NotZero   [34] ht_create              [31] vec_create
+   [6] clusterAdd             [35] ht_destroy             [28] vec_destroy
+   [7] clusterRm              [14] ht_get                 [22] vec_get
+  [15] fTree_append           [11] ht_rm                  [21] vec_rm

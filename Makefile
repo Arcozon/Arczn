@@ -35,10 +35,10 @@ SPNG_SO		  =  $(D_MESON_BUILD)$(SYML_SPNG_SO)
 SYML_SPNG_SO =  libspng.so
 
 CC =  cc
-FLAGS = -Wall -Wextra -Werror -MMD -g -O3
+FLAGS = -Wall -Wextra -Werror -MMD -g -O3 -pg -march=native
 INC = inc/ $(D_SPNG)spng
 INC_FLAGS =  $(addprefix -I, $(INC))
-LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)/$(D_MESON_BUILD)  -Wl,-z,now -lm
+LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)/$(D_MESON_BUILD)  -Wl,-z,now -lm -pg
 
 RM =  rm -rf
 

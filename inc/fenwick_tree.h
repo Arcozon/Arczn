@@ -33,6 +33,6 @@ void		fTree_remove(t_fTree *tree, uint64_t index);
 void		fTree_update(t_fTree *tree, uint64_t index, const uint64_t nWeight);
 
 uint64_t fTree_getIndex(const t_fTree *tree, uint64_t weight);
-uint64_t fTree_getRandomIndex(const t_fTree *tree);
+uint64_t fTree_getRandomIndex(const t_fTree *tree)	__attribute__((hot));
 
 #endif

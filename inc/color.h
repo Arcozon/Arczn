@@ -31,5 +31,7 @@ struct s_clrRules {
 };
 
 t_clr	seededNewColor_Rules(t_clr oldCLr, const t_clrRules * restrict rules)	__attribute__((hot, flatten));
+void	newSeededNewColor_Rules(t_clr *restrict pClr,const t_clr *restrict oldCLr, const t_clrRules * restrict rules)	__attribute__((hot, flatten));
+void	newSeededNewColor_Rules_2(t_clr *restrict pClr1, t_clr *restrict pClr2, const t_clr *restrict oldCLr, const t_clrRules * restrict rules)	__attribute__((hot, flatten));
 
 #endif

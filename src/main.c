@@ -1,3 +1,4 @@
+#define DEBUG_INIT
 #include "arczn.h"
 
 #define DEFAULT_PERCENT	40
@@ -74,9 +75,13 @@ int main(int ac, char *av[], char *env[]) {
 	if (init(ac, av, &nonConstArt))
 		exit(1);
 	t_art art = *(t_art*)&nonConstArt;
+	TIMER_START;
 	selectGenTab(&art);
+	TIMER_START;
 	selectApplyColor(&art);
-	selectPrintTab(&art);
+	TIMER_START;
+	// selectPrintTab(&art);
+	TIMER_END;
 	// printFrame(&art);
 	return (0);
 	(void)env;

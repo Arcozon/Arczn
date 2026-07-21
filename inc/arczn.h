@@ -16,6 +16,11 @@
 # include "random.h"
 # include "start.h"
 
+
+# include "debug.h"
+
+
+
 # define MASK(bit)			(1 << (bit))
 # define GETB(var, bit)		((var) & MASK(bit))
 # define SETB(var, bit)		((var) |= MASK(bit))
