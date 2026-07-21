@@ -101,7 +101,7 @@ void	_joinPoint(t_cluster *cluster, t_point nPoint, const uint8_t choice, uint8_
 }
 
 __always_inline static
-t_cluster	*_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClusters) {
+void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClusters) {
 	t_cluster		cluster = {.xOrigin = start->x /2, .yOrigin = start->y / 2,
 						.chosePossibilityFn = CPF_random,
 						// .getPointWeightFn = GPW_One};
@@ -114,13 +114,14 @@ t_cluster	*_initCluster(const t_start *start, const size_t HashTableSize, t_vec 
 		abort();
 
 	t_cluster	*pCluster = vec_add(vClusters, &cluster);
-		
+	if (!pCluster)
+		abort();
+
 	const t_point	sPoint = {	.x = start->x / 2,
 								.y = start->y / 2,
-								.distance = 0};
+								.distance = 0
+							};
 	clusterAdd(pCluster, &sPoint);
-
-	return (pCluster);
 }
 
 void	_initPetri(t_petri *petri, const t_art *art) {	// TODO: remove duplicates clusters
@@ -131,9 +132,11 @@ void	_initPetri(t_petri *petri, const t_art *art) {	// TODO: remove duplicates c
 	fTree_create(&petri->weightClusters);
 	{
 		for (size_t i = 0; i < startL->n; ++i) {
-			t_cluster	*nCluster = _initCluster(&startL->lStart[i], HashTableSize, petri->vClusters);
-			
-			fTree_append(&petri->weightClusters, nCluster->weight, nCluster);
+			_initCluster(&startL->lStart[i], HashTableSize, petri->vClusters);
+		}
+		for (size_t i = 0; i < startL->n; ++i) {
+			t_cluster	*cluster = vec_get(petri->vClusters, i);
+			fTree_append(&petri->weightClusters, cluster->weight, cluster);
 		}
 	}
 }
@@ -143,7 +146,7 @@ void	genTabPetri(t_art *tab) {
 	_initPetri(&petri, tab);
 	size_t	totalWeight = petri.weightClusters.BIT[petri.weightClusters.cap - 1];
 
-	const size_t	tStart = 80;
+	const size_t	tStart = 1000;
 	size_t	count[tStart] = {};
 
 	const t_cluster	*oldCluster = NULL;
