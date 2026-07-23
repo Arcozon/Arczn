@@ -77,10 +77,11 @@ int main(int ac, char *av[], char *env[]) {
 	t_art art = *(t_art*)&nonConstArt;
 	TIMER_START;
 	selectGenTab(&art);
+	// printFrame(&art);
 	TIMER_START;
 	selectApplyColor(&art);
 	TIMER_START;
-	// selectPrintTab(&art);
+	selectPrintTab(&art);
 	TIMER_END;
 	// printFrame(&art);
 	return (0);
