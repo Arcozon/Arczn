@@ -56,11 +56,11 @@ $(OBJ): $(D_BUILD)%.o:	$(D_SRC)%.c
 
 $(SYML_SPNG_SO):
 	$(MAKE) $(SPNG_SO)
-	ln -s $< $@
+	ln -s $(SPNG_SO) $@
 
 $(SPNG_SO):
-	meson setup $(MESON_BUILD_DIR) $(SPNG_DIR)
-	meson compile -C $(MESON_BUILD_DIR)
+	meson setup $(D_MESON_BUILD) $(D_SPNG)
+	meson compile -C $(D_MESON_BUILD)
 
 clean:
 	@$(RM) $(D_BUILD)
