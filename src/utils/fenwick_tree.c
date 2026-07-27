@@ -112,5 +112,9 @@ uint64_t fTree_getIndex(const t_fTree *tree, uint64_t weight) {
 
 uint64_t fTree_getRandomIndex(const t_fTree *tree) {
 	// printf(" -- TT WEIGHT: %lu\n", tree->BIT[tree->cap - 1]);
-	return (fTree_getIndex(tree, aRand(tree->BIT[tree->cap - 1])));
+	return (fTree_getIndex(tree, aRand(fTree_getTotalweight(tree))));
+}
+
+uint64_t fTree_getTotalweight(const t_fTree *tree) {
+	return (tree->BIT[tree->cap - 1]);
 }
