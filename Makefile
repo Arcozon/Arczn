@@ -46,7 +46,7 @@ MAKE += --no-print-directory
 
 all:	$(NAME)
 
-$(NAME):	$(OBJ)	$(SYML_SPNG_SO)
+$(NAME):	$(SYML_SPNG_SO)  $(OBJ)
 	$(CC) -o$@ $(OBJ) $(LIB_FLAGS)
 
 $(OBJ): $(D_BUILD)%.o:	$(D_SRC)%.c
