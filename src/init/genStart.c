@@ -1,4 +1,22 @@
 #include "arczn.h"
+#include "hashtable.h"
+#include <math.h>
+
+// Hashtable functions
+size_t	hashStart(const void *_s) {
+	const t_start *s = _s;
+	return (s->x * 0x1516075A72F05 + s->y * 971);
+}
+void	*dupStart(const void *_toDup) {
+	t_start	*res = malloc(sizeof(t_start));
+	if (res) memcpy(res, _toDup, sizeof(*res));
+	return (res);
+}
+bool	cmpStart(const void *d1, const void *d2) {
+	const t_start *p1 = d1;
+	const t_start *p2 = d2;
+	return (!(p1->x == p2->x && p1->y == p2->y));
+}
 
 __always_inline static __attribute__((const))
 uint8_t	_reboundCLR(const uint8_t clr, const uint8_t min, const uint8_t max) {
@@ -8,7 +26,6 @@ uint8_t	_reboundCLR(const uint8_t clr, const uint8_t min, const uint8_t max) {
 		return (max);
 	return  (clr);
 }
-
 __always_inline static
 void	_reboundRGB_Start(t_start *s) {
 	s->baseClr.r = _reboundCLR(s->baseClr.r, s->rules.r.min, s->rules.r.max);
@@ -16,7 +33,7 @@ void	_reboundRGB_Start(t_start *s) {
 	s->baseClr.b = _reboundCLR(s->baseClr.b, s->rules.b.min, s->rules.b.max);
 }
 
-__always_inline static
+__always_inline static 
 void	_fixOneRule(t_oneClrRules *r) {
 	if (r->max < r->min) {
 		size_t	max = r->max;
@@ -36,59 +53,52 @@ void	_fixRules_Start(t_start *s) {
 	_fixOneRule(&s->rules.b);
 }
 
-__always_inline static
-void	_fixCoordinate_Start(t_start *s, const size_t w, const size_t h) {
-	if (s->x >= w)
-		s->x = w -1;
-	if (s->y >= h)
-		s->y = h -1;
+__always_inline __attribute__((flatten)) static
+void	_fixStart(t_start *pStart, const t_nonConstArt *art) {
+	const uint64_t	w = art->width * 2;
+	const uint64_t	h = art->height * 2;
+
+	if (pStart->x >= w)		pStart->x = aRand(art->width) * 2;
+	if (pStart->y >= h)		pStart->y = aRand(art->height) * 2;
+	_fixRules_Start(pStart);
+	_reboundRGB_Start(pStart);
 }
 
-__always_inline static
-void	_fixStarts(t_start starts[], const size_t nStart, const t_nonConstArt *art) {
-	const uint64_t	w = art->width * 2 - 1;
-	const uint64_t	h = art->height * 2 - 1;
-
-	for (size_t i = 0; i < nStart; ++i) {
-		_fixCoordinate_Start(&starts[i], w, h);
-		_fixRules_Start(&starts[i]);
-		_reboundRGB_Start(&starts[i]);
+// Retrurn 0 on success, 1 on duplicate
+uint32_t fillOneStart(t_start *pStart, const t_nonConstArt *art, size_t i, t_ht *htStart) {
+	t_start start = {};
+	// If already configured -> Pull
+	// else
+	{
+		start.x = aRand(art->width) * 2;
+		start.y = aRand(art->height) * 2;
+		start.weight = 1;
+		start.baseClr = (t_clr){0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i};
+		start.rules = (t_clrRules){{0x40, 0xef, 5}, {0x36, 0xf0, 2}, {0x83, 0xce, 1}};
 	}
+	_fixStart(&start, art);
+	if (ht_get(htStart, &start)) { // If already in the thing
+		return (1);
+	}
+	ht_add(htStart, &start);
+	*pStart = start;
+	return (0);
 }
 
 size_t	genStarts(t_nonConstArt *art) {
+	t_ht *htStart = ht_create(sqrt(art->nStart) + 1, hashStart, dupStart, cmpStart, free);
 	t_startList *starts = malloc(sizeof(starts->n) + sizeof(starts->lStart[0]) * art->nStart);
-	if (!starts)
+	if (!starts || !htStart)
 		return (1);
 	art->starts = starts;
-	starts->n = art->nStart;
-	for (size_t i = 0; i < art->nStart; ++i) {
-		starts->lStart[i] = (t_start){
-			.x = 0,
-			.y = 0,
-			// .x = aRand(art->width) * 2,
-			// .y = aRand(art->height) * 2,
-			.weight = 3,
-			.baseClr = {0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i},
-			// .baseClr = {0x9,0xb2, 0x3c},
-			.rules = (t_clrRules){{0x40, 0xef, 5}, {0x36, 0xf0, 2}, {0x83, 0xce, 1}}
-			// .rules = (t_clrRules){{0x60, 0xff, 10}, {0x49, 0x9f, 4}, {0x77, 0x75, 9}}
-		};
-		if (i % 20 == 1) {
-			// starts->lStart[i].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
-		} else {
-			// starts->lStart[i].rules = (t_clrRules){{0x60, 0x7e, 1}, {0x68, 0x7f, 1}, {0x95, 0xff, 3}};
-			starts->lStart[i].rules = (t_clrRules){{0x40, 0xef, 17}, {0x36, 0xf0, 2}, {0x83, 0xce, 12}};
 
-			// starts->lStart[i].rules = (t_clrRules){{0x35, 0x55, 2}, {0x78, 0xb2, 4}, {0x15, 0x32, 6}};
-		}
+	uint64_t	index = 0;
+	for (size_t i = 0; i < art->nStart; ++i) {
+		if (!fillOneStart(&starts->lStart[index], art, i, htStart))
+			++index;
 	}
-	// if (art->nStart > 1) {
-	// 	starts->lStart[1].rules = (t_clrRules){{0x9f, 0xff, 10}, {0x69, 0x92, 1}, {0x3c, 0x5e, 1}};
-	// 	starts->lStart[1].weight = 20;
-	// }
-	
-	_fixStarts(starts->lStart, starts->n, art);
+	starts->n = index;
+	art->nStart = index;
 
 	for (size_t i = 0; i < art->nStart; ++i) {
 		const t_clr			bClr = starts->lStart[i].baseClr;
@@ -98,6 +108,7 @@ size_t	genStarts(t_nonConstArt *art) {
 		printf("	G: [%u-%u](%u)\n", rules.g.min, rules.g.max, rules.g.delta);
 		printf("	B: [%u-%u](%u)\n", rules.b.min, rules.b.max, rules.b.delta);
 	}
+	ht_destroy(htStart);
 	return (0);
 }
 

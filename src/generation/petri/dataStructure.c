@@ -8,11 +8,10 @@ size_t	pointHash(const void *rPtr) {
 }
 
 void	*pointDup(const void *_toDup) {
-	const t_point *toDup = _toDup;
 	t_point	*res = malloc(sizeof(t_point));
 
 	if (res) {
-		memcpy(res, toDup, sizeof(*res));
+		memcpy(res, _toDup, sizeof(*res));
 	}
 	return (res);
 }
