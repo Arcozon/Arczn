@@ -16,9 +16,9 @@ enum	e_optType {
 	AT_OUTPUT,
 	AT_BASE_IMG,
 	AT_COLOR,
-	AT_CLR_DELTA,
-	AT_CLR_MIN,
-	AT_CLR_MAX,
+	// AT_CLR_DELTA,
+	// AT_CLR_MIN,
+	// AT_CLR_MAX,
 	AT_HELP,
 	__AT_MAX__
 };

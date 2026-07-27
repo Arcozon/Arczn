@@ -33,9 +33,9 @@ static const char	*_strsGenPetri[] = {"--petri"};
 static const char	*_strsFrame[] = {"--frame"};
 static const char	*_strsBaseImg[] = {"-b", "--base"};
 static const char	*_strsColor[] = {"-c", "--color"};
-static const char	*_strsClrDelta[] = {"-d", "--delta"};
-static const char	*_strsClrMin[] = {"-m", "--min"};
-static const char	*_strsClrMax[] = {"-M", "--max"};
+// static const char	*_strsClrDelta[] = {"-d", "--delta"};
+// static const char	*_strsClrMin[] = {"-m", "--min"};
+// static const char	*_strsClrMax[] = {"-M", "--max"};
 static const char	*_strsHelp[] =	{"--help"} ;
 
 static const t_parsArg	pArg[__AT_MAX__] = {
@@ -63,12 +63,12 @@ static const t_parsArg	pArg[__AT_MAX__] = {
 			.nStrs = sizeof(_strsBaseImg) / sizeof(char *), .strs  = _strsBaseImg},
 		[AT_COLOR] = {.optType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
 			.nStrs = sizeof(_strsColor) / sizeof(char *), .strs  = _strsColor},
-		[AT_CLR_DELTA] = {.optType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = parsArg_clrDelta,
-			.nStrs = sizeof(_strsClrDelta) / sizeof(char *), .strs  = _strsClrDelta},
-		[AT_CLR_MIN] = {.optType = AT_CLR_MIN, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMin,
-			.nStrs = sizeof(_strsClrMin) / sizeof(char *), .strs  = _strsClrMin},
-		[AT_CLR_MAX] = {.optType = AT_CLR_MAX, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMax,
-			.nStrs = sizeof(_strsClrMax) / sizeof(char *), .strs  = _strsClrMax},
+		// [AT_CLR_DELTA] = {.optType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = parsArg_clrDelta,
+		// 	.nStrs = sizeof(_strsClrDelta) / sizeof(char *), .strs  = _strsClrDelta},
+		// [AT_CLR_MIN] = {.optType = AT_CLR_MIN, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMin,
+		// 	.nStrs = sizeof(_strsClrMin) / sizeof(char *), .strs  = _strsClrMin},
+		// [AT_CLR_MAX] = {.optType = AT_CLR_MAX, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMax,
+		// 	.nStrs = sizeof(_strsClrMax) / sizeof(char *), .strs  = _strsClrMax},
 		[AT_HELP] = {.optType = AT_HELP, .fnCheck = NULL, .fnPars  = NULL,
 			.nStrs = sizeof(_strsHelp) / sizeof(char *), .strs  = _strsHelp},
 	};
@@ -136,27 +136,27 @@ size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 	return (0);
 }
 
-void	_fillClrSettings(t_clrSet *set) {
-	if (set->max < set->min)
-		set->max = set->min;
-	set->spanMinMax = set->max - set->min + 1;
-	if (set->delta > set->spanMinMax)
-		set->delta = set->spanMinMax;
-	set->spanDelta = set->delta * 2 + 1;
-}
+// void	_fillClrSettings(t_clrSet *set) {
+// 	if (set->max < set->min)
+// 		set->max = set->min;
+// 	set->spanMinMax = set->max - set->min + 1;
+// 	if (set->delta > set->spanMinMax)
+// 		set->delta = set->spanMinMax;
+// 	set->spanDelta = set->delta * 2 + 1;
+// }
 
 void	_fixDimentions(t_nonConstArt *art) {
-	if (art->width == 0)
-		art->width = 1;
-	if (art->height == 0)
-		art->height = 1;
-	if (art->nStart > art->height * art->width)
-		art->nStart = art->height * art->width;
+	if (art->tab.width == 0)
+		*(size_t *)&art->tab.width = 1;
+	if (art->tab.height == 0)
+		*(size_t *)&art->tab.height = 1;
+	if (art->nStart > art->tab.height * art->tab.width)
+		art->nStart = art->tab.height * art->tab.width;
 }
 
 size_t	_allocClr(t_nonConstArt *art) {
-	*(size_t *)&(art->widthClr) = art->width * 2 - 1;
-	*(size_t *)&(art->heightClr) = art->height * 2 - 1;
+	*(size_t *)&(art->widthClr) = art->tab.width * 2 - 1;
+	*(size_t *)&(art->heightClr) = art->tab.height * 2 - 1;
 	art->arrClr = calloc(art->heightClr, sizeof(art->arrClr[0]));
 	if (!art->arrClr)	return (1);
 	for (size_t i = 0; i < art->heightClr; ++i) {
@@ -171,7 +171,7 @@ size_t	init(const int ac, char *av[], t_nonConstArt *art) {
 	if (_parsArg(ac, av, art))
 		return (1);
 	_fixDimentions(art);
-	_fillClrSettings((t_clrSet *)&art->clrSetting);
+	// _fillClrSettings((t_clrSet *)&art->clrSetting);
 	if (art->color != CLR_NONE) {
 		if (art->color == CLR_BASE_IMG) {
 			if (parsBaseImage(art->fNameBase, art))
@@ -180,8 +180,8 @@ size_t	init(const int ac, char *av[], t_nonConstArt *art) {
 			return (1);
 		}
 	}
-	art->arr = allocArray(art->width, art->height);
-	if (!art->arr)
+	art->tab.arr = allocArray(art->tab.width, art->tab.height);
+	if (!art->tab.arr)
 		return (1);
 	if (genStarts(art))
 		return (1);

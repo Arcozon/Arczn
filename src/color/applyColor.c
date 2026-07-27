@@ -107,6 +107,6 @@ void	_negative(t_clr *clr[], const uint8_t *arr[], const size_t w, const size_t 
 }
 
 void	applyColorBaseFile(t_art *art) {
-	_applyClr_4b4(art->arrClr, (const uint8_t **)art->arr, art->width, 2 * art->height - 1);
+	_applyClr_4b4(art->arrClr, (const uint8_t **)art->tab.arr, art->tab.width, 2 * art->tab.height - 1);
 	// _negative(art->arrClr, (const uint8_t **)art->arr, art->widthClr, art->heightClr);
 }

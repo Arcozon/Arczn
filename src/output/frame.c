@@ -76,8 +76,10 @@ static void	_printN(const size_t n, const aChar patern[]) {
 	write(0, patern, sizeof(aChar) * (n % (sizeof(fullLine) / sizeof(fullLine[0]))));
 }
 
-void	printFrame(const t_art *tab) {
-	const size_t trueWidth = tab->width * 2 - 1;
+void	printFrame(const t_art *art) {
+	const t_tab		*tab = &art->tab;
+	const size_t	trueWidth = tab->width * 2 - 1;
+	
 	_printN(trueWidth + 4, fullLine);
 	write(0, "\n", 1);
 	write(0, leftBorder, sizeof(leftBorder));

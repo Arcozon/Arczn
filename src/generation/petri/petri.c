@@ -35,23 +35,23 @@ bool	_hasNeighbour(uint8_t *arr[], const size_t width, const size_t height, cons
 }
 
 __always_inline static inline
-uint8_t	getPossibility(uint8_t *arr[], const size_t width, const size_t height, const size_t x, const size_t y) {
+uint8_t	getPossibility(const t_tab *tab, const size_t x, const size_t y) {
 	uint8_t	res = 0b0000;
 
 	if (x != 0) { // Check left
-		if (!_hasNeighbour(arr, width, height, x - 1, y))
+		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x - 1, y))
 			res |= MASK(LEFT);
 	}
-	if (x + 1 < width) { // Check right
-		if (!_hasNeighbour(arr, width, height, x + 1, y))
+	if (x + 1 < tab->width) { // Check right
+		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x + 1, y))
 			res |= MASK(RIGHT);
 	}
 	if (y != 0) { // Check up
-		if (!_hasNeighbour(arr, width, height, x, y - 1))
+		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x, y - 1))
 			res |= MASK(UP);
 	}
-	if (y + 1 < height) { // Check down
-		if (!_hasNeighbour(arr, width, height, x, y + 1))
+	if (y + 1 < tab->height) { // Check down
+		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x, y + 1))
 			res |= MASK(DOWN);
 	}
 	return (res);
@@ -130,7 +130,7 @@ void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClus
 
 void	_initPetri(t_petri *petri, const t_art *art) {	// TODO: remove duplicates clusters
 	const t_startList	*startL = art->starts;
-	const size_t		HashTableSize = sqrt(art->height * art->width) / startL->n + 1;
+	const size_t		HashTableSize = sqrt(art->tab.height * art->tab.width) / startL->n + 1;
 
 	petri->vClusters = vec_create(sizeof(t_cluster));
 	fTree_create(&petri->weightClusters);
@@ -174,14 +174,14 @@ void	genTabPetri(t_art *tab) {
 		const t_point	*point = cluster->weightPoints.val[indexPoint].data;
 		// printf("Chose point %lu (%lu): ", rItem, cluster->weightPoints.val[rItem].weight);
 		// printf("[%lu:%lu]", point->x, point->y);
-		const uint8_t	poss = getPossibility(tab->arr, tab->width, tab->height, point->x, point->y);
+		const uint8_t	poss = getPossibility(&tab->tab, point->x, point->y);
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		// printf("-> nPos %u\n", nPoss);
 		
 		if (nPoss >= 1) {
 			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss);
 
-			_joinPoint(cluster, *point, choice, tab->arr); // Maje it return a vec
+			_joinPoint(cluster, *point, choice, tab->tab.arr); // Maje it return a vec
 			// TODO: If new point, get new point weight
 			if (nPoss > 1 && oldCluster->getPointWeightFn)	// update old point weight
 				fTree_update(&cluster->weightPoints, indexPoint,

@@ -54,29 +54,29 @@ void	_fixRules_Start(t_start *s) {
 }
 
 __always_inline __attribute__((flatten)) static
-void	_fixStart(t_start *pStart, const t_nonConstArt *art) {
-	const uint64_t	w = art->width * 2;
-	const uint64_t	h = art->height * 2;
+void	_fixStart(t_start *pStart, const t_tab *tab) {
+	const uint64_t	w = tab->width * 2;
+	const uint64_t	h = tab->height * 2;
 
-	if (pStart->x >= w)		pStart->x = aRand(art->width) * 2;
-	if (pStart->y >= h)		pStart->y = aRand(art->height) * 2;
+	if (pStart->x >= w)		pStart->x = aRand(tab->width) * 2;
+	if (pStart->y >= h)		pStart->y = aRand(tab->height) * 2;
 	_fixRules_Start(pStart);
 	_reboundRGB_Start(pStart);
 }
 
 // Retrurn 0 on success, 1 on duplicate
-uint32_t fillOneStart(t_start *pStart, const t_nonConstArt *art, size_t i, t_ht *htStart) {
+uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart) {
 	t_start start = {};
 	// If already configured -> Pull
 	// else
 	{
-		start.x = aRand(art->width) * 2;
-		start.y = aRand(art->height) * 2;
+		start.x = aRand(tab->width) * 2;
+		start.y = aRand(tab->height) * 2;
 		start.weight = 1;
 		start.baseClr = (t_clr){0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i};
 		start.rules = (t_clrRules){{0x40, 0xef, 5}, {0x36, 0xf0, 2}, {0x83, 0xce, 1}};
 	}
-	_fixStart(&start, art);
+	_fixStart(&start, tab);
 	if (ht_get(htStart, &start)) { // If already in the thing
 		return (1);
 	}
@@ -94,7 +94,7 @@ size_t	genStarts(t_nonConstArt *art) {
 
 	uint64_t	index = 0;
 	for (size_t i = 0; i < art->nStart; ++i) {
-		if (!fillOneStart(&starts->lStart[index], art, i, htStart))
+		if (!fillOneStart(&starts->lStart[index], &art->tab, i, htStart))
 			++index;
 	}
 	starts->n = index;

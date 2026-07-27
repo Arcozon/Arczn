@@ -16,11 +16,11 @@ t_nonConstArt	_defaultArt(void) {
 		.gen = G_PETRI,
 		.print = P_NORMAL,
 		.color = CLR_GRADIENT,
-		.width = DEFAULT_WIDTH,
-		.height = DEFAULT_HEIGHT,
-		.arr = NULL,
-		.clrSetting = {	.min = DEFAULT_MIN, .max = DEFAULT_MAX,
-				.delta = DEFAULT_DELTA, 0, 0},
+		.tab = {.width = DEFAULT_WIDTH,
+			.height = DEFAULT_HEIGHT,
+			.arr = NULL},
+		// .clrSetting = {	.min = DEFAULT_MIN, .max = DEFAULT_MAX,
+		// 		.delta = DEFAULT_DELTA, 0, 0},
 		.widthClr = 0,
 		.heightClr = 0,
 		.arrClr = NULL
@@ -28,18 +28,19 @@ t_nonConstArt	_defaultArt(void) {
 	return (art);
 }
 
-void	freeArt(t_nonConstArt *tab) {
+void	freeArt(t_nonConstArt *art) {
+	const t_tab	*tab = &art->tab;
 	if (tab->arr != NULL) {
 		for (size_t i = 0; tab->arr[i]; ++i)
 			free(tab->arr[i]);
 		free(tab->arr);
 	}
-	if (tab->arrClr != NULL) {
-		for (size_t i = 0; i < tab->heightClr; ++i)
-			free(tab->arrClr[i]);
-		free(tab->arrClr);
+	if (art->arrClr != NULL) {
+		for (size_t i = 0; i < art->heightClr; ++i)
+			free(art->arrClr[i]);
+		free(art->arrClr);
 	}
-	free(tab->starts);
+	free(art->starts);
 }
 
 typedef void	(*genTabFn)(t_art *);
