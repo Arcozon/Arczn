@@ -145,10 +145,13 @@ void	_fillClrSettings(t_clrSet *set) {
 	set->spanDelta = set->delta * 2 + 1;
 }
 
-size_t	_check(const t_nonConstArt *art) {
-	if (art->width == 0)	return (1);
-	else if (art->height == 0)	return (1);
-	return (0);
+void	_fixDimentions(t_nonConstArt *art) {
+	if (art->width == 0)
+		art->width = 1;
+	if (art->height == 0)
+		art->height = 1;
+	if (art->nStart > art->height * art->width)
+		art->nStart = art->height * art->width;
 }
 
 size_t	_allocClr(t_nonConstArt *art) {
@@ -167,8 +170,7 @@ size_t	_allocClr(t_nonConstArt *art) {
 size_t	init(const int ac, char *av[], t_nonConstArt *art) {
 	if (_parsArg(ac, av, art))
 		return (1);
-	if (_check(art))
-		return (1);
+	_fixDimentions(art);
 	_fillClrSettings((t_clrSet *)&art->clrSetting);
 	if (art->color != CLR_NONE) {
 		if (art->color == CLR_BASE_IMG) {

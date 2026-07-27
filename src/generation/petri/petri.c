@@ -172,8 +172,8 @@ void	genTabPetri(t_art *tab) {
 		// printf("-> nPos %u\n", nPoss);
 		
 		if (nPoss >= 1) {
-			// const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : CPF_first(poss);
-			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss);
+			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : CPF_first(poss);
+			// const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss);
 
 			_joinPoint(cluster, *point, choice, tab->arr); // Maje it return a vec
 			// TODO: If new point, get new point weight

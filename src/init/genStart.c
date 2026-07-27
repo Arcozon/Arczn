@@ -64,8 +64,10 @@ size_t	genStarts(t_nonConstArt *art) {
 	starts->n = art->nStart;
 	for (size_t i = 0; i < art->nStart; ++i) {
 		starts->lStart[i] = (t_start){
-			.x = aRand(art->width) * 2,
-			.y = aRand(art->height) * 2,
+			.x = 0,
+			.y = 0,
+			// .x = aRand(art->width) * 2,
+			// .y = aRand(art->height) * 2,
 			.weight = 3,
 			.baseClr = {0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i},
 			// .baseClr = {0x9,0xb2, 0x3c},

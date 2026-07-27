@@ -38,7 +38,7 @@ CC =  cc
 FLAGS = -Wall -Wextra -Werror -MMD -g -O3 -pg -march=native
 INC = inc/ $(D_SPNG)spng
 INC_FLAGS =  $(addprefix -I, $(INC))
-LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)/$(D_MESON_BUILD)  -Wl,-z,now -lm -pg
+LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)  -Wl,-z,now -lm -pg
 
 RM =  rm -rf
 
@@ -54,7 +54,8 @@ $(OBJ): $(D_BUILD)%.o:	$(D_SRC)%.c
 	$(CC) $(FLAGS) $(INC_FLAGS) -c $< -o $@
 
 
-$(SYML_SPNG_SO):	$(SPNG_SO)
+$(SYML_SPNG_SO):
+	$(MAKE) $(SPNG_SO)
 	ln -s $< $@
 
 $(SPNG_SO):
@@ -65,7 +66,7 @@ clean:
 	@$(RM) $(D_BUILD)
 
 fclean: clean
-	@$(RM) $(NAME) $(SYML_SPNG_SO)
+	@$(RM) $(NAME)
 
 re: fclean
 	@$(MAKE) all
@@ -73,4 +74,4 @@ re: fclean
 DEPS = $(addprefix $(D_BUILD), $(SRC:.c=.d))
 -include $(DEPS)
 
-.PHONY: re fclean clean all $(CC) $(FLAGS) $(RM)
+.PHONY: re fclean clean all $(CC) $(FLAGS) $(RM)  $(SPNG_SO)
