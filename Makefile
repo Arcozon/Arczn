@@ -4,7 +4,10 @@ S_INIT =  parsOpt.c  parsOptArg.c  checkOptArg.c  parsBaseImg.c  genStart.c
 D_INIT =  init/
 INIT = $(addprefix $(D_INIT), $(S_INIT))
 
-S_GEN =  random.c  ivy.c  petri.c  
+S_PETRI =  chosePossibility.c  getPointWeight.c  dataStructure.c  cluster.c  petri.c
+D_PETRI =  petri/
+PETRI = $(addprefix $(D_PETRI), $(S_PETRI))
+S_GEN =  random.c  ivy.c  $(PETRI)
 D_GEN =  generation/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
@@ -32,10 +35,10 @@ SPNG_SO		  =  $(D_MESON_BUILD)$(SYML_SPNG_SO)
 SYML_SPNG_SO =  libspng.so
 
 CC =  cc
-FLAGS = -Wall -Wextra -Werror -MMD -g -O3
+FLAGS = -Wall -Wextra -Werror -MMD -g -O3 -march=native
 INC = inc/ $(D_SPNG)spng
 INC_FLAGS =  $(addprefix -I, $(INC))
-LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)/$(D_MESON_BUILD)  -Wl,-z,now -lm
+LIB_FLAGS = -L. -lspng -Wl,-rpath,$(shell pwd)  -Wl,-z,now -lm
 
 RM =  rm -rf
 
@@ -43,7 +46,7 @@ MAKE += --no-print-directory
 
 all:	$(NAME)
 
-$(NAME):	$(OBJ)	$(SYML_SPNG_SO)
+$(NAME):	$(SYML_SPNG_SO)  $(OBJ)
 	$(CC) -o$@ $(OBJ) $(LIB_FLAGS)
 
 $(OBJ): $(D_BUILD)%.o:	$(D_SRC)%.c
@@ -51,18 +54,19 @@ $(OBJ): $(D_BUILD)%.o:	$(D_SRC)%.c
 	$(CC) $(FLAGS) $(INC_FLAGS) -c $< -o $@
 
 
-$(SYML_SPNG_SO):	$(SPNG_SO)
-	ln -s $< $@
+$(SYML_SPNG_SO):
+	$(MAKE) $(SPNG_SO)
+	ln -s $(SPNG_SO) $@
 
 $(SPNG_SO):
-	meson setup $(MESON_BUILD_DIR) $(SPNG_DIR)
-	meson compile -C $(MESON_BUILD_DIR)
+	meson setup $(D_MESON_BUILD) $(D_SPNG)
+	meson compile -C $(D_MESON_BUILD)
 
 clean:
 	@$(RM) $(D_BUILD)
 
 fclean: clean
-	@$(RM) $(NAME) $(SYML_SPNG_SO)
+	@$(RM) $(NAME)
 
 re: fclean
 	@$(MAKE) all
@@ -96,4 +100,4 @@ $(LEX_C_GEN): $(LEX_SRC) $(INC_GEN)
 DEPS = $(addprefix $(D_BUILD), $(SRC:.c=.d))
 -include $(DEPS)
 
-.PHONY: re fclean clean all $(CC) $(FLAGS) $(RM)
+.PHONY: re fclean clean all $(CC) $(FLAGS) $(RM)  $(SPNG_SO)

@@ -64,7 +64,8 @@ static void	_printLineOdd(const uint8_t lineTab[], const size_t width) {
 	write(0, "\n", 1);
 }
 
-void	printTab(const t_art *tab) {
+void	printTab(const t_art *art) {
+	const t_tab	*tab = &art->tab;
 	for (size_t i = 0; tab->arr[i]; ++i) {
 		if (i & 1) {
 			_printLineOdd(tab->arr[i], tab->width);

@@ -3,89 +3,114 @@
 
 enum e_dir {UP, LEFT, DOWN, RIGHT, NONE};
 
-typedef struct s_petriPoint {
+typedef struct s_point {
 	size_t	x;
 	size_t	y;
-	enum e_dir	dir;
-}	t_petriPoint;
+	enum e_dir	dirOrig;
+	const t_clr	*clrOrig;
+}	t_point;
 
-struct s_vecDir{
+struct s_vecDir {
 	int8_t dx;
 	int8_t dy;
 };
 
+static const struct s_vecDir	vecDirs[NONE] = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
 
-void	_spreadP(enum e_dir dir, const size_t bX, const size_t bY, const t_clr bClr,
-		t_clr *arrClr[], const t_clrRules *rules) {
-	static const struct s_vecDir	vecDirs[NONE] = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
-	const struct s_vecDir	vecDir = vecDirs[dir];
-	const t_clr	nClr  = seededNewColor_Rules(bClr, rules);
+__always_inline __attribute__((const)) static
+uint8_t	isFilled(const uint8_t *arr[], uint64_t w, uint64_t h, uint64_t xClr, uint64_t y, enum e_dir direction) {
+	uint64_t	x = xClr / 2;	// HERE
 
-	arrClr[bY + vecDir.dy][bX + vecDir.dx] = nClr;
-	arrClr[bY + 2 * vecDir.dy][bX + 2 * vecDir.dx] = seededNewColor_Rules(nClr, rules);
+	if (direction == UP) {
+		if (y > 0) {
+			return (arr[y - 1][x / 8] & MASK(x % 8));
+		} else
+			return (0);
+	} else if (direction == DOWN) {
+		if (y + 1 < h) {
+			return (arr[y + 1][x / 8] & MASK(x % 8));
+		} else
+			return (0);
+	} else if (direction == LEFT) {
+		if (x > 0) {
+			uint64_t	nX = x - 1;
+			return (arr[y][nX / 8] & MASK(nX % 8));
+		} else
+			return (0);
+	} else if (direction == RIGHT) {
+		if (x + 1 < w) {
+			return (arr[y][x / 8] & MASK(x % 8));
+		} else
+			return (0);
+	}
+	return (0);
+}
+
+__always_inline static
+void	checkAllPossibleDir(const uint8_t *arr[], uint64_t w, uint64_t h, const t_point *origin, t_vec *vecPts) {
+	const enum e_dir	dir = origin->dirOrig;
+	const size_t		X = origin->x;
+	const size_t		Y = origin->y;
+
+	if (dir != LEFT && dir != RIGHT) {	// Add Left Right
+		if (isFilled(arr, w, h, X, Y, LEFT)) {
+			vec_add(vecPts, &(t_point){.x = X - 2, .y = Y, .dirOrig = LEFT, .clrOrig = origin->clrOrig});
+		}
+		if (isFilled(arr, w, h, X, Y, RIGHT)) {
+			vec_add(vecPts, &(t_point){.x = X + 2, .y = Y, .dirOrig = RIGHT, .clrOrig = origin->clrOrig});
+		}
+	}
+	if (dir != UP && dir != DOWN) {
+		if (isFilled(arr, w, h, X, Y, UP)) {
+			vec_add(vecPts, &(t_point){.x = X, .y = Y - 2, .dirOrig = UP, .clrOrig = origin->clrOrig});
+		}
+		if (isFilled(arr, w, h, X, Y, DOWN)) {
+			vec_add(vecPts, &(t_point){.x = X, .y = Y + 2, .dirOrig = DOWN, .clrOrig = origin->clrOrig});
+		}
+	}
+}
+
+__always_inline static
+void	_spreadClrOnDir(const t_point *p, const struct s_vecDir dir, t_clr *arrClr[], const t_clrRules *rules) {
+	const uint64_t	bX = p->x;
+	const uint64_t	bY = p->y;
+
+	newSeededNewColor_Rules_2(&arrClr[bY - dir.dy][bX - dir.dx], &arrClr[bY][bX], p->clrOrig, rules);
+}
+
+__always_inline static
+void	_FillLine(const t_art *art, t_vec *vecPts, t_point p, const t_clrRules *rules) {
+	const struct s_vecDir	vecDir = vecDirs[p.dirOrig];
+
+	do {
+		_spreadClrOnDir(&p, vecDir, art->arrClr, rules);
+		p.clrOrig =  &art->arrClr[p.y][p.x];
+		checkAllPossibleDir((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, &p, vecPts);
+		if (!isFilled((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, p.x, p.y, p.dirOrig))
+			break ;
+		p.x += 2 * vecDir.dx;
+		p.y += 2 * vecDir.dy;
+	} while (1);
 }
 
 
-__always_inline
-void	_checkPSide(const t_art *art, t_vec *vec, const t_petriPoint p, const t_clrRules *rules) {
-	const size_t xArr = p.x / 2;
-	// printf("Point %lu - %lu: ", p.x, p.y);
-	if (p.dir != UP && p.y > 0) {	// Check Up
-		// printf(" u?");
-		if (art->arr[p.y - 1][xArr / 8] & MASK(xArr % 8)) {
-			_spreadP(UP, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
-			vec_add(vec, &(t_petriPoint){.x = p.x, .y = p.y - 2, .dir = DOWN});
-			// printf("U");
-		}
-	}
-	if (p.dir != LEFT && p.x > 0) {	// Check Up
-		// printf(" l?");
-		const size_t	NxArr = xArr - 1;
-		if (art->arr[p.y][NxArr / 8] & MASK(NxArr % 8)) {
-			_spreadP(LEFT, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
-			vec_add(vec, &(t_petriPoint){.x = p.x - 2, .y = p.y, .dir = RIGHT});
-			// printf("L");
-		}
-	}
-	if (p.dir != DOWN && p.y + 1 < art->heightClr) {	// Check Up
-		// printf(" d?");
-		if (art->arr[p.y + 1][xArr / 8] & MASK(xArr % 8)) {
-			_spreadP(DOWN, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
-			vec_add(vec, &(t_petriPoint){.x = p.x, .y = p.y + 2, .dir = UP});
-			// printf("D");
-		}
-	}
-	if (p.dir != RIGHT && p.x + 1 < art->widthClr) {	// Check Up
-		// printf(" r?");
-		if (art->arr[p.y][xArr / 8] & MASK(xArr % 8)) {
-			_spreadP(RIGHT, p.x, p.y, art->arrClr[p.y][p.x], art->arrClr, rules);
-			vec_add(vec, &(t_petriPoint){.x = p.x + 2, .y = p.y, .dir = LEFT});
-			// printf("R");
-		}
-	}
-	// printf("\n");
-}
-
-
+__attribute__((flatten))
 void	applyColorGradient(t_art *art) {
 	const t_startList	*starts = art->starts;
-	t_vec	*vec = vec_create(sizeof(t_petriPoint));
+	t_vec	*vec = vec_create(sizeof(t_point));
 
 	for (size_t i = 0; i < starts->n; ++i) {
 		const t_clrRules	rules = starts->lStart[i].rules;
-		// printf("%lu %lu\n", starts->n, i);
-		// printf("%u %u\n", rules.r.min, rules.r.max);
-		const t_petriPoint	p_ = {.x = starts->lStart[i].x, .y = starts->lStart[i].y, .dir = NONE};
+		const t_point	pStart = {.x = starts->lStart[i].x, .y = starts->lStart[i].y,
+								.dirOrig = NONE, .clrOrig = &art->arrClr[pStart.y][pStart.x]};
 		
-		art->arrClr[p_.y][p_.x] = starts->lStart[i].baseClr;	// Copy First
-		vec_add(vec, &p_);
-		
+		art->arrClr[pStart.y][pStart.x] = starts->lStart[i].baseClr;	// Copy First
+		checkAllPossibleDir((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, &pStart, vec);
 		while (vec->size) {
-			const t_petriPoint	p = *(t_petriPoint *)vec_get(vec, vec->size - 1);
+			const t_point	p = *(t_point *)vec_get(vec, vec->size - 1);
 			vec_rm(vec, vec->size - 1);
-			_checkPSide(art, vec, p, &rules);
+			_FillLine(art, vec, p, &rules);
 		}
-		// recursive not recusive shit
 	}
 	vec_destroy(vec);
 }

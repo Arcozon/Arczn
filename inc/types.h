@@ -15,6 +15,7 @@ typedef struct s_parsArg	t_parsArg;
 
 typedef struct s_nonConstArt	t_nonConstArt;
 typedef struct s_art			t_art;
+typedef struct s_tab			t_tab;
 
 typedef struct s_clrSet		t_clrSet;
 

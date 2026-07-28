@@ -1,3 +1,4 @@
+#define DEBUG_INIT
 #include "arczn.h"
 
 #define DEFAULT_PERCENT	40
@@ -12,14 +13,14 @@ t_nonConstArt	_defaultArt(void) {
 		.nStart = 1,
 		.orphanPercent = 0,
 		.percent = DEFAULT_PERCENT,
-		.gen = G_RANDOM,
+		.gen = G_PETRI,
 		.print = P_NORMAL,
 		.color = CLR_GRADIENT,
-		.width = DEFAULT_WIDTH,
-		.height = DEFAULT_HEIGHT,
-		.arr = NULL,
-		.clrSetting = {	.min = DEFAULT_MIN, .max = DEFAULT_MAX,
-				.delta = DEFAULT_DELTA, 0, 0},
+		.tab = {.width = DEFAULT_WIDTH,
+			.height = DEFAULT_HEIGHT,
+			.arr = NULL},
+		// .clrSetting = {	.min = DEFAULT_MIN, .max = DEFAULT_MAX,
+		// 		.delta = DEFAULT_DELTA, 0, 0},
 		.widthClr = 0,
 		.heightClr = 0,
 		.arrClr = NULL
@@ -27,18 +28,19 @@ t_nonConstArt	_defaultArt(void) {
 	return (art);
 }
 
-void	freeArt(t_nonConstArt *tab) {
+void	freeArt(t_nonConstArt *art) {
+	const t_tab	*tab = &art->tab;
 	if (tab->arr != NULL) {
 		for (size_t i = 0; tab->arr[i]; ++i)
 			free(tab->arr[i]);
 		free(tab->arr);
 	}
-	if (tab->arrClr != NULL) {
-		for (size_t i = 0; i < tab->heightClr; ++i)
-			free(tab->arrClr[i]);
-		free(tab->arrClr);
+	if (art->arrClr != NULL) {
+		for (size_t i = 0; i < art->heightClr; ++i)
+			free(art->arrClr[i]);
+		free(art->arrClr);
 	}
-	free(tab->starts);
+	free(art->starts);
 }
 
 typedef void	(*genTabFn)(t_art *);
@@ -74,9 +76,14 @@ int main(int ac, char *av[], char *env[]) {
 	if (init(ac, av, &nonConstArt))
 		exit(1);
 	t_art art = *(t_art*)&nonConstArt;
+	TIMER_START;
 	selectGenTab(&art);
+	// printFrame(&art);
+	TIMER_START;
 	selectApplyColor(&art);
+	TIMER_START;
 	selectPrintTab(&art);
+	TIMER_END;
 	// printFrame(&art);
 	return (0);
 	(void)env;
