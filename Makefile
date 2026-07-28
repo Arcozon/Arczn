@@ -75,19 +75,19 @@ NAME_PARS = parsConfig
 YACC_SRC =  config_parser.y
 LEX_SRC	 =  config_lexer.l
 
-D_GEN	   =  gen/
-YACC_C_GEN =  $(D_GEN)$(YACC_SRC:.y=.c)
-LEX_C_GEN  =  $(D_GEN)$(LEX_SRC:.l=.c)
+D_GEN_PARS	   =  gen/
+YACC_C_GEN =  $(D_GEN_PARS)$(YACC_SRC:.y=.c)
+LEX_C_GEN  =  $(D_GEN_PARS)$(LEX_SRC:.l=.c)
 INC_GEN	   =  $(YACC_C_GEN:.c=.h) 
 
-YACC	=  bison -d #-Wother -Wconflicts-rr -Wconflicts-sr -Wcounterexamples 
+YACC	=  bison -d -Wother -Wconflicts-rr -Wconflicts-sr -Wcounterexamples 
 LEX		=  flex
 
 .DEFAULT_GOAL =  pars
 pars:	$(NAME_PARS)
 
 $(NAME_PARS):	$(YACC_C_GEN)	$(LEX_C_GEN)
-	cc $^ -I. -I$(D_GEN) $(INC_FLAGS) -o $@
+	cc $^ -I. -I$(D_GEN_PARS) $(INC_FLAGS) -o $@
 
 $(YACC_C_GEN): $(YACC_SRC)
 	@mkdir -p $(@D)

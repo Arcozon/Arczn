@@ -54,15 +54,15 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    INT = 258,                     /* INT  */
-    START_POINT = 259,             /* START_POINT  */
-    N_POINT = 260,                 /* N_POINT  */
-    TYPE = 261,                    /* TYPE  */
-    TYPE_IVY = 262,                /* TYPE_IVY  */
-    TYPE_PETRI = 263,              /* TYPE_PETRI  */
-    RED = 264,                     /* RED  */
-    GREEN = 265,                   /* GREEN  */
-    BLUE = 266,                    /* BLUE  */
+    UINT64 = 258,                  /* UINT64  */
+    UINT8 = 259,                   /* UINT8  */
+    START = 260,                   /* START  */
+    N_START = 261,                 /* N_START  */
+    SEPARATOR = 262,               /* SEPARATOR  */
+    ASSIGN = 263,                  /* ASSIGN  */
+    TRED = 264,                    /* TRED  */
+    TGREEN = 265,                  /* TGREEN  */
+    TBLUE = 266,                   /* TBLUE  */
     MIN = 267,                     /* MIN  */
     MAX = 268,                     /* MAX  */
     DELTA = 269                    /* DELTA  */
@@ -74,15 +74,16 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 8 "config_parser.y"
+#line 17 "config_parser.y"
 
-	size_t	longval;
+	uint64_t	uint64val;
+	uint8_t		uint8val;
 	
 	t_clr	clrval;
 	t_oneClrRules	oneClrRuleval;
 	t_clrRules		clrRuleval;
 
-#line 86 "gen/config_parser.h"
+#line 87 "gen/config_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

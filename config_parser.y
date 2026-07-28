@@ -2,11 +2,21 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 
-	#include "arczn.h"
+	// #include "types.h"
+	// #include "arczn.h"
+	// #include "color.h"
+
+	#include "parser_types.h"
+	// #include "config_parser.h"
+	void	yyerror (const char[]);
+	int  yylex (void);
+
+	t_parsStart	pStart;
 %}
 
 %union {
-	size_t	longval;
+	uint64_t	uint64val;
+	uint8_t		uint8val;
 	
 	t_clr	clrval;
 	t_oneClrRules	oneClrRuleval;
@@ -15,66 +25,92 @@
 
 %start config
 
-%token INT
+%token UINT64 UINT8
 
-%token START_POINT N_POINT
+%token START N_START
+%token SEPARATOR ASSIGN
 
-%token TYPE TYPE_IVY TYPE_PETRI
-
-%token RED GREEN BLUE
+%token TRED TGREEN TBLUE
 %token MIN MAX DELTA
 
 %%
 
 config:
-	type 
-
-type:
-		TYPE ':'	gen_type
+	/* start_0_ */
+	start_0_
 	;
 
-gen_type:
-	
-color_rule:
+start:
+	START '{' start_body '}'
+	{printf("start\n");}
+	;
+start_body:
+	{printf("start Body\n");}
+	;
 
+
+red_rule:
+	TRED rule 
+green_rule:
+	TGREEN rule 
 blue_rule:
-	BLUE rule 
+	TBLUE rule 
 
 rule:
 		'{' min max delta '}'
 	|	compact_rule
 	;
 
-compact_rule:	'[' INT '-' INT ']' '(' INT ')'
+compact_rule:	'[' UINT8 '-' UINT8 ']' '(' UINT8 ')'
 	;
 
 min:
-		MIN ':' INT ';'
+		MIN ':' UINT8 separator_1_
 		{} //Return INT VAL
 	|	{}//DEfault Val
 	;
 
 
 max:
-		MAX ':' INT ';'
+		MAX ':' UINT8 separator_1_
 		{} //Return INT VAL
 	|	{}//DEfault Val
 	;
 
 
 delta:
-		DELTA ':' INT ';'
-		{} //Return INT VAL
+		DELTA ':' UINT8 separator_1_
+		{} //Return INT VAL 
 	|	{}//DEfault Val
 	;
 
+n_start: 
+	;
+
+start_0_:
+		separator_0_
+	|	start_1_ separator_0_
+
+start_1_: 
+		start 
+	|	start_1_ separator_1_ start
+	;  
+
+separator_0_:
+	|	separator_1_;
+separator_1_:
+		SEPARATOR
+	|	separator_1_ SEPARATOR
+	;
 %%
+
+t_parsStart	pStart = {};
 
 void	yyerror (const char s[]) {
 	fprintf (stderr, "%s\n", s);
 }
 
 int main(void) {
-	printf(".intel_syntax noprefix\n");
 	yyparse();
 }
+ 
