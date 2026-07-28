@@ -69,11 +69,12 @@
 /* First part of user prologue.  */
 #line 1 "config_parser.y"
 
-	#include "type.h"
+	#include <stdio.h>
+	#include <stdlib.h>
 
-	#include "start.h"
+	#include "arczn.h"
 
-#line 77 "gen/config_parser.c"
+#line 78 "gen/config_parser.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -515,7 +516,7 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    29,    29,    32,    35
+       0,    30,    30,    33,    36
 };
 #endif
 
@@ -1074,7 +1075,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1078 "gen/config_parser.c"
+#line 1079 "gen/config_parser.c"
 
       default: break;
     }
@@ -1267,57 +1268,12 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 70 "config_parser.y"
+#line 71 "config_parser.y"
 
 
-void	yyerror (char const s[]) {
+void	yyerror (const char s[]) {
 	fprintf (stderr, "%s\n", s);
 }
-
-void	_annonceSection(void) {
-	const e_section sct = parsData.section;
-	static const char *sctStr[] = {"text", "data", "bss"};
-
-	if (sct == SCT_NONE || sct > SCT_MAX) {
-		exit(255);
-	}
-	printf("section .%s\n", sctStr[sct - SCT_TEXT]);
-}
-
-//__attribute__((format(printf(2, 3))))
-static inline void	_writeToSection(const e_section _nSection, const char _format[], va_list vp) {
-	if (_nSection != parsData.section) {
-		parsData.section = _nSection;
-		_annonceSection();
-	}
-	vprintf(_format, vp);
-}
-
-__attribute__((format(printf, 1, 2)))
-void	writeText(const char _format[], ...) {
-	va_list	 vp;
-	va_start(vp, _format);
-	_writeToSection(SCT_TEXT, _format, vp);
-	va_end(vp);
-}
-
-__attribute__((format(printf, 1, 2)))
-void	writeData(const char _format[], ...) {
-	va_list	 vp;
-	va_start(vp, _format);
-	_writeToSection(SCT_TEXT, _format, vp);
-	va_end(vp);
-}
-
-__attribute__((format(printf, 1, 2)))
-void	writeBss(const char _format[], ...) {
-	va_list	 vp;
-	va_start(vp, _format);
-	_writeToSection(SCT_TEXT, _format, vp);
-	va_end(vp);
-}
-
-data_t	parsData =  {0, SCT_NONE};
 
 int main(void) {
 	printf(".intel_syntax noprefix\n");

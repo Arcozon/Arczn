@@ -74,13 +74,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 7 "config_parser.y"
+#line 8 "config_parser.y"
 
 	size_t	longval;
 	
 	t_clr	clrval;
-	s_oneClrRules	oneClrRuleval;
-	s_clrRules		clrRuleval;
+	t_oneClrRules	oneClrRuleval;
+	t_clrRules		clrRuleval;
 
 #line 86 "gen/config_parser.h"
 

@@ -83,7 +83,7 @@ LEX		=  flex
 pars:	$(NAME_PARS)
 
 $(NAME_PARS):	$(YACC_C_GEN)	$(LEX_C_GEN)
-	cc $^ -I$(D_GEN) -I$(D_SRC) -o $@
+	cc $^ -I. -I$(D_GEN) $(INC_FLAGS) -o $@
 
 $(YACC_C_GEN): $(YACC_SRC)
 	@mkdir -p $(@D)
