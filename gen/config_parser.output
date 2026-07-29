@@ -1,0 +1,1305 @@
+Terminals unused in grammar
+
+    UINT8
+    MIN
+    MAX
+    DELTA
+
+
+Rules useless in parser due to conflicts
+
+   19 $@4: ε
+
+
+State 2 conflicts: 1 shift/reduce
+State 7 conflicts: 1 shift/reduce
+State 24 conflicts: 1 shift/reduce
+State 43 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: config $end
+
+    1 $@1: ε
+
+    2 $@2: ε
+
+    3 config: $@1 settings $@2 start_0_
+
+    4 settings: separator_0_
+    5         | settings settings_content separator_1_
+
+    6 settings_content: WIDTH ASSIGN uint64
+    7                 | HEIGHT ASSIGN uint64
+    8                 | N_START ASSIGN uint64
+    9                 | FNAME ASSIGN STRING
+
+   10 $@3: ε
+
+   11 start: $@3 START '{' start_body '}'
+
+   12 start_body: separator_0_
+   13           | start_body start_body_content separator_1_
+
+   14 start_body_content: X ASSIGN uint64
+   15                   | Y ASSIGN uint64
+   16                   | COLOR ASSIGN color
+   17                   | RULES ASSIGN clr_rules
+
+   18 color: CLR_RGB
+
+   19 $@4: ε
+
+   20 color: $@4 '{' single_color ',' single_color ',' single_color '}'
+   21      | '{' uint64 ',' uint64 ',' uint64 '}'
+
+   22 single_color: TRED ASSIGN uint64
+   23             | TGREEN ASSIGN uint64
+   24             | TBLUE ASSIGN uint64
+
+   25 $@5: ε
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}'
+   27          | clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 ')'
+
+   28 one_rule: TRED ASSIGN verbose_one_rule
+   29         | TGREEN ASSIGN verbose_one_rule
+   30         | TBLUE ASSIGN verbose_one_rule
+
+   31 verbose_one_rule: '{' uint64 ',' uint64 ',' uint64 '}'
+   32                 | '[' uint64 '-' uint64 ']' '(' uint64 ')'
+
+   33 start_0_: separator_0_
+   34         | start_1_ separator_0_
+
+   35 start_1_: start
+   36         | start_1_ separator_1_ start
+
+   37 separator_0_: ε
+   38             | separator_1_
+
+   39 separator_1_: SEPARATOR
+   40             | separator_1_ SEPARATOR
+
+   41 uint64: UINT64
+
+   42 clr_rgb: CLR_RGB
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '(' (40) 27 32
+    ')' (41) 27 32
+    ',' (44) 20 21 27 31
+    '-' (45) 27 32
+    '[' (91) 32
+    ']' (93) 32
+    '{' (123) 11 20 21 26 31
+    '}' (125) 11 20 21 26 31
+    error (256)
+    UINT64 (258) 41
+    UINT8 (259)
+    STRING (260) 9
+    CLR_RGB (261) 18 42
+    SEPARATOR (262) 39 40
+    ASSIGN (263) 6 7 8 9 14 15 16 17 22 23 24 28 29 30
+    WIDTH (264) 6
+    HEIGHT (265) 7
+    FNAME (266) 9
+    START (267) 11
+    N_START (268) 8
+    COLOR (269) 16
+    RULES (270) 17
+    X (271) 14
+    Y (272) 15
+    TRED (273) 22 28
+    TGREEN (274) 23 29
+    TBLUE (275) 24 30
+    MIN (276)
+    MAX (277)
+    DELTA (278)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (32)
+        on left: 0
+    config (33)
+        on left: 3
+        on right: 0
+    $@1 (34)
+        on left: 1
+        on right: 3
+    $@2 (35)
+        on left: 2
+        on right: 3
+    settings (36)
+        on left: 4 5
+        on right: 3 5
+    settings_content (37)
+        on left: 6 7 8 9
+        on right: 5
+    start (38)
+        on left: 11
+        on right: 35 36
+    $@3 (39)
+        on left: 10
+        on right: 11
+    start_body (40)
+        on left: 12 13
+        on right: 11 13
+    start_body_content (41)
+        on left: 14 15 16 17
+        on right: 13
+    color <clr> (42)
+        on left: 18 20 21
+        on right: 16
+    $@4 (43)
+        on left: 19
+        on right: 20
+    single_color (44)
+        on left: 22 23 24
+        on right: 20
+    clr_rules <clrRules> (45)
+        on left: 26 27
+        on right: 17
+    $@5 (46)
+        on left: 25
+        on right: 26
+    one_rule <oneClrRule> (47)
+        on left: 28 29 30
+        on right: 26
+    verbose_one_rule <oneClrRule> (48)
+        on left: 31 32
+        on right: 28 29 30
+    start_0_ (49)
+        on left: 33 34
+        on right: 3
+    start_1_ (50)
+        on left: 35 36
+        on right: 34 36
+    separator_0_ (51)
+        on left: 37 38
+        on right: 4 12 26 33 34
+    separator_1_ (52)
+        on left: 39 40
+        on right: 5 13 26 36 38 40
+    uint64 <uint64> (53)
+        on left: 41
+        on right: 6 7 8 14 15 21 22 23 24 27 31 32
+    clr_rgb <clr> (54)
+        on left: 42
+        on right: 27
+
+
+State 0
+
+    0 $accept: • config $end
+
+    $default  reduce using rule 1 ($@1)
+
+    config  go to state 1
+    $@1     go to state 2
+
+
+State 1
+
+    0 $accept: config • $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    3 config: $@1 • settings $@2 start_0_
+
+    SEPARATOR  shift, and go to state 4
+
+    SEPARATOR  [reduce using rule 37 (separator_0_)]
+    $default   reduce using rule 37 (separator_0_)
+
+    settings      go to state 5
+    separator_0_  go to state 6
+    separator_1_  go to state 7
+
+    shift/reduce conflict on token SEPARATOR:
+       37 separator_0_: ε •
+       39 separator_1_: • SEPARATOR
+      Example: $@1 • SEPARATOR
+      Shift derivation
+        config
+        ↳ 3: $@1 settings                     $@2    start_0_
+                 ↳ 4: separator_0_            ↳ 3: ε ↳ 3: ε
+                      ↳ 38: separator_1_
+                            ↳ 39: • SEPARATOR
+      Reduce derivation
+        config
+        ↳ 3: $@1 settings          $@2    start_0_
+                 ↳ 4: separator_0_ ↳ 3: ε ↳ 33: separator_0_
+                      ↳ 37: ε •                 ↳ 38: separator_1_
+                                                      ↳ 39: SEPARATOR
+
+
+
+State 3
+
+    0 $accept: config $end •
+
+    $default  accept
+
+
+State 4
+
+   39 separator_1_: SEPARATOR •
+
+    $default  reduce using rule 39 (separator_1_)
+
+
+State 5
+
+    3 config: $@1 settings • $@2 start_0_
+    5 settings: settings • settings_content separator_1_
+
+    WIDTH    shift, and go to state 8
+    HEIGHT   shift, and go to state 9
+    FNAME    shift, and go to state 10
+    N_START  shift, and go to state 11
+
+    $default  reduce using rule 2 ($@2)
+
+    $@2               go to state 12
+    settings_content  go to state 13
+
+
+State 6
+
+    4 settings: separator_0_ •
+
+    $default  reduce using rule 4 (settings)
+
+
+State 7
+
+   38 separator_0_: separator_1_ •
+   40 separator_1_: separator_1_ • SEPARATOR
+
+    SEPARATOR  shift, and go to state 14
+
+    SEPARATOR  [reduce using rule 38 (separator_0_)]
+    $default   reduce using rule 38 (separator_0_)
+
+    shift/reduce conflict on token SEPARATOR:
+       38 separator_0_: separator_1_ •
+       40 separator_1_: separator_1_ • SEPARATOR
+      Example: $@1 separator_1_ • SEPARATOR
+      Shift derivation
+        config
+        ↳ 3: $@1 settings                                  $@2    start_0_
+                 ↳ 4: separator_0_                         ↳ 3: ε ↳ 3: ε
+                      ↳ 38: separator_1_
+                            ↳ 40: separator_1_ • SEPARATOR
+      Reduce derivation
+        config
+        ↳ 3: $@1 settings                  $@2    start_0_
+                 ↳ 4: separator_0_         ↳ 3: ε ↳ 33: separator_0_
+                      ↳ 38: separator_1_ •              ↳ 38: separator_1_
+                                                              ↳ 39: SEPARATOR
+
+
+
+State 8
+
+    6 settings_content: WIDTH • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 15
+
+
+State 9
+
+    7 settings_content: HEIGHT • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 16
+
+
+State 10
+
+    9 settings_content: FNAME • ASSIGN STRING
+
+    ASSIGN  shift, and go to state 17
+
+
+State 11
+
+    8 settings_content: N_START • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 18
+
+
+State 12
+
+    3 config: $@1 settings $@2 • start_0_
+
+    SEPARATOR  shift, and go to state 4
+
+    $end      reduce using rule 37 (separator_0_)
+    $default  reduce using rule 10 ($@3)
+
+    start         go to state 19
+    $@3           go to state 20
+    start_0_      go to state 21
+    start_1_      go to state 22
+    separator_0_  go to state 23
+    separator_1_  go to state 7
+
+
+State 13
+
+    5 settings: settings settings_content • separator_1_
+
+    SEPARATOR  shift, and go to state 4
+
+    separator_1_  go to state 24
+
+
+State 14
+
+   40 separator_1_: separator_1_ SEPARATOR •
+
+    $default  reduce using rule 40 (separator_1_)
+
+
+State 15
+
+    6 settings_content: WIDTH ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 26
+
+
+State 16
+
+    7 settings_content: HEIGHT ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 27
+
+
+State 17
+
+    9 settings_content: FNAME ASSIGN • STRING
+
+    STRING  shift, and go to state 28
+
+
+State 18
+
+    8 settings_content: N_START ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 29
+
+
+State 19
+
+   35 start_1_: start •
+
+    $default  reduce using rule 35 (start_1_)
+
+
+State 20
+
+   11 start: $@3 • START '{' start_body '}'
+
+    START  shift, and go to state 30
+
+
+State 21
+
+    3 config: $@1 settings $@2 start_0_ •
+
+    $default  reduce using rule 3 (config)
+
+
+State 22
+
+   34 start_0_: start_1_ • separator_0_
+   36 start_1_: start_1_ • separator_1_ start
+
+    SEPARATOR  shift, and go to state 4
+
+    $default  reduce using rule 37 (separator_0_)
+
+    separator_0_  go to state 31
+    separator_1_  go to state 32
+
+
+State 23
+
+   33 start_0_: separator_0_ •
+
+    $default  reduce using rule 33 (start_0_)
+
+
+State 24
+
+    5 settings: settings settings_content separator_1_ •
+   40 separator_1_: separator_1_ • SEPARATOR
+
+    SEPARATOR  shift, and go to state 14
+
+    SEPARATOR  [reduce using rule 5 (settings)]
+    $default   reduce using rule 5 (settings)
+
+    shift/reduce conflict on token SEPARATOR:
+        5 settings: settings settings_content separator_1_ •
+       40 separator_1_: separator_1_ • SEPARATOR
+      Example: $@1 settings settings_content separator_1_ • SEPARATOR
+      Shift derivation
+        config
+        ↳ 3: $@1 settings                                                      $@2    start_0_
+                 ↳ 5: settings settings_content separator_1_                   ↳ 3: ε ↳ 3: ε
+                                                ↳ 40: separator_1_ • SEPARATOR
+      Reduce derivation
+        config
+        ↳ 3: $@1 settings                                      $@2    start_0_
+                 ↳ 5: settings settings_content separator_1_ • ↳ 3: ε ↳ 33: separator_0_
+                                                                            ↳ 38: separator_1_
+                                                                                  ↳ 39: SEPARATOR
+
+
+
+State 25
+
+   41 uint64: UINT64 •
+
+    $default  reduce using rule 41 (uint64)
+
+
+State 26
+
+    6 settings_content: WIDTH ASSIGN uint64 •
+
+    $default  reduce using rule 6 (settings_content)
+
+
+State 27
+
+    7 settings_content: HEIGHT ASSIGN uint64 •
+
+    $default  reduce using rule 7 (settings_content)
+
+
+State 28
+
+    9 settings_content: FNAME ASSIGN STRING •
+
+    $default  reduce using rule 9 (settings_content)
+
+
+State 29
+
+    8 settings_content: N_START ASSIGN uint64 •
+
+    $default  reduce using rule 8 (settings_content)
+
+
+State 30
+
+   11 start: $@3 START • '{' start_body '}'
+
+    '{'  shift, and go to state 33
+
+
+State 31
+
+   34 start_0_: start_1_ separator_0_ •
+
+    $default  reduce using rule 34 (start_0_)
+
+
+State 32
+
+   36 start_1_: start_1_ separator_1_ • start
+   38 separator_0_: separator_1_ •
+   40 separator_1_: separator_1_ • SEPARATOR
+
+    SEPARATOR  shift, and go to state 14
+
+    $end      reduce using rule 38 (separator_0_)
+    $default  reduce using rule 10 ($@3)
+
+    start  go to state 34
+    $@3    go to state 20
+
+
+State 33
+
+   11 start: $@3 START '{' • start_body '}'
+
+    SEPARATOR  shift, and go to state 4
+
+    $default  reduce using rule 37 (separator_0_)
+
+    start_body    go to state 35
+    separator_0_  go to state 36
+    separator_1_  go to state 7
+
+
+State 34
+
+   36 start_1_: start_1_ separator_1_ start •
+
+    $default  reduce using rule 36 (start_1_)
+
+
+State 35
+
+   11 start: $@3 START '{' start_body • '}'
+   13 start_body: start_body • start_body_content separator_1_
+
+    COLOR  shift, and go to state 37
+    RULES  shift, and go to state 38
+    X      shift, and go to state 39
+    Y      shift, and go to state 40
+    '}'    shift, and go to state 41
+
+    start_body_content  go to state 42
+
+
+State 36
+
+   12 start_body: separator_0_ •
+
+    $default  reduce using rule 12 (start_body)
+
+
+State 37
+
+   16 start_body_content: COLOR • ASSIGN color
+
+    ASSIGN  shift, and go to state 43
+
+
+State 38
+
+   17 start_body_content: RULES • ASSIGN clr_rules
+
+    ASSIGN  shift, and go to state 44
+
+
+State 39
+
+   14 start_body_content: X • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 45
+
+
+State 40
+
+   15 start_body_content: Y • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 46
+
+
+State 41
+
+   11 start: $@3 START '{' start_body '}' •
+
+    $default  reduce using rule 11 (start)
+
+
+State 42
+
+   13 start_body: start_body start_body_content • separator_1_
+
+    SEPARATOR  shift, and go to state 4
+
+    separator_1_  go to state 47
+
+
+State 43
+
+   16 start_body_content: COLOR ASSIGN • color
+
+    CLR_RGB  shift, and go to state 48
+    '{'      shift, and go to state 49
+
+    '{'  [reduce using rule 19 ($@4)]
+
+    color  go to state 50
+    $@4    go to state 51
+
+    shift/reduce conflict on token '{':
+       19 $@4: ε •
+       21 color: • '{' uint64 ',' uint64 ',' uint64 '}'
+      First example: $@1 settings $@2 $@3 START '{' COLOR ASSIGN • '{' uint64 ',' uint64 ',' uint64 '}' start_body_content separator_1_ '}' separator_0_ $end
+      Shift derivation
+        $accept
+        ↳ 0: config                                                                                                                                                                       $end
+             ↳ 3: $@1 settings $@2 start_0_
+                                   ↳ 34: start_1_                                                                                                                            separator_0_
+                                         ↳ 35: start
+                                               ↳ 11: $@3 START '{' start_body                                                                                            '}'
+                                                                   ↳ 13: start_body_content                                              start_body_content separator_1_
+                                                                         ↳ 16: COLOR ASSIGN color
+                                                                                            ↳ 21: • '{' uint64 ',' uint64 ',' uint64 '}'
+      Second example: $@1 settings $@2 $@3 START '{' start_body COLOR ASSIGN • '{' single_color ',' single_color ',' single_color '}' separator_1_ '}' separator_0_ $end
+      Reduce derivation
+        $accept
+        ↳ 0: config                                                                                                                                                                                         $end
+             ↳ 3: $@1 settings $@2 start_0_
+                                   ↳ 34: start_1_                                                                                                                                              separator_0_
+                                         ↳ 35: start
+                                               ↳ 11: $@3 START '{' start_body                                                                                                              '}'
+                                                                   ↳ 13: start_body start_body_content                                                                        separator_1_
+                                                                                    ↳ 16: COLOR ASSIGN color
+                                                                                                       ↳ 20: $@4       '{' single_color ',' single_color ',' single_color '}'
+                                                                                                             ↳ 19: ε •
+
+
+
+State 44
+
+   17 start_body_content: RULES ASSIGN • clr_rules
+
+    CLR_RGB  shift, and go to state 52
+
+    $default  reduce using rule 25 ($@5)
+
+    clr_rules  go to state 53
+    $@5        go to state 54
+    clr_rgb    go to state 55
+
+
+State 45
+
+   14 start_body_content: X ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 56
+
+
+State 46
+
+   15 start_body_content: Y ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 57
+
+
+State 47
+
+   13 start_body: start_body start_body_content separator_1_ •
+   40 separator_1_: separator_1_ • SEPARATOR
+
+    SEPARATOR  shift, and go to state 14
+
+    $default  reduce using rule 13 (start_body)
+
+
+State 48
+
+   18 color: CLR_RGB •
+
+    $default  reduce using rule 18 (color)
+
+
+State 49
+
+   21 color: '{' • uint64 ',' uint64 ',' uint64 '}'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 58
+
+
+State 50
+
+   16 start_body_content: COLOR ASSIGN color •
+
+    $default  reduce using rule 16 (start_body_content)
+
+
+State 51
+
+   20 color: $@4 • '{' single_color ',' single_color ',' single_color '}'
+
+    '{'  shift, and go to state 59
+
+
+State 52
+
+   42 clr_rgb: CLR_RGB •
+
+    $default  reduce using rule 42 (clr_rgb)
+
+
+State 53
+
+   17 start_body_content: RULES ASSIGN clr_rules •
+
+    $default  reduce using rule 17 (start_body_content)
+
+
+State 54
+
+   26 clr_rules: $@5 • '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}'
+
+    '{'  shift, and go to state 60
+
+
+State 55
+
+   27 clr_rules: clr_rgb • '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 ')'
+
+    '-'  shift, and go to state 61
+
+
+State 56
+
+   14 start_body_content: X ASSIGN uint64 •
+
+    $default  reduce using rule 14 (start_body_content)
+
+
+State 57
+
+   15 start_body_content: Y ASSIGN uint64 •
+
+    $default  reduce using rule 15 (start_body_content)
+
+
+State 58
+
+   21 color: '{' uint64 • ',' uint64 ',' uint64 '}'
+
+    ','  shift, and go to state 62
+
+
+State 59
+
+   20 color: $@4 '{' • single_color ',' single_color ',' single_color '}'
+
+    TRED    shift, and go to state 63
+    TGREEN  shift, and go to state 64
+    TBLUE   shift, and go to state 65
+
+    single_color  go to state 66
+
+
+State 60
+
+   26 clr_rules: $@5 '{' • separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}'
+
+    SEPARATOR  shift, and go to state 4
+
+    $default  reduce using rule 37 (separator_0_)
+
+    separator_0_  go to state 67
+    separator_1_  go to state 7
+
+
+State 61
+
+   27 clr_rules: clr_rgb '-' • clr_rgb '(' uint64 ',' uint64 ',' uint64 ')'
+
+    CLR_RGB  shift, and go to state 52
+
+    clr_rgb  go to state 68
+
+
+State 62
+
+   21 color: '{' uint64 ',' • uint64 ',' uint64 '}'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 69
+
+
+State 63
+
+   22 single_color: TRED • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 70
+
+
+State 64
+
+   23 single_color: TGREEN • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 71
+
+
+State 65
+
+   24 single_color: TBLUE • ASSIGN uint64
+
+    ASSIGN  shift, and go to state 72
+
+
+State 66
+
+   20 color: $@4 '{' single_color • ',' single_color ',' single_color '}'
+
+    ','  shift, and go to state 73
+
+
+State 67
+
+   26 clr_rules: $@5 '{' separator_0_ • one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}'
+
+    TRED    shift, and go to state 74
+    TGREEN  shift, and go to state 75
+    TBLUE   shift, and go to state 76
+
+    one_rule  go to state 77
+
+
+State 68
+
+   27 clr_rules: clr_rgb '-' clr_rgb • '(' uint64 ',' uint64 ',' uint64 ')'
+
+    '('  shift, and go to state 78
+
+
+State 69
+
+   21 color: '{' uint64 ',' uint64 • ',' uint64 '}'
+
+    ','  shift, and go to state 79
+
+
+State 70
+
+   22 single_color: TRED ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 80
+
+
+State 71
+
+   23 single_color: TGREEN ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 81
+
+
+State 72
+
+   24 single_color: TBLUE ASSIGN • uint64
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 82
+
+
+State 73
+
+   20 color: $@4 '{' single_color ',' • single_color ',' single_color '}'
+
+    TRED    shift, and go to state 63
+    TGREEN  shift, and go to state 64
+    TBLUE   shift, and go to state 65
+
+    single_color  go to state 83
+
+
+State 74
+
+   28 one_rule: TRED • ASSIGN verbose_one_rule
+
+    ASSIGN  shift, and go to state 84
+
+
+State 75
+
+   29 one_rule: TGREEN • ASSIGN verbose_one_rule
+
+    ASSIGN  shift, and go to state 85
+
+
+State 76
+
+   30 one_rule: TBLUE • ASSIGN verbose_one_rule
+
+    ASSIGN  shift, and go to state 86
+
+
+State 77
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule • separator_1_ one_rule separator_1_ one_rule separator_0_ '}'
+
+    SEPARATOR  shift, and go to state 4
+
+    separator_1_  go to state 87
+
+
+State 78
+
+   27 clr_rules: clr_rgb '-' clr_rgb '(' • uint64 ',' uint64 ',' uint64 ')'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 88
+
+
+State 79
+
+   21 color: '{' uint64 ',' uint64 ',' • uint64 '}'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 89
+
+
+State 80
+
+   22 single_color: TRED ASSIGN uint64 •
+
+    $default  reduce using rule 22 (single_color)
+
+
+State 81
+
+   23 single_color: TGREEN ASSIGN uint64 •
+
+    $default  reduce using rule 23 (single_color)
+
+
+State 82
+
+   24 single_color: TBLUE ASSIGN uint64 •
+
+    $default  reduce using rule 24 (single_color)
+
+
+State 83
+
+   20 color: $@4 '{' single_color ',' single_color • ',' single_color '}'
+
+    ','  shift, and go to state 90
+
+
+State 84
+
+   28 one_rule: TRED ASSIGN • verbose_one_rule
+
+    '{'  shift, and go to state 91
+    '['  shift, and go to state 92
+
+    verbose_one_rule  go to state 93
+
+
+State 85
+
+   29 one_rule: TGREEN ASSIGN • verbose_one_rule
+
+    '{'  shift, and go to state 91
+    '['  shift, and go to state 92
+
+    verbose_one_rule  go to state 94
+
+
+State 86
+
+   30 one_rule: TBLUE ASSIGN • verbose_one_rule
+
+    '{'  shift, and go to state 91
+    '['  shift, and go to state 92
+
+    verbose_one_rule  go to state 95
+
+
+State 87
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule separator_1_ • one_rule separator_1_ one_rule separator_0_ '}'
+   40 separator_1_: separator_1_ • SEPARATOR
+
+    SEPARATOR  shift, and go to state 14
+    TRED       shift, and go to state 74
+    TGREEN     shift, and go to state 75
+    TBLUE      shift, and go to state 76
+
+    one_rule  go to state 96
+
+
+State 88
+
+   27 clr_rules: clr_rgb '-' clr_rgb '(' uint64 • ',' uint64 ',' uint64 ')'
+
+    ','  shift, and go to state 97
+
+
+State 89
+
+   21 color: '{' uint64 ',' uint64 ',' uint64 • '}'
+
+    '}'  shift, and go to state 98
+
+
+State 90
+
+   20 color: $@4 '{' single_color ',' single_color ',' • single_color '}'
+
+    TRED    shift, and go to state 63
+    TGREEN  shift, and go to state 64
+    TBLUE   shift, and go to state 65
+
+    single_color  go to state 99
+
+
+State 91
+
+   31 verbose_one_rule: '{' • uint64 ',' uint64 ',' uint64 '}'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 100
+
+
+State 92
+
+   32 verbose_one_rule: '[' • uint64 '-' uint64 ']' '(' uint64 ')'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 101
+
+
+State 93
+
+   28 one_rule: TRED ASSIGN verbose_one_rule •
+
+    $default  reduce using rule 28 (one_rule)
+
+
+State 94
+
+   29 one_rule: TGREEN ASSIGN verbose_one_rule •
+
+    $default  reduce using rule 29 (one_rule)
+
+
+State 95
+
+   30 one_rule: TBLUE ASSIGN verbose_one_rule •
+
+    $default  reduce using rule 30 (one_rule)
+
+
+State 96
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule • separator_1_ one_rule separator_0_ '}'
+
+    SEPARATOR  shift, and go to state 4
+
+    separator_1_  go to state 102
+
+
+State 97
+
+   27 clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' • uint64 ',' uint64 ')'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 103
+
+
+State 98
+
+   21 color: '{' uint64 ',' uint64 ',' uint64 '}' •
+
+    $default  reduce using rule 21 (color)
+
+
+State 99
+
+   20 color: $@4 '{' single_color ',' single_color ',' single_color • '}'
+
+    '}'  shift, and go to state 104
+
+
+State 100
+
+   31 verbose_one_rule: '{' uint64 • ',' uint64 ',' uint64 '}'
+
+    ','  shift, and go to state 105
+
+
+State 101
+
+   32 verbose_one_rule: '[' uint64 • '-' uint64 ']' '(' uint64 ')'
+
+    '-'  shift, and go to state 106
+
+
+State 102
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ • one_rule separator_0_ '}'
+   40 separator_1_: separator_1_ • SEPARATOR
+
+    SEPARATOR  shift, and go to state 14
+    TRED       shift, and go to state 74
+    TGREEN     shift, and go to state 75
+    TBLUE      shift, and go to state 76
+
+    one_rule  go to state 107
+
+
+State 103
+
+   27 clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' uint64 • ',' uint64 ')'
+
+    ','  shift, and go to state 108
+
+
+State 104
+
+   20 color: $@4 '{' single_color ',' single_color ',' single_color '}' •
+
+    $default  reduce using rule 20 (color)
+
+
+State 105
+
+   31 verbose_one_rule: '{' uint64 ',' • uint64 ',' uint64 '}'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 109
+
+
+State 106
+
+   32 verbose_one_rule: '[' uint64 '-' • uint64 ']' '(' uint64 ')'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 110
+
+
+State 107
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule • separator_0_ '}'
+
+    SEPARATOR  shift, and go to state 4
+
+    $default  reduce using rule 37 (separator_0_)
+
+    separator_0_  go to state 111
+    separator_1_  go to state 7
+
+
+State 108
+
+   27 clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' • uint64 ')'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 112
+
+
+State 109
+
+   31 verbose_one_rule: '{' uint64 ',' uint64 • ',' uint64 '}'
+
+    ','  shift, and go to state 113
+
+
+State 110
+
+   32 verbose_one_rule: '[' uint64 '-' uint64 • ']' '(' uint64 ')'
+
+    ']'  shift, and go to state 114
+
+
+State 111
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ • '}'
+
+    '}'  shift, and go to state 115
+
+
+State 112
+
+   27 clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 • ')'
+
+    ')'  shift, and go to state 116
+
+
+State 113
+
+   31 verbose_one_rule: '{' uint64 ',' uint64 ',' • uint64 '}'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 117
+
+
+State 114
+
+   32 verbose_one_rule: '[' uint64 '-' uint64 ']' • '(' uint64 ')'
+
+    '('  shift, and go to state 118
+
+
+State 115
+
+   26 clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}' •
+
+    $default  reduce using rule 26 (clr_rules)
+
+
+State 116
+
+   27 clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 ')' •
+
+    $default  reduce using rule 27 (clr_rules)
+
+
+State 117
+
+   31 verbose_one_rule: '{' uint64 ',' uint64 ',' uint64 • '}'
+
+    '}'  shift, and go to state 119
+
+
+State 118
+
+   32 verbose_one_rule: '[' uint64 '-' uint64 ']' '(' • uint64 ')'
+
+    UINT64  shift, and go to state 25
+
+    uint64  go to state 120
+
+
+State 119
+
+   31 verbose_one_rule: '{' uint64 ',' uint64 ',' uint64 '}' •
+
+    $default  reduce using rule 31 (verbose_one_rule)
+
+
+State 120
+
+   32 verbose_one_rule: '[' uint64 '-' uint64 ']' '(' uint64 • ')'
+
+    ')'  shift, and go to state 121
+
+
+State 121
+
+   32 verbose_one_rule: '[' uint64 '-' uint64 ']' '(' uint64 ')' •
+
+    $default  reduce using rule 32 (verbose_one_rule)

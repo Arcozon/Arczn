@@ -56,16 +56,25 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     UINT64 = 258,                  /* UINT64  */
     UINT8 = 259,                   /* UINT8  */
-    START = 260,                   /* START  */
-    N_START = 261,                 /* N_START  */
+    STRING = 260,                  /* STRING  */
+    CLR_RGB = 261,                 /* CLR_RGB  */
     SEPARATOR = 262,               /* SEPARATOR  */
     ASSIGN = 263,                  /* ASSIGN  */
-    TRED = 264,                    /* TRED  */
-    TGREEN = 265,                  /* TGREEN  */
-    TBLUE = 266,                   /* TBLUE  */
-    MIN = 267,                     /* MIN  */
-    MAX = 268,                     /* MAX  */
-    DELTA = 269                    /* DELTA  */
+    WIDTH = 264,                   /* WIDTH  */
+    HEIGHT = 265,                  /* HEIGHT  */
+    FNAME = 266,                   /* FNAME  */
+    START = 267,                   /* START  */
+    N_START = 268,                 /* N_START  */
+    COLOR = 269,                   /* COLOR  */
+    RULES = 270,                   /* RULES  */
+    X = 271,                       /* X  */
+    Y = 272,                       /* Y  */
+    TRED = 273,                    /* TRED  */
+    TGREEN = 274,                  /* TGREEN  */
+    TBLUE = 275,                   /* TBLUE  */
+    MIN = 276,                     /* MIN  */
+    MAX = 277,                     /* MAX  */
+    DELTA = 278                    /* DELTA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -74,16 +83,17 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "config_parser.y"
+#line 19 "config_parser.y"
 
-	uint64_t	uint64val;
-	uint8_t		uint8val;
+	uint64_t	uint64;
+	uint8_t		uint8;
+	char		*str;
 	
-	t_clr	clrval;
-	t_oneClrRules	oneClrRuleval;
-	t_clrRules		clrRuleval;
+	t_clr			clr;
+	t_oneClrRules	oneClrRule;
+	t_clrRules		clrRules;
 
-#line 87 "gen/config_parser.h"
+#line 97 "gen/config_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

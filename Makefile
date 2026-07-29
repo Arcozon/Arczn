@@ -80,11 +80,14 @@ YACC_C_GEN =  $(D_GEN_PARS)$(YACC_SRC:.y=.c)
 LEX_C_GEN  =  $(D_GEN_PARS)$(LEX_SRC:.l=.c)
 INC_GEN	   =  $(YACC_C_GEN:.c=.h) 
 
-YACC	=  bison -d -Wother -Wconflicts-rr -Wconflicts-sr -Wcounterexamples 
+YACC	=  bison -d -Wother -Wconflicts-rr -Wconflicts-sr -Wcounterexamples -v
 LEX		=  flex
 
 .DEFAULT_GOAL =  pars
 pars:	$(NAME_PARS)
+	clear
+	@echo -e '\t\033[1;32m./$(NAME_PARS) <test.config\033[0m'
+	@./$(NAME_PARS) <test.config
 
 $(NAME_PARS):	$(YACC_C_GEN)	$(LEX_C_GEN)
 	cc $^ -I. -I$(D_GEN_PARS) $(INC_FLAGS) -o $@
