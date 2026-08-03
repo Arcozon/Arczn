@@ -104,10 +104,9 @@ void	_joinPoint(t_cluster *cluster, t_point nPoint, const uint8_t choice, uint8_
 __always_inline static
 void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClusters) {
 	t_cluster		cluster = {.xOrigin = start->x /2, .yOrigin = start->y / 2,
-			// .getClusterWeightFn = NULL,
-			.getClusterWeightFn = GCW_Linear,
-			.getPointWeightFn = GPW_distance,
-			.chosePossibilityFn = CPF_random};
+			.getClusterWeightFn = start->getClusterWeightFn,
+			.getPointWeightFn = start->getPointWeightFn,
+			.chosePossibilityFn = start->chosePossibilityFn};
 	
 	cluster.ht = ht_create(HashTableSize, pointHash, pointDup, pointCmp, free);
 	cluster.ratioWeight = start->weight;
@@ -136,11 +135,6 @@ void	_initPetri(t_petri *petri, const t_art *art) {	// TODO: remove duplicates c
 	fTree_create(&petri->weightClusters);
 	for (size_t i = 0; i < startL->n; ++i) {
 		_initCluster(&startL->lStart[i], HashTableSize, petri->vClusters);
-	}
-	{
-		t_cluster	*cluster0 = vec_get(petri->vClusters, 0);
-		cluster0->ratioWeight = 10;
-		cluster0->weight = 10;
 	}
 	for (size_t i = 0; i < startL->n; ++i) {
 		t_cluster	*cluster = vec_get(petri->vClusters, i);

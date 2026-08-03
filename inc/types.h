@@ -28,4 +28,12 @@ typedef struct s_clr		t_clr;
 typedef struct s_startList	t_startList;
 typedef struct s_start		t_start;
 
+typedef struct s_cluster	t_cluster;
+typedef struct s_point	t_point;
+typedef struct s_petri	t_petri;
+
+typedef uint64_t	(*t_getClusterWeightFn)(const t_cluster *cluster);
+typedef uint64_t	(*t_getPointWeightFn)(const t_point *point, const t_cluster *cluster);
+typedef uint8_t		(*t_chosePossibilityFn)(const uint8_t possibility);
+
 #endif

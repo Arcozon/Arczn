@@ -122,3 +122,6 @@ int main(void) {
 	printf(".intel_syntax noprefix\n");
 	yyparse();
 }
+const 
+const 
+const 

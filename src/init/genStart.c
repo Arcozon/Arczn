@@ -69,12 +69,33 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 	t_start start = {};
 	// If already configured -> Pull
 	// else
+	(void)i;
 	{
 		start.x = aRand(tab->width) * 2;
 		start.y = aRand(tab->height) * 2;
-		start.weight = 1;
-		start.baseClr = (t_clr){0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i};
-		start.rules = (t_clrRules){{0x40, 0xef, 5}, {0x36, 0xf0, 2}, {0x83, 0xce, 1}};
+		start.weight = 2;
+		start.baseClr = (t_clr){0x9 + 25, 0xb + 55, 0x3 + 65};
+		// start.baseClr = (t_clr){0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i};
+		start.rules = (t_clrRules){{0x20, 0xef, 2}, {0x36, 0xf0, 4}, {0x83, 0xce, 0}};
+		start.getClusterWeightFn = GCW_Linear;
+		start.getPointWeightFn = NULL;
+		start.chosePossibilityFn = CPF_random;
+	}
+	if (i == 0) {
+		start.x = tab->width;
+		start.y = tab->height;
+		start.chosePossibilityFn = CPF_ULDR;
+		start.getPointWeightFn = GPW_distance_ULDR;
+		start.baseClr = (t_clr){0xab, 0x35, 0x3};
+		start.rules = (t_clrRules){{0x20, 0xef, 4}, {0x46, 0x90, 1}, {0x43, 0xce, 5}};
+
+	} else {
+		start.x = tab->width * 2 - 10;
+		start.y = tab->height * 2 - 10;
+		start.weight = 4;
+		// start.getClusterWeightFn = GCW_Linear;
+		start.getPointWeightFn = NULL;
+		// start.chosePossibilityFn = CPF_random;
 	}
 	_fixStart(&start, tab);
 	if (ht_get(htStart, &start)) { // If already in the thing

@@ -15,11 +15,9 @@
 # include "color.h"
 # include "random.h"
 # include "start.h"
-
+#include "petri.h"
 
 # include "debug.h"
-
-
 
 # define MASK(bit)			(1 << (bit))
 # define GETB(var, bit)		((var) & MASK(bit))

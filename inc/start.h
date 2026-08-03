@@ -10,6 +10,9 @@ struct s_start {
 
 	t_clr		baseClr;
 	t_clrRules	rules;
+	t_getClusterWeightFn	getClusterWeightFn;
+	t_getPointWeightFn		getPointWeightFn;
+	t_chosePossibilityFn	chosePossibilityFn;
 };
 
 struct s_startList {

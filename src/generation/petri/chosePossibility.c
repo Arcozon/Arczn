@@ -29,3 +29,4 @@ uint8_t	CPF_##name(const uint8_t poss) {	\
 }
 
 MK_CPF_ORDER(ULRD, UP, LEFT, RIGHT, DOWN)
+MK_CPF_ORDER(ULDR, UP, LEFT, DOWN, RIGHT)

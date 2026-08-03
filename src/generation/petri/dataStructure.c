@@ -26,12 +26,15 @@ void	*clusterAdd(t_cluster *cluster, const t_point *p) {
 	void	*search = ht_get(cluster->ht, p);
 
 	if (!search) {
-		search = ht_add(cluster->ht, p);
-		if (!search)	abort();
 		size_t weight = 1;
 		if (cluster->getPointWeightFn)
-			weight = cluster->getPointWeightFn(search, cluster);
-		fTree_append(&cluster->weightPoints, weight, search);
+			weight = cluster->getPointWeightFn(p, cluster);
+		if (weight > 0) {
+			search = ht_add(cluster->ht, p);
+			if (!search)
+				abort();
+			fTree_append(&cluster->weightPoints, weight, search);
+		}
 	} else if (cluster->getPointWeightFn) {
 		// UPDATE Weight
 		// Need to know its index
