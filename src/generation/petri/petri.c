@@ -106,7 +106,9 @@ void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClus
 	t_cluster		cluster = {.xOrigin = start->x /2, .yOrigin = start->y / 2,
 			.getClusterWeightFn = start->getClusterWeightFn,
 			.getPointWeightFn = start->getPointWeightFn,
-			.chosePossibilityFn = start->chosePossibilityFn};
+			.chosePossibilityFn = start->chosePossibilityFn,
+			.possibilityMask = start->possibilityMask,
+			.getPossibilityMaskFn = start->getPossibilityMaskFn};
 	
 	cluster.ht = ht_create(HashTableSize, pointHash, pointDup, pointCmp, free);
 	cluster.ratioWeight = start->weight;

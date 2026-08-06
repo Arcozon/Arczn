@@ -13,16 +13,18 @@ struct s_cluster {
 	const uint64_t	xOrigin;
 	const uint64_t	yOrigin;
 
-	// t_vec	*vec;
 	t_ht	*ht;
 	t_fTree	weightPoints;
+	
 	size_t	ratioWeight;
 	size_t	weight;
-	// size_t	baseWeight;
+	const t_getClusterWeightFn		getClusterWeightFn;
+	
+	const uint8_t	possibilityMask;
+	const t_getPossibilityMaskFn	getPossibilityMaskFn;
 
-	const t_getClusterWeightFn	getClusterWeightFn;
-	const t_getPointWeightFn	getPointWeightFn;
-	const t_chosePossibilityFn	chosePossibilityFn;
+	const t_getPointWeightFn		getPointWeightFn;
+	const t_chosePossibilityFn		chosePossibilityFn;
 };
 
 struct s_point {
@@ -48,10 +50,10 @@ uint64_t	GPW_rectangle(const t_point *point, const t_cluster *cluster);
 uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster);
 	
 	
-uint8_t	CPF_random(const uint8_t poss);
-uint8_t	CPF_first(const uint8_t poss);
-uint8_t	CPF_ULRD(const uint8_t poss);
-uint8_t	CPF_ULDR(const uint8_t poss);
+uint8_t	CPD_random(const uint8_t poss);
+uint8_t	CPD_first(const uint8_t poss);
+uint8_t	CPD_ULRD(const uint8_t poss);
+uint8_t	CPD_ULDR(const uint8_t poss);
 
 size_t	pointHash(const void *rPtr);
 bool	pointCmp(const void *d1, const void *d2);

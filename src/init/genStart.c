@@ -58,8 +58,8 @@ void	_fixStart(t_start *pStart, const t_tab *tab) {
 	const uint64_t	w = tab->width * 2;
 	const uint64_t	h = tab->height * 2;
 
-	if (pStart->x % 2) pStart->x -= 1;
-	if (pStart->y % 2) pStart->y -= 1;
+	if (pStart->x % 2)	pStart->x -= 1;
+	if (pStart->y % 2)	pStart->y -= 1;
 	if (pStart->x >= w)		pStart->x = aRand(tab->width) * 2;
 	if (pStart->y >= h)		pStart->y = aRand(tab->height) * 2;
 	_fixRules_Start(pStart);
@@ -81,12 +81,14 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 		start.rules = (t_clrRules){{0x20, 0xef, 2}, {0x36, 0xf0, 4}, {0x83, 0xce, 0}};
 		start.getClusterWeightFn = GCW_Linear;
 		start.getPointWeightFn = NULL;
-		start.chosePossibilityFn = CPF_random;
+		start.chosePossibilityFn = CPD_random;
+		start.getPossibilityMaskFn = NULL;
+		start.possibilityMask = 0b1111;
 	}
 	if (i == 0) {
 		start.x = tab->width;
 		start.y = tab->height;
-		start.chosePossibilityFn = CPF_ULDR;
+		start.chosePossibilityFn = CPD_ULDR;
 		start.getPointWeightFn = GPW_distance_ULDR;
 		start.baseClr = (t_clr){0xab, 0x35, 0x3};
 		start.rules = (t_clrRules){{0x20, 0xef, 4}, {0x46, 0x90, 1}, {0x43, 0xce, 5}};
@@ -97,7 +99,7 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 		start.weight = 3;
 		// start.getClusterWeightFn = GCW_Linear;
 		start.getPointWeightFn = NULL;
-		// start.chosePossibilityFn = CPF_random;
+		// start.chosePossibilityFn = CPD_random;
 	}
 	_fixStart(&start, tab);
 	if (ht_get(htStart, &start)) { // If already in the thing

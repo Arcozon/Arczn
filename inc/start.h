@@ -6,13 +6,16 @@
 struct s_start {
 	size_t	x;
 	size_t	y;
+	
 	size_t	weight;
-
-	t_clr		baseClr;
-	t_clrRules	rules;
 	t_getClusterWeightFn	getClusterWeightFn;
 	t_getPointWeightFn		getPointWeightFn;
 	t_chosePossibilityFn	chosePossibilityFn;
+	uint8_t					possibilityMask;
+	t_getPossibilityMaskFn	getPossibilityMaskFn;
+
+	t_clr		baseClr;
+	t_clrRules	rules;
 };
 
 struct s_startList {
