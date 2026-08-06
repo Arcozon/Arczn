@@ -60,7 +60,6 @@ void	_fixStart(t_start *pStart, const t_tab *tab) {
 
 	if (pStart->x % 2) pStart->x -= 1;
 	if (pStart->y % 2) pStart->y -= 1;
-	printf("%lu | %lu\n", pStart->x, pStart->y);
 	if (pStart->x >= w)		pStart->x = aRand(tab->width) * 2;
 	if (pStart->y >= h)		pStart->y = aRand(tab->height) * 2;
 	_fixRules_Start(pStart);
