@@ -58,6 +58,9 @@ void	_fixStart(t_start *pStart, const t_tab *tab) {
 	const uint64_t	w = tab->width * 2;
 	const uint64_t	h = tab->height * 2;
 
+	if (pStart->x % 2) pStart->x -= 1;
+	if (pStart->y % 2) pStart->y -= 1;
+	printf("%lu | %lu\n", pStart->x, pStart->y);
 	if (pStart->x >= w)		pStart->x = aRand(tab->width) * 2;
 	if (pStart->y >= h)		pStart->y = aRand(tab->height) * 2;
 	_fixRules_Start(pStart);
@@ -92,7 +95,7 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 	} else {
 		start.x = tab->width * 2 - 10;
 		start.y = tab->height * 2 - 10;
-		start.weight = 4;
+		start.weight = 3;
 		// start.getClusterWeightFn = GCW_Linear;
 		start.getPointWeightFn = NULL;
 		// start.chosePossibilityFn = CPF_random;

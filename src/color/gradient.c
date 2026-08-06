@@ -104,6 +104,8 @@ void	applyColorGradient(t_art *art) {
 		const t_cPoint	pStart = {.x = starts->lStart[i].x, .y = starts->lStart[i].y,
 								.dirOrig = NONE, .clrOrig = &art->arrClr[pStart.y][pStart.x]};
 		
+		printf("%lu | %lu\n", pStart.x, pStart.y);
+		printf("%lu | %lu\n", art->widthClr, art->heightClr);
 		art->arrClr[pStart.y][pStart.x] = starts->lStart[i].baseClr;	// Copy First
 		checkAllPossibleDir((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, &pStart, vec);
 		while (vec->size) {

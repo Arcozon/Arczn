@@ -8,8 +8,8 @@ uint64_t	GPW_One(const t_point *point, const t_cluster *cluster) {
 }
 
 uint64_t	GPW_distance(const t_point *point, const t_cluster *cluster) {
-	size_t dx = cluster->xOrigin - point->x;
-	size_t dy = cluster->yOrigin - point->y;
+	uint64_t dx = cluster->xOrigin - point->x;
+	uint64_t dy = cluster->yOrigin - point->y;
 
 	if (cluster->xOrigin > point->x)	dx = -dx;
 	if (cluster->yOrigin > point->y)	dy = -dy;
@@ -18,8 +18,8 @@ uint64_t	GPW_distance(const t_point *point, const t_cluster *cluster) {
 }
 
 uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster) {
-	size_t dx = cluster->xOrigin - point->x;
-	size_t dy = cluster->yOrigin - point->y;
+	uint64_t dx = cluster->xOrigin - point->x;
+	uint64_t dy = cluster->yOrigin - point->y;
 
 	if (cluster->xOrigin > point->x)	dx = 100 * -dx;
 	if (cluster->yOrigin > point->y)	dy = 100 * -dy;
@@ -36,7 +36,7 @@ uint64_t	GPW_distance_UP(const t_point *point, const t_cluster *cluster) {
 	
 	const uint64_t	hipotenus2 = dx * dx + dy * dy;
 	const uint64_t	hipotenus = (int)sqrt(hipotenus2);
-	const uint64_t	radius = 40;
+	const uint64_t	radius = 8;
 
 	if (hipotenus % radius == 0) {
 		return (1);
@@ -93,8 +93,8 @@ uint64_t	GPW_circle(const t_point *point, const t_cluster *cluster) {
 }
 
 uint64_t	GPW_rectangle(const t_point *point, const t_cluster *cluster) {
-	const size_t	w = 20;
-	const size_t	h = 20;
+	const uint64_t	w = 20;
+	const uint64_t	h = 20;
 
 	if (point->x % w == 0)
 		return (10);
