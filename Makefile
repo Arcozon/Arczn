@@ -72,6 +72,23 @@ fclean: clean
 re: fclean
 	@$(MAKE) all
 
+.DEFAULT_GOAL = jit
+
+NAME_JIT =  JIT
+D_JIT	 =  jit/
+S_JIT =  main.c  jit.c
+O_JIT =  $(addprefix $(D_BUILD)$(D_JIT), $(S_JIT:.c=.o))
+
+
+jit: $(NAME_JIT)
+
+$(NAME_JIT):	$(O_JIT)
+	$(CC) -o$@ $(O_JIT)
+
+$(O_JIT): $(D_BUILD)$(D_JIT)%.o:	$(D_JIT)%.c
+	@mkdir -p $(@D)
+	$(CC) $(FLAGS) -I$(D_JIT) -c $< -o $@
+
 DEPS = $(addprefix $(D_BUILD), $(SRC:.c=.d))
 -include $(DEPS)
 
