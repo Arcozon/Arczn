@@ -91,9 +91,9 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 		start.weight = 20000;
 		start.chosePossibilityFn = CPD_random;
 		start.getPointWeightFn = GPW_test;
-		start.baseClr = (t_clr){0x35, 0xab, 0x70};
+		start.baseClr = (t_clr){0xb5, 0xfb, 0xb0};
 		// start.rules = (t_clrRules){{0x20, 0xef, 2}, {0x06, 0x90, 1}, {0x33, 0xce, 1}};
-		start.rules = (t_clrRules){{0x10, 0x5f, 7}, {0x36, 0xe0, 1}, {0x43, 0xee, 2}};
+		start.rules = (t_clrRules){{0x90, 0x5f, 7}, {0x96, 0xf0, 1}, {0x83, 0xee, 2}};
 
 	} else {
 		start.x = tab->width * 2 - 10;
