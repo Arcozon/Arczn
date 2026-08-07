@@ -7,7 +7,9 @@
 #include "fenwick_tree.h"
 #include <math.h>
 
-
+# ifndef M_PI
+#  define M_PI		3.14159265358979323846
+# endif
 
 struct s_cluster {
 	const uint64_t	xOrigin;
@@ -45,7 +47,7 @@ uint64_t	GCW_Linear(const t_cluster *cluster);
 
 uint64_t	GPW_One(const t_point *point, const t_cluster *cluster);
 uint64_t	GPW_distance(const t_point *point, const t_cluster *cluster);
-uint64_t	GPW_distance_UP(const t_point *point, const t_cluster *cluster);
+uint64_t	GPW_test(const t_point *point, const t_cluster *cluster);
 uint64_t	GPW_rectangle(const t_point *point, const t_cluster *cluster);
 uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster);
 	

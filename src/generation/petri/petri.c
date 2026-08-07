@@ -150,11 +150,7 @@ void	genTabPetri(t_art *tab) {
 	_initPetri(&petri, tab);
 	size_t	totalWeight = fTree_getTotalweight(&petri.weightClusters);
 
-	const size_t	tStart = 1000;
-	size_t	count[tStart] = {};
-
 	const t_cluster	*oldCluster = NULL;
-	printf("TT wieght %lu\n", totalWeight);
 	while (totalWeight != 0) {
 		// printf("TT wieght %lu\n", totalWeight);
 		const uint64_t	indexCluster = fTree_getRandomIndex(&petri.weightClusters);
@@ -170,7 +166,7 @@ void	genTabPetri(t_art *tab) {
 		const t_point	*point = cluster->weightPoints.val[indexPoint].data;
 		// printf("Chose point %lu (%lu): ", rItem, cluster->weightPoints.val[rItem].weight);
 		// printf("[%lu:%lu]", point->x, point->y);
-		const uint8_t	poss = getPossibility(&tab->tab, point->x, point->y);
+		const uint8_t	poss = getPossibility(&tab->tab, point->x, point->y) & cluster->possibilityMask;
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		// printf("-> nPos %u\n", nPoss);
 		
@@ -194,18 +190,6 @@ void	genTabPetri(t_art *tab) {
 			fTree_update(&petri.weightClusters, indexCluster, cluster->weight);
 		}
 		totalWeight = fTree_getTotalweight(&petri.weightClusters);
-		++count[indexCluster];
-		// sleep(1);
-	}
-	{
-		size_t tt = 0;
-		for (size_t i = 0; i < petri.vClusters->size; ++i) {
-			t_cluster		*cluster = petri.weightClusters.val[i].data;
-			printf("%lu: %lu | %lu\n", i, count[i], cluster->weightPoints.BIT[cluster->weightPoints.cap - 1]);
-			// printf("%lu: %lu\n", i, count[i]);
-			tt += count[i];
-		}
-		printf("total: %lu\n", tt);
 	}
 	for (size_t i = 0; i < petri.vClusters->size; ++i) {
 		t_cluster	*cluster = vec_get(petri.vClusters, i);

@@ -93,12 +93,22 @@ void	_FillLine(const t_art *art, t_vec *vecPts, t_cPoint p, const t_clrRules *ru
 	} while (1);
 }
 
+__always_inline static
+void	_fillBackground(t_clr *clr[], const t_clr bgColor, size_t width, size_t height) {
+	if (bgColor.r || bgColor.g || bgColor.b) {
+		for (size_t i = 0; i < height; ++i) {
+			for (size_t j = 0; j < width; ++j)
+				clr[i][j] = bgColor;
+		}
+	}
+}
 
 __attribute__((flatten))
 void	applyColorGradient(t_art *art) {
 	const t_startList	*starts = art->starts;
 	t_vec	*vec = vec_create(sizeof(t_cPoint));
 
+	_fillBackground(art->arrClr, art->bgColor, art->widthClr, art->heightClr);
 	for (size_t i = 0; i < starts->n; ++i) {
 		const t_clrRules	rules = starts->lStart[i].rules;
 		const t_cPoint	pStart = {.x = starts->lStart[i].x, .y = starts->lStart[i].y,

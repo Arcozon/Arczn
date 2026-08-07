@@ -57,13 +57,6 @@ enum e_colorType {
 # define CLR_MAX		CLR_MAX
 };
 
-// struct s_clrSet {
-// 	uint8_t		min;
-// 	uint8_t		max;
-// 	uint8_t		delta;
-// 	uint8_t		spanMinMax;
-// 	uint32_t	spanDelta;
-// };
 
 struct s_tab {
 	const size_t	width;
@@ -85,10 +78,10 @@ struct s_art {
 	const char			*fNameBase;
 	const e_colorType	color;
 
-	// const t_clrSet		clrSetting;
-	const size_t		widthClr;
-	const size_t		heightClr;
-	t_clr				**arrClr;
+	t_clr			bgColor;
+	const size_t	widthClr;
+	const size_t	heightClr;
+	t_clr			**arrClr;
 
 	const char			*fNameOut;
 	const e_printType	print;
@@ -107,7 +100,7 @@ struct s_nonConstArt {
 	const char	*fNameBase;
 	e_colorType	color;
 	
-	// t_clrSet	clrSetting;
+	const t_clr	bgColor;
 	size_t		widthClr;
 	size_t		heightClr;
 	t_clr		**arrClr;
