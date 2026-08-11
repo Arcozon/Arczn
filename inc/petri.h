@@ -52,10 +52,12 @@ uint64_t	GPW_rectangle(const t_point *point, const t_cluster *cluster);
 uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster);
 	
 	
-uint8_t	CPD_random(const uint8_t poss);
-uint8_t	CPD_first(const uint8_t poss);
-uint8_t	CPD_ULRD(const uint8_t poss);
-uint8_t	CPD_ULDR(const uint8_t poss);
+uint8_t	CPD_random(const uint8_t poss, const t_point *point, const t_cluster *cluster);
+uint8_t	CPD_first(const uint8_t poss, const t_point *point, const t_cluster *cluster);
+uint8_t	CPD_binary(const uint8_t poss, const t_point *point, const t_cluster *cluster);
+uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *cluster);
+uint8_t	CPD_ULRD(const uint8_t poss, const t_point *point, const t_cluster *cluster);
+uint8_t	CPD_ULDR(const uint8_t poss, const t_point *point, const t_cluster *cluster);
 
 size_t	pointHash(const void *rPtr);
 bool	pointCmp(const void *d1, const void *d2);

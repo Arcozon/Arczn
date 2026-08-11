@@ -34,7 +34,7 @@ typedef struct s_petri	t_petri;
 
 typedef uint64_t	(*t_getClusterWeightFn)(const t_cluster *cluster);
 typedef uint64_t	(*t_getPointWeightFn)(const t_point *point, const t_cluster *cluster);
-typedef uint8_t		(*t_chosePossibilityFn)(const uint8_t possibility);
+typedef uint8_t		(*t_chosePossibilityFn)(const uint8_t poss, const t_point *point, const t_cluster *cluster);
 typedef uint8_t		(*t_getPossibilityMaskFn)(const t_point *point, const t_cluster *cluster);
 
 #endif

@@ -85,11 +85,12 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 		start.possibilityMask = 0b1111;
 	}
 	if (i == 0) {
-		start.x = tab->width / 3 ;
-		start.y = tab->height / 3 ;
+		start.x = tab->width / 2 ;
+		start.y = tab->height / 2 ;
 		start.weight = 20000;
-		// start.chosePossibilityFn = CPD_ULDR;
-		start.getPointWeightFn = GPW_test;
+		start.chosePossibilityFn = CPD_angle;
+		start.chosePossibilityFn = CPD_binary;
+		start.getPointWeightFn = GPW_One;
 		start.baseClr = (t_clr){0xb5, 0x8b, 0xb0};
 		start.rules = (t_clrRules){{0x20, 0xff, 14}, {0x36, 0xf0, 1}, {0x23, 0xfe, 14}};
 

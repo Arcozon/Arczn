@@ -103,7 +103,7 @@ void	_joinPoint(t_cluster *cluster, t_point nPoint, const uint8_t choice, uint8_
 
 __always_inline static
 void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClusters) {
-	t_cluster		cluster = {.xOrigin = start->x /2, .yOrigin = start->y / 2,
+	t_cluster		cluster = {.xOrigin = start->x, .yOrigin = start->y,
 			.getClusterWeightFn = start->getClusterWeightFn,
 			.getPointWeightFn = start->getPointWeightFn,
 			.chosePossibilityFn = start->chosePossibilityFn,
@@ -121,8 +121,8 @@ void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClus
 	if (!pCluster)
 		abort();
 
-	const t_point	sPoint = {	.x = start->x / 2,
-								.y = start->y / 2,
+	const t_point	sPoint = {	.x = start->x,
+								.y = start->y,
 								.distance = 0};
 	clusterAdd(pCluster, &sPoint);
 	if (pCluster->getClusterWeightFn)
@@ -171,7 +171,7 @@ void	genTabPetri(t_art *tab) {
 		// printf("-> nPos %u\n", nPoss);
 		
 		if (nPoss >= 1) {
-			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss);
+			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss, point, cluster);
 
 			_joinPoint(cluster, *point, choice, tab->tab.arr); // Maje it return a vec
 			// TODO: If new point, get new point weight
