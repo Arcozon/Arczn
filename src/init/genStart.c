@@ -76,32 +76,26 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 		start.x = aRand(tab->width) * 2;
 		start.y = aRand(tab->height) * 2;
 		start.weight = 2;
-		start.baseClr = (t_clr){0x9 + 25, 0xb + 55, 0x3 + 65};
-		// start.baseClr = (t_clr){0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i};
+		start.baseClr = (t_clr){0x9 , 0xb, 0x3};
 		start.rules = (t_clrRules){{0x20, 0xef, 7}, {0x16, 0x60, 4}, {0x73, 0xce, 5}};
 		start.getClusterWeightFn = GCW_Linear;
-		start.getPointWeightFn = NULL;
-		start.chosePossibilityFn = CPD_random;
+		start.getPointWeightFn = GPW_distance;
+		start.chosePossibilityFn = CPD_ULDR;
 		start.getPossibilityMaskFn = NULL;
 		start.possibilityMask = 0b1111;
 	}
 	if (i == 0) {
-		start.x = tab->width;
-		start.y = tab->height;
+		start.x = tab->width / 3 ;
+		start.y = tab->height / 3 ;
 		start.weight = 20000;
-		start.chosePossibilityFn = CPD_random;
+		// start.chosePossibilityFn = CPD_ULDR;
 		start.getPointWeightFn = GPW_test;
-		start.baseClr = (t_clr){0xb5, 0xfb, 0xb0};
-		// start.rules = (t_clrRules){{0x20, 0xef, 2}, {0x06, 0x90, 1}, {0x33, 0xce, 1}};
-		start.rules = (t_clrRules){{0x90, 0x5f, 7}, {0x96, 0xf0, 1}, {0x83, 0xee, 2}};
+		start.baseClr = (t_clr){0xb5, 0x8b, 0xb0};
+		start.rules = (t_clrRules){{0x20, 0xff, 14}, {0x36, 0xf0, 1}, {0x23, 0xfe, 14}};
 
 	} else {
-		start.x = tab->width * 2 - 10;
-		start.y = tab->height * 2 - 10;
-		start.weight = 3;
-		// start.getClusterWeightFn = GCW_Linear;
-		start.getPointWeightFn = NULL;
-		// start.chosePossibilityFn = CPD_random;
+		start.x = tab->width / 3 + 10;
+		start.y = tab->height / 3 + 10;
 	}
 	_fixStart(&start, tab);
 	if (ht_get(htStart, &start)) { // If already in the thing

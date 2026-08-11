@@ -28,9 +28,9 @@ uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster) {
 }
 
 uint64_t	GPW_test(const t_point *point, const t_cluster *cluster) {
-	const float	radius = 1.5;
-	const float	baseTeta = M_PI;
-	const float d0 = 0.18;
+	const float	radius = 70;
+	const float	baseTeta = 120;
+	const float d0 = 0.15;
 
 	int64_t	dx = point->x - cluster->xOrigin;
 	int64_t	dy = point->y - cluster->yOrigin;
@@ -44,11 +44,9 @@ uint64_t	GPW_test(const t_point *point, const t_cluster *cluster) {
 	const float k = fabs(teta) / (2 * M_PI);
 	const float kMod1 = k - (int)k;
 	if (kMod1 > 1 - d0 || kMod1 < d0) {
-		return (0);
+		return (1000);
 	}
-	if (point->distance > 800)
-		return (0);
-	return (1);
+	return (0);
 }
 
 uint64_t	GPW_spiral(const t_point *point, const t_cluster *cluster) {
