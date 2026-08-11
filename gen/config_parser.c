@@ -125,49 +125,50 @@ enum yysymbol_kind_t
   YYSYMBOL_WIDTH = 9,                      /* WIDTH  */
   YYSYMBOL_HEIGHT = 10,                    /* HEIGHT  */
   YYSYMBOL_FNAME = 11,                     /* FNAME  */
-  YYSYMBOL_START = 12,                     /* START  */
-  YYSYMBOL_N_START = 13,                   /* N_START  */
-  YYSYMBOL_COLOR = 14,                     /* COLOR  */
-  YYSYMBOL_RULES = 15,                     /* RULES  */
-  YYSYMBOL_X = 16,                         /* X  */
-  YYSYMBOL_Y = 17,                         /* Y  */
-  YYSYMBOL_TRED = 18,                      /* TRED  */
-  YYSYMBOL_TGREEN = 19,                    /* TGREEN  */
-  YYSYMBOL_TBLUE = 20,                     /* TBLUE  */
-  YYSYMBOL_MIN = 21,                       /* MIN  */
-  YYSYMBOL_MAX = 22,                       /* MAX  */
-  YYSYMBOL_DELTA = 23,                     /* DELTA  */
-  YYSYMBOL_24_ = 24,                       /* '{'  */
-  YYSYMBOL_25_ = 25,                       /* '}'  */
-  YYSYMBOL_26_ = 26,                       /* ','  */
-  YYSYMBOL_27_ = 27,                       /* '-'  */
-  YYSYMBOL_28_ = 28,                       /* '('  */
-  YYSYMBOL_29_ = 29,                       /* ')'  */
-  YYSYMBOL_30_ = 30,                       /* '['  */
-  YYSYMBOL_31_ = 31,                       /* ']'  */
-  YYSYMBOL_YYACCEPT = 32,                  /* $accept  */
-  YYSYMBOL_config = 33,                    /* config  */
-  YYSYMBOL_34_1 = 34,                      /* $@1  */
-  YYSYMBOL_35_2 = 35,                      /* $@2  */
-  YYSYMBOL_settings = 36,                  /* settings  */
-  YYSYMBOL_settings_content = 37,          /* settings_content  */
-  YYSYMBOL_start = 38,                     /* start  */
-  YYSYMBOL_39_3 = 39,                      /* $@3  */
-  YYSYMBOL_start_body = 40,                /* start_body  */
-  YYSYMBOL_start_body_content = 41,        /* start_body_content  */
-  YYSYMBOL_color = 42,                     /* color  */
-  YYSYMBOL_43_4 = 43,                      /* $@4  */
-  YYSYMBOL_single_color = 44,              /* single_color  */
-  YYSYMBOL_clr_rules = 45,                 /* clr_rules  */
-  YYSYMBOL_46_5 = 46,                      /* $@5  */
-  YYSYMBOL_one_rule = 47,                  /* one_rule  */
-  YYSYMBOL_verbose_one_rule = 48,          /* verbose_one_rule  */
-  YYSYMBOL_start_0_ = 49,                  /* start_0_  */
-  YYSYMBOL_start_1_ = 50,                  /* start_1_  */
-  YYSYMBOL_separator_0_ = 51,              /* separator_0_  */
-  YYSYMBOL_separator_1_ = 52,              /* separator_1_  */
-  YYSYMBOL_uint64 = 53,                    /* uint64  */
-  YYSYMBOL_clr_rgb = 54                    /* clr_rgb  */
+  YYSYMBOL_BACKGROUND = 12,                /* BACKGROUND  */
+  YYSYMBOL_START = 13,                     /* START  */
+  YYSYMBOL_N_START = 14,                   /* N_START  */
+  YYSYMBOL_COLOR = 15,                     /* COLOR  */
+  YYSYMBOL_RULES = 16,                     /* RULES  */
+  YYSYMBOL_X = 17,                         /* X  */
+  YYSYMBOL_Y = 18,                         /* Y  */
+  YYSYMBOL_TRED = 19,                      /* TRED  */
+  YYSYMBOL_TGREEN = 20,                    /* TGREEN  */
+  YYSYMBOL_TBLUE = 21,                     /* TBLUE  */
+  YYSYMBOL_MIN = 22,                       /* MIN  */
+  YYSYMBOL_MAX = 23,                       /* MAX  */
+  YYSYMBOL_DELTA = 24,                     /* DELTA  */
+  YYSYMBOL_25_ = 25,                       /* '{'  */
+  YYSYMBOL_26_ = 26,                       /* '}'  */
+  YYSYMBOL_27_ = 27,                       /* ','  */
+  YYSYMBOL_28_ = 28,                       /* '-'  */
+  YYSYMBOL_29_ = 29,                       /* '('  */
+  YYSYMBOL_30_ = 30,                       /* ')'  */
+  YYSYMBOL_31_ = 31,                       /* '['  */
+  YYSYMBOL_32_ = 32,                       /* ']'  */
+  YYSYMBOL_YYACCEPT = 33,                  /* $accept  */
+  YYSYMBOL_config = 34,                    /* config  */
+  YYSYMBOL_35_1 = 35,                      /* $@1  */
+  YYSYMBOL_36_2 = 36,                      /* $@2  */
+  YYSYMBOL_settings = 37,                  /* settings  */
+  YYSYMBOL_settings_content = 38,          /* settings_content  */
+  YYSYMBOL_start = 39,                     /* start  */
+  YYSYMBOL_40_3 = 40,                      /* $@3  */
+  YYSYMBOL_start_body = 41,                /* start_body  */
+  YYSYMBOL_start_body_content = 42,        /* start_body_content  */
+  YYSYMBOL_color = 43,                     /* color  */
+  YYSYMBOL_44_4 = 44,                      /* $@4  */
+  YYSYMBOL_single_color = 45,              /* single_color  */
+  YYSYMBOL_clr_rules = 46,                 /* clr_rules  */
+  YYSYMBOL_47_5 = 47,                      /* $@5  */
+  YYSYMBOL_one_rule = 48,                  /* one_rule  */
+  YYSYMBOL_verbose_one_rule = 49,          /* verbose_one_rule  */
+  YYSYMBOL_start_0_ = 50,                  /* start_0_  */
+  YYSYMBOL_start_1_ = 51,                  /* start_1_  */
+  YYSYMBOL_separator_0_ = 52,              /* separator_0_  */
+  YYSYMBOL_separator_1_ = 53,              /* separator_1_  */
+  YYSYMBOL_uint64 = 54,                    /* uint64  */
+  YYSYMBOL_clr_rgb = 55                    /* clr_rgb  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -495,19 +496,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   113
+#define YYLAST   112
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  32
+#define YYNTOKENS  33
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  23
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  43
+#define YYNRULES  44
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  122
+#define YYNSTATES  125
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   278
+#define YYMAXUTOK   279
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -525,15 +526,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      28,    29,     2,     2,    26,    27,     2,     2,     2,     2,
+      29,    30,     2,     2,    27,    28,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    30,     2,    31,     2,     2,     2,     2,     2,     2,
+       2,    31,     2,    32,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    24,     2,    25,     2,     2,     2,     2,
+       2,     2,     2,    25,     2,    26,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -548,7 +549,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24
 };
 
 #if YYDEBUG
@@ -556,10 +557,10 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    56,    56,    59,    56,    68,    69,    73,    83,    93,
-     103,   114,   114,   120,   121,   125,   132,   139,   146,   159,
-     161,   161,   163,   168,   172,   176,   183,   183,   190,   202,
-     208,   214,   223,   231,   242,   243,   246,   247,   250,   251,
-     253,   254,   257,   260
+     103,   110,   120,   120,   126,   127,   131,   138,   145,   152,
+     165,   167,   167,   169,   174,   178,   182,   189,   189,   196,
+     208,   214,   220,   229,   237,   248,   249,   252,   253,   256,
+     257,   259,   260,   263,   266
 };
 #endif
 
@@ -577,12 +578,12 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "UINT64", "UINT8",
   "STRING", "CLR_RGB", "SEPARATOR", "ASSIGN", "WIDTH", "HEIGHT", "FNAME",
-  "START", "N_START", "COLOR", "RULES", "X", "Y", "TRED", "TGREEN",
-  "TBLUE", "MIN", "MAX", "DELTA", "'{'", "'}'", "','", "'-'", "'('", "')'",
-  "'['", "']'", "$accept", "config", "$@1", "$@2", "settings",
-  "settings_content", "start", "$@3", "start_body", "start_body_content",
-  "color", "$@4", "single_color", "clr_rules", "$@5", "one_rule",
-  "verbose_one_rule", "start_0_", "start_1_", "separator_0_",
+  "BACKGROUND", "START", "N_START", "COLOR", "RULES", "X", "Y", "TRED",
+  "TGREEN", "TBLUE", "MIN", "MAX", "DELTA", "'{'", "'}'", "','", "'-'",
+  "'('", "')'", "'['", "']'", "$accept", "config", "$@1", "$@2",
+  "settings", "settings_content", "start", "$@3", "start_body",
+  "start_body_content", "color", "$@4", "single_color", "clr_rules", "$@5",
+  "one_rule", "verbose_one_rule", "start_0_", "start_1_", "separator_0_",
   "separator_1_", "uint64", "clr_rgb", YY_NULLPTR
 };
 
@@ -593,12 +594,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-79)
+#define YYPACT_NINF (-91)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-40)
+#define YYTABLE_NINF (-41)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -607,19 +608,19 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -79,    14,    10,   -79,   -79,    28,   -79,    33,    23,    37,
-      39,    40,     6,    10,   -79,    50,    50,    52,    50,   -79,
-      46,   -79,    10,   -79,    33,   -79,   -79,   -79,   -79,   -79,
-      35,   -79,     8,    10,   -79,    11,   -79,    53,    56,    57,
-      58,   -79,    10,    -1,    54,    50,    50,    33,   -79,    50,
-     -79,    44,   -79,   -79,    45,    43,   -79,   -79,    47,    24,
-      10,    54,    50,    63,    64,    66,    51,    32,    55,    59,
-      50,    50,    50,    24,    70,    71,    72,    10,    50,    50,
-     -79,   -79,   -79,    61,   -14,   -14,   -14,     0,    62,    68,
-      24,    50,    50,   -79,   -79,   -79,    10,    50,   -79,    69,
-      65,    73,     0,    75,   -79,    50,    50,    10,    50,    77,
-      67,    74,    76,    50,    78,   -79,   -79,    79,    50,   -79,
-      80,   -79
+     -91,    11,    20,   -91,   -91,    45,   -91,    21,    32,    34,
+      40,    41,    42,    38,    20,   -91,    44,    44,    53,    -4,
+      44,   -91,    47,   -91,    20,   -91,    21,   -91,   -91,   -91,
+     -91,   -91,    44,   -91,    36,   -91,    37,   -91,    39,    46,
+     -11,    20,   -91,    44,    55,    56,    57,    48,    15,   -91,
+      49,    44,    44,    44,   -11,    58,    59,    60,    61,   -91,
+      20,    44,   -91,   -91,   -91,    50,    -4,    65,    44,    44,
+      21,    52,   -11,   -91,   -91,   -91,    54,    62,   -91,   -91,
+     -91,    63,    20,    65,   -91,     4,    43,    74,    76,    77,
+      20,    44,    12,    12,    12,    -1,    66,    44,    44,   -91,
+     -91,   -91,    20,    44,    69,    72,    -1,    70,    44,    44,
+      20,    44,    75,    71,    79,    78,    44,    80,   -91,   -91,
+      81,    44,   -91,    82,   -91
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -627,35 +628,35 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,    38,     1,    40,     3,     5,    39,     0,     0,
-       0,     0,    11,     0,    41,     0,     0,     0,     0,    36,
-       0,     4,    38,    34,     6,    42,     7,     8,    10,     9,
-       0,    35,    11,    38,    37,     0,    13,     0,     0,     0,
-       0,    12,     0,     0,    26,     0,     0,    14,    19,     0,
-      17,     0,    43,    18,     0,     0,    15,    16,     0,     0,
-      38,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-      23,    24,    25,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,    29,    30,    31,     0,     0,    22,     0,
-       0,     0,     0,     0,    21,     0,     0,    38,     0,     0,
-       0,     0,     0,     0,     0,    27,    28,     0,     0,    32,
-       0,    33
+       2,     0,    39,     1,    41,     3,     5,    40,     0,     0,
+       0,     0,     0,    12,     0,    42,     0,     0,     0,     0,
+       0,    37,     0,     4,    39,    35,     6,    43,     7,     8,
+      10,    20,     0,    11,     0,     9,     0,    36,    12,     0,
+       0,    39,    38,     0,     0,     0,     0,     0,     0,    14,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    13,
+       0,     0,    24,    25,    26,     0,     0,    27,     0,     0,
+      15,     0,     0,    18,    44,    19,     0,     0,    16,    17,
+      23,     0,    39,     0,    22,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    30,
+      31,    32,     0,     0,     0,     0,     0,     0,     0,     0,
+      39,     0,     0,     0,     0,     0,     0,     0,    28,    29,
+       0,     0,    33,     0,    34
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -79,   -79,   -79,   -79,   -79,   -79,    81,   -79,   -79,   -79,
-     -79,   -79,   -69,   -79,   -79,   -78,   -51,   -79,   -79,   -11,
-     -10,   -16,    21
+     -91,   -91,   -91,   -91,   -91,   -91,    68,   -91,   -91,   -91,
+      22,   -91,   -50,   -91,   -91,   -90,   -80,   -91,   -91,   -12,
+      -7,   -17,    18
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     2,    12,     5,    13,    19,    20,    35,    42,
-      50,    51,    66,    53,    54,    77,    93,    21,    22,     6,
-       7,    26,    55
+       0,     1,     2,    13,     5,    14,    21,    22,    48,    60,
+      33,    34,    47,    75,    76,    90,    99,    23,    24,     6,
+       7,    28,    77
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -663,73 +664,73 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      27,    23,    29,    24,    83,    48,   -38,    14,   -39,    96,
-      91,    31,    32,     4,     3,    14,    92,     4,    74,    75,
-      76,    99,    36,    49,   107,    37,    38,    39,    40,    56,
-      57,    15,    47,    58,    94,    95,    41,     8,     9,    10,
-      14,    11,    63,    64,    65,    16,    69,    17,    18,    67,
-      74,    75,    76,    25,    80,    81,    82,    28,    30,    33,
-      52,    43,    88,    89,    44,    45,    46,    87,    59,    60,
-      61,    70,    71,    62,    72,   100,   101,    73,    84,    85,
-      86,   103,    68,    78,     0,    79,   102,    90,    97,   109,
-     110,   105,   112,    98,   104,     0,   111,   117,   114,   115,
-     106,   108,   120,   113,   119,   116,   118,     0,     0,   121,
-       0,     0,     0,    34
+      29,    25,    31,    35,    65,   102,    15,    26,    44,    45,
+      46,     3,    37,   100,   101,    39,   110,    38,    87,    88,
+      89,    32,    81,    87,    88,    89,    50,     4,    15,    49,
+      55,    56,    57,    58,    62,    63,    64,    97,   -39,   -40,
+      16,    59,    17,    98,    71,     4,    15,    27,    18,    19,
+      20,    78,    79,    70,     8,     9,    10,    11,    30,    12,
+      36,    40,    41,    51,    52,    53,    66,    67,    68,    69,
+      85,    74,    91,    43,    96,    54,    61,    72,    80,    82,
+     104,   105,    92,    95,    93,    94,   107,     0,    73,    84,
+      83,   112,   113,   103,   115,   106,   108,   111,   114,   120,
+     109,    86,   116,   117,   123,   118,    42,   122,   119,   121,
+       0,     0,   124
 };
 
 static const yytype_int8 yycheck[] =
 {
-      16,    12,    18,    13,    73,     6,     0,     7,     0,    87,
-      24,    22,    22,     7,     0,     7,    30,     7,    18,    19,
-      20,    90,    33,    24,   102,    14,    15,    16,    17,    45,
-      46,     8,    42,    49,    85,    86,    25,     9,    10,    11,
-       7,    13,    18,    19,    20,     8,    62,     8,     8,    60,
-      18,    19,    20,     3,    70,    71,    72,     5,    12,    24,
-       6,     8,    78,    79,     8,     8,     8,    77,    24,    24,
-      27,     8,     8,    26,     8,    91,    92,    26,     8,     8,
-       8,    97,    61,    28,    -1,    26,    96,    26,    26,   105,
-     106,    26,   108,    25,    25,    -1,   107,   113,    31,    25,
-      27,    26,   118,    26,    25,    29,    28,    -1,    -1,    29,
-      -1,    -1,    -1,    32
+      17,    13,     6,    20,    54,    95,     7,    14,    19,    20,
+      21,     0,    24,    93,    94,    32,   106,    24,    19,    20,
+      21,    25,    72,    19,    20,    21,    43,     7,     7,    41,
+      15,    16,    17,    18,    51,    52,    53,    25,     0,     0,
+       8,    26,     8,    31,    61,     7,     7,     3,     8,     8,
+       8,    68,    69,    60,     9,    10,    11,    12,     5,    14,
+      13,    25,    25,     8,     8,     8,     8,     8,     8,     8,
+      82,     6,    29,    27,    91,    27,    27,    27,    26,    25,
+      97,    98,     8,    90,     8,     8,   103,    -1,    66,    26,
+      28,   108,   109,    27,   111,   102,    27,    27,   110,   116,
+      28,    83,    27,    32,   121,    26,    38,    26,    30,    29,
+      -1,    -1,    30
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    33,    34,     0,     7,    36,    51,    52,     9,    10,
-      11,    13,    35,    37,     7,     8,     8,     8,     8,    38,
-      39,    49,    50,    51,    52,     3,    53,    53,     5,    53,
-      12,    51,    52,    24,    38,    40,    51,    14,    15,    16,
-      17,    25,    41,     8,     8,     8,     8,    52,     6,    24,
-      42,    43,     6,    45,    46,    54,    53,    53,    53,    24,
-      24,    27,    26,    18,    19,    20,    44,    51,    54,    53,
-       8,     8,     8,    26,    18,    19,    20,    47,    28,    26,
-      53,    53,    53,    44,     8,     8,     8,    52,    53,    53,
-      26,    24,    30,    48,    48,    48,    47,    26,    25,    44,
-      53,    53,    52,    53,    25,    26,    27,    47,    26,    53,
-      53,    51,    53,    26,    31,    25,    29,    53,    28,    25,
-      53,    29
+       0,    34,    35,     0,     7,    37,    52,    53,     9,    10,
+      11,    12,    14,    36,    38,     7,     8,     8,     8,     8,
+       8,    39,    40,    50,    51,    52,    53,     3,    54,    54,
+       5,     6,    25,    43,    44,    54,    13,    52,    53,    54,
+      25,    25,    39,    27,    19,    20,    21,    45,    41,    52,
+      54,     8,     8,     8,    27,    15,    16,    17,    18,    26,
+      42,    27,    54,    54,    54,    45,     8,     8,     8,     8,
+      53,    54,    27,    43,     6,    46,    47,    55,    54,    54,
+      26,    45,    25,    28,    26,    52,    55,    19,    20,    21,
+      48,    29,     8,     8,     8,    53,    54,    25,    31,    49,
+      49,    49,    48,    27,    54,    54,    53,    54,    27,    28,
+      48,    27,    54,    54,    52,    54,    27,    32,    26,    30,
+      54,    29,    26,    54,    30
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    32,    34,    35,    33,    36,    36,    37,    37,    37,
-      37,    39,    38,    40,    40,    41,    41,    41,    41,    42,
-      43,    42,    42,    44,    44,    44,    46,    45,    45,    47,
-      47,    47,    48,    48,    49,    49,    50,    50,    51,    51,
-      52,    52,    53,    54
+       0,    33,    35,    36,    34,    37,    37,    38,    38,    38,
+      38,    38,    40,    39,    41,    41,    42,    42,    42,    42,
+      43,    44,    43,    43,    45,    45,    45,    47,    46,    46,
+      48,    48,    48,    49,    49,    50,    50,    51,    51,    52,
+      52,    53,    53,    54,    55
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     0,     0,     4,     1,     3,     3,     3,     3,
-       3,     0,     5,     1,     3,     3,     3,     3,     3,     1,
-       0,     8,     7,     3,     3,     3,     0,    10,    10,     3,
-       3,     3,     7,     8,     1,     2,     1,     3,     0,     1,
-       1,     2,     1,     1
+       3,     3,     0,     5,     1,     3,     3,     3,     3,     3,
+       1,     0,     8,     7,     3,     3,     3,     0,    10,    10,
+       3,     3,     3,     7,     8,     1,     2,     1,     3,     0,
+       1,     1,     2,     1,     1
 };
 
 
@@ -1197,7 +1198,7 @@ yyreduce:
         {
 		parsConfig = (t_parsConfig){.nStart = 1};
 	}
-#line 1201 "gen/config_parser.c"
+#line 1202 "gen/config_parser.c"
     break;
 
   case 3: /* $@2: %empty  */
@@ -1207,7 +1208,7 @@ yyreduce:
 		if (!parsConfig.height_Defined)	YY_THROW("Height not defined");
 		if (!parsConfig.width_Defined)	YY_THROW("Width not defined");
 	}
-#line 1211 "gen/config_parser.c"
+#line 1212 "gen/config_parser.c"
     break;
 
   case 7: /* settings_content: WIDTH ASSIGN uint64  */
@@ -1221,7 +1222,7 @@ yyreduce:
 		parsConfig.width_Defined = 1;
 		parsConfig.width = (yyvsp[0].uint64);
 	}
-#line 1225 "gen/config_parser.c"
+#line 1226 "gen/config_parser.c"
     break;
 
   case 8: /* settings_content: HEIGHT ASSIGN uint64  */
@@ -1235,7 +1236,7 @@ yyreduce:
 		parsConfig.height_Defined = 1;
 		parsConfig.height = (yyvsp[0].uint64);
 	}
-#line 1239 "gen/config_parser.c"
+#line 1240 "gen/config_parser.c"
     break;
 
   case 9: /* settings_content: N_START ASSIGN uint64  */
@@ -1249,7 +1250,7 @@ yyreduce:
 		parsConfig.nStart_Defined = 1;
 		parsConfig.nStart = (yyvsp[0].uint64);
 	}
-#line 1253 "gen/config_parser.c"
+#line 1254 "gen/config_parser.c"
     break;
 
   case 10: /* settings_content: FNAME ASSIGN STRING  */
@@ -1260,58 +1261,68 @@ yyreduce:
 		parsConfig.fName_Defined = 1;
 		parsConfig.fName = yylval.str;
 	}
-#line 1264 "gen/config_parser.c"
+#line 1265 "gen/config_parser.c"
     break;
 
-  case 11: /* $@3: %empty  */
-#line 114 "config_parser.y"
+  case 11: /* settings_content: BACKGROUND ASSIGN color  */
+#line 111 "config_parser.y"
+        {
+		if (parsConfig.bg_Defined)	YY_THROW("BackGround redefined");
+		parsConfig.bg_Defined = 1;
+		parsConfig.bg = (yyvsp[0].clr);
+	}
+#line 1275 "gen/config_parser.c"
+    break;
+
+  case 12: /* $@3: %empty  */
+#line 120 "config_parser.y"
         {parsStart = (t_parsStart){};}
-#line 1270 "gen/config_parser.c"
+#line 1281 "gen/config_parser.c"
     break;
 
-  case 12: /* start: $@3 START '{' start_body '}'  */
-#line 115 "config_parser.y"
+  case 13: /* start: $@3 START '{' start_body '}'  */
+#line 121 "config_parser.y"
         {
 		//Dup start
 	}
-#line 1278 "gen/config_parser.c"
+#line 1289 "gen/config_parser.c"
     break;
 
-  case 15: /* start_body_content: X ASSIGN uint64  */
-#line 126 "config_parser.y"
+  case 16: /* start_body_content: X ASSIGN uint64  */
+#line 132 "config_parser.y"
                 {
 			if (parsStart.x_Defined) YY_THROW("X redefined")
 			parsStart.x_Defined = 1;
 			parsStart.start.x = (yyvsp[0].uint64);
 			printf("X = %lu\n ", (yyvsp[0].uint64));
 		}
-#line 1289 "gen/config_parser.c"
+#line 1300 "gen/config_parser.c"
     break;
 
-  case 16: /* start_body_content: Y ASSIGN uint64  */
-#line 133 "config_parser.y"
+  case 17: /* start_body_content: Y ASSIGN uint64  */
+#line 139 "config_parser.y"
                 {
 			if (parsStart.y_Defined) YY_THROW("Y redefined")
 			parsStart.y_Defined = 1;
 			parsStart.start.y = (yyvsp[0].uint64);
 			printf("Y = %lu\n ", (yyvsp[0].uint64));
 		}
-#line 1300 "gen/config_parser.c"
+#line 1311 "gen/config_parser.c"
     break;
 
-  case 17: /* start_body_content: COLOR ASSIGN color  */
-#line 140 "config_parser.y"
+  case 18: /* start_body_content: COLOR ASSIGN color  */
+#line 146 "config_parser.y"
                 {
 			if (parsStart.clr_Defined) YY_THROW("Color redefined")
 			parsStart.clr_Defined = 1;
 			parsStart.start.baseClr = (yyvsp[0].clr);
 			printf("Clr = #%02X%02X%02X\n", (yyvsp[0].clr).r, (yyvsp[0].clr).g, (yyvsp[0].clr).b);
 		}
-#line 1311 "gen/config_parser.c"
+#line 1322 "gen/config_parser.c"
     break;
 
-  case 18: /* start_body_content: RULES ASSIGN clr_rules  */
-#line 147 "config_parser.y"
+  case 19: /* start_body_content: RULES ASSIGN clr_rules  */
+#line 153 "config_parser.y"
                 {
 			if (parsStart.rules_Defined) YY_THROW("Color rule redefined")
 			parsStart.rules_Defined = 1;
@@ -1321,71 +1332,71 @@ yyreduce:
 			printf("\t g: %u-%u (%u)\n", (yyvsp[0].clrRules).g.min, (yyvsp[0].clrRules).g.max, (yyvsp[0].clrRules).g.delta);
 			printf("\t b: %u-%u (%u)\n", (yyvsp[0].clrRules).b.min, (yyvsp[0].clrRules).b.max, (yyvsp[0].clrRules).b.delta);
 		}
-#line 1325 "gen/config_parser.c"
+#line 1336 "gen/config_parser.c"
     break;
 
-  case 19: /* color: CLR_RGB  */
-#line 160 "config_parser.y"
+  case 20: /* color: CLR_RGB  */
+#line 166 "config_parser.y"
                 {	(yyval.clr) = yylval.clr; }
-#line 1331 "gen/config_parser.c"
+#line 1342 "gen/config_parser.c"
     break;
 
-  case 20: /* $@4: %empty  */
-#line 161 "config_parser.y"
+  case 21: /* $@4: %empty  */
+#line 167 "config_parser.y"
                 {parsClr = (t_parsClr){};}
-#line 1337 "gen/config_parser.c"
+#line 1348 "gen/config_parser.c"
     break;
 
-  case 21: /* color: $@4 '{' single_color ',' single_color ',' single_color '}'  */
-#line 162 "config_parser.y"
+  case 22: /* color: $@4 '{' single_color ',' single_color ',' single_color '}'  */
+#line 168 "config_parser.y"
                 {	(yyval.clr) = parsClr.clr;	}
-#line 1343 "gen/config_parser.c"
+#line 1354 "gen/config_parser.c"
     break;
 
-  case 22: /* color: '{' uint64 ',' uint64 ',' uint64 '}'  */
-#line 164 "config_parser.y"
+  case 23: /* color: '{' uint64 ',' uint64 ',' uint64 '}'  */
+#line 170 "config_parser.y"
                 {	(yyval.clr) = (t_clr){.r = (yyvsp[-5].uint64), .g = (yyvsp[-3].uint64), .b = (yyvsp[-1].uint64)}; }
-#line 1349 "gen/config_parser.c"
+#line 1360 "gen/config_parser.c"
     break;
 
-  case 23: /* single_color: TRED ASSIGN uint64  */
-#line 169 "config_parser.y"
+  case 24: /* single_color: TRED ASSIGN uint64  */
+#line 175 "config_parser.y"
                 {	if (parsClr.r_Defined) YY_THROW("Red redefined")
 			parsClr.clr.r = (yyvsp[0].uint64); parsClr.r_Defined = 1;
 		}
-#line 1357 "gen/config_parser.c"
+#line 1368 "gen/config_parser.c"
     break;
 
-  case 24: /* single_color: TGREEN ASSIGN uint64  */
-#line 173 "config_parser.y"
+  case 25: /* single_color: TGREEN ASSIGN uint64  */
+#line 179 "config_parser.y"
                 {	if (parsClr.g_Defined) YY_THROW("Green redefined")
 			parsClr.clr.g = (yyvsp[0].uint64); parsClr.g_Defined = 1;
 		}
-#line 1365 "gen/config_parser.c"
+#line 1376 "gen/config_parser.c"
     break;
 
-  case 25: /* single_color: TBLUE ASSIGN uint64  */
-#line 177 "config_parser.y"
+  case 26: /* single_color: TBLUE ASSIGN uint64  */
+#line 183 "config_parser.y"
                 {	if (parsClr.b_Defined)  YY_THROW("Blue redefined")
 			parsClr.clr.b = (yyvsp[0].uint64); parsClr.b_Defined = 1;
 		}
-#line 1373 "gen/config_parser.c"
+#line 1384 "gen/config_parser.c"
     break;
 
-  case 26: /* $@5: %empty  */
-#line 183 "config_parser.y"
-                { parsClrRules = (t_parsClrRules){};}
-#line 1379 "gen/config_parser.c"
-    break;
-
-  case 27: /* clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}'  */
+  case 27: /* $@5: %empty  */
 #line 189 "config_parser.y"
-                { (yyval.clrRules) = parsClrRules.rules; }
-#line 1385 "gen/config_parser.c"
+                { parsClrRules = (t_parsClrRules){};}
+#line 1390 "gen/config_parser.c"
     break;
 
-  case 28: /* clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 ')'  */
-#line 191 "config_parser.y"
+  case 28: /* clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}'  */
+#line 195 "config_parser.y"
+                { (yyval.clrRules) = parsClrRules.rules; }
+#line 1396 "gen/config_parser.c"
+    break;
+
+  case 29: /* clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 ')'  */
+#line 197 "config_parser.y"
         {
 		t_clrRules	res = {};
 		res.r = (t_oneClrRules){.min = (yyvsp[-9].clr).r, .max = (yyvsp[-7].clr).r, .delta = (yyvsp[-5].uint64)};
@@ -1393,41 +1404,41 @@ yyreduce:
 		res.b = (t_oneClrRules){.min = (yyvsp[-9].clr).b, .max = (yyvsp[-7].clr).b, .delta = (yyvsp[-1].uint64)};
 		(yyval.clrRules) = res;
 	}
-#line 1397 "gen/config_parser.c"
+#line 1408 "gen/config_parser.c"
     break;
 
-  case 29: /* one_rule: TRED ASSIGN verbose_one_rule  */
-#line 203 "config_parser.y"
+  case 30: /* one_rule: TRED ASSIGN verbose_one_rule  */
+#line 209 "config_parser.y"
                 {
 			if (parsClrRules.r_Defined)	YY_THROW("Color rule for red redefined");
 			parsClrRules.r_Defined = 1;
 			parsClrRules.rules.r = (yyvsp[0].oneClrRule);
 		}
-#line 1407 "gen/config_parser.c"
+#line 1418 "gen/config_parser.c"
     break;
 
-  case 30: /* one_rule: TGREEN ASSIGN verbose_one_rule  */
-#line 209 "config_parser.y"
+  case 31: /* one_rule: TGREEN ASSIGN verbose_one_rule  */
+#line 215 "config_parser.y"
                 {
 			if (parsClrRules.g_Defined)	YY_THROW("Color rule for green redefined");
 			parsClrRules.g_Defined = 1;
 			parsClrRules.rules.g = (yyvsp[0].oneClrRule);
 		}
-#line 1417 "gen/config_parser.c"
+#line 1428 "gen/config_parser.c"
     break;
 
-  case 31: /* one_rule: TBLUE ASSIGN verbose_one_rule  */
-#line 215 "config_parser.y"
+  case 32: /* one_rule: TBLUE ASSIGN verbose_one_rule  */
+#line 221 "config_parser.y"
                 {
 			if (parsClrRules.b_Defined)	YY_THROW("Color rule for blue redefined");
 			parsClrRules.b_Defined = 1;
 			parsClrRules.rules.b = (yyvsp[0].oneClrRule);
 		}
-#line 1427 "gen/config_parser.c"
+#line 1438 "gen/config_parser.c"
     break;
 
-  case 32: /* verbose_one_rule: '{' uint64 ',' uint64 ',' uint64 '}'  */
-#line 224 "config_parser.y"
+  case 33: /* verbose_one_rule: '{' uint64 ',' uint64 ',' uint64 '}'  */
+#line 230 "config_parser.y"
                 {
 			t_oneClrRules	res = {};
 			res.min = (yyvsp[-5].uint64);
@@ -1435,11 +1446,11 @@ yyreduce:
 			res.delta = (yyvsp[-1].uint64);
 			(yyval.oneClrRule) = res;
 		}
-#line 1439 "gen/config_parser.c"
+#line 1450 "gen/config_parser.c"
     break;
 
-  case 33: /* verbose_one_rule: '[' uint64 '-' uint64 ']' '(' uint64 ')'  */
-#line 232 "config_parser.y"
+  case 34: /* verbose_one_rule: '[' uint64 '-' uint64 ']' '(' uint64 ')'  */
+#line 238 "config_parser.y"
                 {
 			t_oneClrRules	res = {};
 			res.min = (yyvsp[-6].uint64);
@@ -1447,23 +1458,23 @@ yyreduce:
 			res.delta = (yyvsp[-1].uint64);
 			(yyval.oneClrRule) = res;
 		}
-#line 1451 "gen/config_parser.c"
+#line 1462 "gen/config_parser.c"
     break;
 
-  case 42: /* uint64: UINT64  */
-#line 258 "config_parser.y"
+  case 43: /* uint64: UINT64  */
+#line 264 "config_parser.y"
         { (yyval.uint64) = yylval.uint64; }
-#line 1457 "gen/config_parser.c"
+#line 1468 "gen/config_parser.c"
     break;
 
-  case 43: /* clr_rgb: CLR_RGB  */
-#line 261 "config_parser.y"
+  case 44: /* clr_rgb: CLR_RGB  */
+#line 267 "config_parser.y"
         { (yyval.clr) = yylval.clr; }
-#line 1463 "gen/config_parser.c"
+#line 1474 "gen/config_parser.c"
     break;
 
 
-#line 1467 "gen/config_parser.c"
+#line 1478 "gen/config_parser.c"
 
       default: break;
     }
@@ -1656,7 +1667,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 264 "config_parser.y"
+#line 270 "config_parser.y"
 
 
 t_parsStart	pStart = {};

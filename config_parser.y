@@ -41,7 +41,7 @@
 
 %token SEPARATOR ASSIGN
 
-%token WIDTH HEIGHT FNAME
+%token WIDTH HEIGHT FNAME BACKGROUND
 
 %token START N_START
 %token COLOR RULES
@@ -106,6 +106,12 @@ settings_content:
 		if (yylval.str == NULL)			YY_THROW("Fname malloc fail");
 		parsConfig.fName_Defined = 1;
 		parsConfig.fName = yylval.str;
+	}
+	|	BACKGROUND ASSIGN color
+	{
+		if (parsConfig.bg_Defined)	YY_THROW("BackGround redefined");
+		parsConfig.bg_Defined = 1;
+		parsConfig.bg = $3;
 	}
 	;
 

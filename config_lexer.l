@@ -16,9 +16,11 @@
 
 %%
 
-width|w		{	return (WIDTH);	}
-height|h	{	return (HEIGHT);}
-file|fname	{	return (FNAME);}
+
+width|w				{	return (WIDTH);	}
+height|h			{	return (HEIGHT);}
+file|fname			{	return (FNAME);}
+background|bg		{	return (BACKGROUND);	}
 
 "start"		{	return (START);	}
 "nStart"	{	return (N_START);	}

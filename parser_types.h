@@ -11,6 +11,7 @@ typedef struct s_parsConfig {
 	uint64_t	width;
 	uint64_t	height;
 	char		*fName;
+	t_clr		bg;
 	
 	uint64_t	nStart;
 	t_start		*starts;
@@ -21,6 +22,7 @@ typedef struct s_parsConfig {
 	uint64_t	width_Defined:1;
 	uint64_t	height_Defined:1;
 	uint64_t	fName_Defined:1;
+	uint64_t	bg_Defined:1;
 	uint64_t	nStart_Defined:1;
 }	t_parsConfig;
 

@@ -63,18 +63,19 @@ extern int yydebug;
     WIDTH = 264,                   /* WIDTH  */
     HEIGHT = 265,                  /* HEIGHT  */
     FNAME = 266,                   /* FNAME  */
-    START = 267,                   /* START  */
-    N_START = 268,                 /* N_START  */
-    COLOR = 269,                   /* COLOR  */
-    RULES = 270,                   /* RULES  */
-    X = 271,                       /* X  */
-    Y = 272,                       /* Y  */
-    TRED = 273,                    /* TRED  */
-    TGREEN = 274,                  /* TGREEN  */
-    TBLUE = 275,                   /* TBLUE  */
-    MIN = 276,                     /* MIN  */
-    MAX = 277,                     /* MAX  */
-    DELTA = 278                    /* DELTA  */
+    BACKGROUND = 267,              /* BACKGROUND  */
+    START = 268,                   /* START  */
+    N_START = 269,                 /* N_START  */
+    COLOR = 270,                   /* COLOR  */
+    RULES = 271,                   /* RULES  */
+    X = 272,                       /* X  */
+    Y = 273,                       /* Y  */
+    TRED = 274,                    /* TRED  */
+    TGREEN = 275,                  /* TGREEN  */
+    TBLUE = 276,                   /* TBLUE  */
+    MIN = 277,                     /* MIN  */
+    MAX = 278,                     /* MAX  */
+    DELTA = 279                    /* DELTA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -93,7 +94,7 @@ union YYSTYPE
 	t_oneClrRules	oneClrRule;
 	t_clrRules		clrRules;
 
-#line 97 "gen/config_parser.h"
+#line 98 "gen/config_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
