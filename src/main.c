@@ -19,8 +19,6 @@ t_nonConstArt	_defaultArt(void) {
 		.tab = {.width = DEFAULT_WIDTH,
 			.height = DEFAULT_HEIGHT,
 			.arr = NULL},
-		// .clrSetting = {	.min = DEFAULT_MIN, .max = DEFAULT_MAX,
-		// 		.delta = DEFAULT_DELTA, 0, 0},
 		.widthClr = 0,
 		.heightClr = 0,
 		.arrClr = NULL
@@ -59,6 +57,7 @@ void	selectApplyColor(t_art *tab) {
 	};
 	if (_genTabFn[tab->color]) {
 		(*_genTabFn[tab->color])(tab);
+		TIMER_START;
 		mergeBackGround(tab->arrClr, tab->widthClr, tab->heightClr, &tab->bgColor);
 	}
 	

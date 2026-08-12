@@ -173,12 +173,15 @@ void	genTabPetri(t_art *tab) {
 		
 		size_t	indexPoint = _getPointIndex(&cluster->weightPoints, cluster->choseLastPoint);
 		const t_point	*point = cluster->weightPoints.val[indexPoint].data;
-		const uint8_t	poss = getPossibility(&tab->tab, point->x, point->y) & cluster->possibilityMask;
+		const uint8_t	possibilityMask = (cluster->getPossibilityMaskFn ? cluster->getPossibilityMaskFn(point, cluster) : 0b1111) & cluster->possibilityMask;
+		const uint8_t	poss = getPossibility(&tab->tab, point->x, point->y) & possibilityMask;
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		
 		if (nPoss >= 1) {
 			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss, point, cluster);
 
+			if (choice >= 4)
+				printf("%d\n", choice);
 			_joinPoint(cluster, *point, choice, tab->tab.arr); // Maje it return a vec
 			// TODO: If new point, get new point weight
 			if (nPoss > 1 && oldCluster->getPointWeightFn)	// update old point weight

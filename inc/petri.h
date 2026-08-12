@@ -53,7 +53,8 @@ uint64_t	GPW_test(const t_point *point, const t_cluster *cluster);
 uint64_t	GPW_rectangle(const t_point *point, const t_cluster *cluster);
 uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster);
 	
-	
+uint8_t		GPM_Angle(const t_point *point, const t_cluster *cluster);	
+
 uint8_t	CPD_random(const uint8_t poss, const t_point *point, const t_cluster *cluster);
 uint8_t	CPD_first(const uint8_t poss, const t_point *point, const t_cluster *cluster);
 uint8_t	CPD_binary(const uint8_t poss, const t_point *point, const t_cluster *cluster);

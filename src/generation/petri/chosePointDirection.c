@@ -37,6 +37,37 @@ uint8_t	CPD_binary(const uint8_t poss, const t_point *point, const t_cluster *cl
 }
 
 uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *cluster) {
+	const int64_t	dX = point->x - cluster->xOrigin;	
+	const int64_t	dY = point->y - cluster->yOrigin;	
+
+	float teta = 0;
+	if (point->distance != 0)
+		teta = atan2f(dY, dX);
+	// teta += M_PI / 4;
+	float chanceXf = cos(teta);
+	float chanceYf = sin(teta);
+	uint8_t	mChoiceX = MASK(chanceXf > 0 ? LEFT : RIGHT);
+	uint8_t	mChoiceY = MASK(chanceYf > 0 ? UP : DOWN);
+
+	if (poss & (mChoiceX | mChoiceY)) {
+		if ((poss & (mChoiceX | mChoiceY)) == (mChoiceX | mChoiceY)) {
+			uint64_t	chanceX = (uint64_t)roundf(fabs(chanceXf * 10000));
+			uint64_t	chanceY = (uint64_t)roundf(fabs(chanceYf * 10000));
+			if (aRand(chanceX + chanceY) < chanceX)
+				return (__builtin_ctz(mChoiceX));
+			else
+				return (__builtin_ctz(mChoiceX));
+		} else {
+			return (__builtin_ctz(poss & (mChoiceX | mChoiceY)));
+		}
+	} else {
+		return (__builtin_ctz(poss));
+	}
+	return (1);
+	(void)poss;(void)point;(void)cluster;
+}
+
+uint8_t	CPD_angle_save(const uint8_t poss, const t_point *point, const t_cluster *cluster) {
 	static uint8_t	choice[NONE] = {UP, LEFT, DOWN, RIGHT};
 	const int64_t	dX = point->x - cluster->xOrigin;	
 	const int64_t	dY = point->y - cluster->yOrigin;	
@@ -45,8 +76,6 @@ uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *clu
 	if (point->distance != 0)
 		teta = atan2f(dY, dX);
 	uint8_t	mod = ((uint8_t)floorf(teta / (M_PI / 2) )) % NONE;
-	// uint8_t	mod = ((uint8_t)roundf(teta / M_PI)) % NONE;
-	printf("[%ld, %ld]: %u (%f)\n", dX, dY, mod, teta);
 	uint8_t	i = 0;
 	for (i = 0; i < NONE; ++i) {
 		if (poss & MASK(choice[(i + mod) % NONE])) {

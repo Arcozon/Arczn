@@ -70,18 +70,22 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 	// else
 	(void)i;
 	{
-		start.x = aRand(tab->width);
-		start.y = aRand(tab->height);
+	// 	start.x = aRand(tab->width);
+	// 	start.y = aRand(tab->height);
+
+		start.x = tab->width / 2;
+		start.y = tab->height / 2;
 
 		start.weight = 2;
 		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
-		start.rules = (t_clrRules){{0x20, 0xef, 8}, {0x16, 0xe0, 8}, {0x23, 0xee, 8}};
+		start.rules = (t_clrRules){{0x20, 0xef, 2}, {0x16, 0xe0, 2}, {0x23, 0xee, 2}};
 		// start.rules = (t_clrRules){{0x20, 0xef, 25}, {0x16, 0xe0, 25}, {0x23, 0xee, 25}};
 		start.getClusterWeightFn = GCW_Linear;
-		start.getPointWeightFn = GPW_rectangle;
+		// start.getPointWeightFn = GPW_rectangle;
 		// start.getPointWeightFn = GPW_distance;
 		start.chosePossibilityFn = CPD_random;
-		start.getPossibilityMaskFn = NULL;
+		start.chosePossibilityFn = CPD_angle;
+		start.getPossibilityMaskFn = GPM_Angle;
 		start.possibilityMask = 0b1111;
 	}
 	_fixStart(&start, tab);
