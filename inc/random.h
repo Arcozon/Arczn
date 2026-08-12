@@ -3,7 +3,7 @@
 
 # include "types.h"
 
-size_t	aRand(const size_t range);
-size_t	aRandRange(const size_t min, const size_t max);
+uint64_t	aRand(const uint64_t range);
+uint64_t	aRandRange(const uint64_t min, const uint64_t max);
 
 #endif

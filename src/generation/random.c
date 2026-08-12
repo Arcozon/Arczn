@@ -1,14 +1,6 @@
 #include "arczn.h"
 
-uint8_t	genNBit(const uint8_t nBit, const uint8_t percent) {
-	uint8_t	res = 0;
 
-	for (uint8_t i = 0; i < nBit; ++i) {
-		if (aRand(100) < percent)
-			res |= MASK(i);
-	}
-	return (res);
-}
 
 void	genTabRandom(t_art *art) {
 	t_tab			*tab = &art->tab;
