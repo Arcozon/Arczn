@@ -124,5 +124,8 @@ void	printNColor(const t_art *tab);
 void	printFrame(const t_art *tab);
 void	printSavePng(const t_art *tab);
 
+// DEBUG
+void	printPoint(const char strHead[], const t_point *pointCmp);
+
 #endif
  

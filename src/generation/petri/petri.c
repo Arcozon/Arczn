@@ -121,8 +121,8 @@ void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClus
 	if (!pCluster)
 		abort();
 
-	const t_point	sPoint = {	.x = start->x / 2,
-								.y = start->y / 2,
+	const t_point	sPoint = {	.x = start->x,
+								.y = start->y,
 								.distance = 0};
 	clusterAdd(pCluster, &sPoint);
 	if (pCluster->getClusterWeightFn)

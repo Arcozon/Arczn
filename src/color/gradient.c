@@ -111,7 +111,7 @@ void	applyColorGradient(t_art *art) {
 	_fillBackground(art->arrClr, art->bgColor, art->widthClr, art->heightClr);
 	for (size_t i = 0; i < starts->n; ++i) {
 		const t_clrRules	rules = starts->lStart[i].rules;
-		const t_cPoint	pStart = {.x = starts->lStart[i].x, .y = starts->lStart[i].y,
+		const t_cPoint	pStart = {.x = starts->lStart[i].x * 2, .y = starts->lStart[i].y * 2,
 								.dirOrig = NONE, .clrOrig = &art->arrClr[pStart.y][pStart.x]};
 		
 		art->arrClr[pStart.y][pStart.x] = starts->lStart[i].baseClr;	// Copy First
