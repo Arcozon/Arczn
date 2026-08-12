@@ -55,15 +55,10 @@ void	_fixRules_Start(t_start *s) {
 
 __always_inline __attribute__((flatten)) static
 void	_fixStart(t_start *pStart, const t_tab *tab) {
-	// const uint64_t	w = tab->width * 2;
-	// const uint64_t	h = tab->height * 2;
-
-	// if (pStart->x % 2)	pStart->x -= 1;
-	// if (pStart->y % 2)	pStart->y -= 1;
-	// if (pStart->x >= w)		pStart->x = aRand(tab->width) * 2;
-	// if (pStart->y >= h)		pStart->y = aRand(tab->height) * 2;
-	if (pStart->x >= tab->width)		pStart->x = aRand(tab->width);
-	if (pStart->y >= tab->height)		pStart->y = aRand(tab->height);
+	if (pStart->x >= tab->width)
+		pStart->x = aRand(tab->width);
+	if (pStart->y >= tab->height)
+		pStart->y = aRand(tab->height);
 	_fixRules_Start(pStart);
 	_reboundRGB_Start(pStart);
 }
@@ -75,16 +70,16 @@ uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart
 	// else
 	(void)i;
 	{
-		// start.x = aRand(tab->width) * 2;
-		// start.y = aRand(tab->height) * 2;
-		start.x = 1;
-		start.y = 1;
+		start.x = aRand(tab->width);
+		start.y = aRand(tab->height);
 
 		start.weight = 2;
 		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
-		start.rules = (t_clrRules){{0x20, 0xef, 7}, {0x16, 0xe0, 4}, {0x23, 0xee, 5}};
+		start.rules = (t_clrRules){{0x20, 0xef, 8}, {0x16, 0xe0, 8}, {0x23, 0xee, 8}};
+		// start.rules = (t_clrRules){{0x20, 0xef, 25}, {0x16, 0xe0, 25}, {0x23, 0xee, 25}};
 		start.getClusterWeightFn = GCW_Linear;
-		start.getPointWeightFn = GPW_distance;
+		start.getPointWeightFn = GPW_rectangle;
+		// start.getPointWeightFn = GPW_distance;
 		start.chosePossibilityFn = CPD_random;
 		start.getPossibilityMaskFn = NULL;
 		start.possibilityMask = 0b1111;

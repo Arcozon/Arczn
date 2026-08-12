@@ -15,7 +15,7 @@
 # include "color.h"
 # include "random.h"
 # include "start.h"
-#include "petri.h"
+# include "petri.h"
 
 # include "debug.h"
 
@@ -118,6 +118,8 @@ void	genTabPetri(t_art *tab);
 
 void	applyColorGradient(t_art *art);
 void	applyColorBaseFile(t_art *art);
+
+void	mergeBackGround(t_clr *clr[], uint64_t w, uint64_t h, const t_clr *bgClr);
 
 void	printTab(const t_art *tab);
 void	printNColor(const t_art *tab);

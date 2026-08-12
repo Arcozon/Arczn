@@ -12,7 +12,7 @@ S_GEN =  random.c  ivy.c  $(PETRI)
 D_GEN =  generation/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
-S_COLOR =  applyColor.c  gradient.c
+S_COLOR =  applyColor.c  gradient.c  mergeBackground.c
 D_COLOR =  color/
 COLOR = $(addprefix $(D_COLOR), $(S_COLOR))
 

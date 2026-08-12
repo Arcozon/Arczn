@@ -24,9 +24,11 @@ struct s_cluster {
 	
 	const uint8_t	possibilityMask;
 	const t_getPossibilityMaskFn	getPossibilityMaskFn;
-
+	
 	const t_getPointWeightFn		getPointWeightFn;
 	const t_chosePossibilityFn		chosePossibilityFn;
+	
+	const uint8_t					choseLastPoint:1;
 };
 
 struct s_point {

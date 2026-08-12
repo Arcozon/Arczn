@@ -57,8 +57,11 @@ void	selectApplyColor(t_art *tab) {
 	static const genTabFn _genTabFn[CLR_MAX] = {
 		NULL,	applyColorGradient,	applyColorBaseFile
 	};
-	if (_genTabFn[tab->color])
+	if (_genTabFn[tab->color]) {
 		(*_genTabFn[tab->color])(tab);
+		mergeBackGround(tab->arrClr, tab->widthClr, tab->heightClr, &tab->bgColor);
+	}
+	
 }
 
 typedef void	(*printTabFn)(const t_art *);
@@ -85,6 +88,7 @@ int main(int ac, char *av[], char *env[]) {
 	selectPrintTab(&art);
 	TIMER_END;
 	// printFrame(&art);
+	
 	return (0);
 	(void)env;
 }

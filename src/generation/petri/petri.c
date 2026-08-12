@@ -102,14 +102,18 @@ void	_joinPoint(t_cluster *cluster, t_point nPoint, const uint8_t choice, uint8_
 }
 
 __always_inline static
-void	_initCluster(const t_start *start, const size_t HashTableSize, t_vec *vClusters) {
+void	_initCluster(const t_start *start, size_t HashTableSize, t_vec *vClusters) {
 	t_cluster		cluster = {.xOrigin = start->x, .yOrigin = start->y,
 			.getClusterWeightFn = start->getClusterWeightFn,
 			.getPointWeightFn = start->getPointWeightFn,
 			.chosePossibilityFn = start->chosePossibilityFn,
 			.possibilityMask = start->possibilityMask,
-			.getPossibilityMaskFn = start->getPossibilityMaskFn};
+			.getPossibilityMaskFn = start->getPossibilityMaskFn,
+			.choseLastPoint = 1};
 	
+	// printf("%lu\n", HashTableSize);
+	if (cluster.choseLastPoint)
+		HashTableSize *= 32;
 	cluster.ht = ht_create(HashTableSize, pointHash, pointDup, pointCmp, free);
 	cluster.ratioWeight = start->weight;
 	cluster.weight = start->weight;
@@ -144,6 +148,14 @@ void	_initPetri(t_petri *petri, const t_art *art) {	// TODO: remove duplicates c
 	}
 }
 
+uint64_t	_getPointIndex(const t_fTree *fTree, uint8_t choseLastIndex) {
+	if (choseLastIndex)
+		return (fTree->n - 1);
+	else
+		return (fTree_getRandomIndex(fTree));
+}
+
+
 void	genTabPetri(t_art *tab) {
 	t_petri	petri = {};
 	_initPetri(&petri, tab);
@@ -159,8 +171,7 @@ void	genTabPetri(t_art *tab) {
 			// TODO: Calc wieghts pts of newCluster
 		}
 		
-		// const size_t	indexPoint = fTree_getRandomIndex(&cluster->weightPoints);
-		const size_t	indexPoint = cluster->weightPoints.n - 1;
+		size_t	indexPoint = _getPointIndex(&cluster->weightPoints, cluster->choseLastPoint);
 		const t_point	*point = cluster->weightPoints.val[indexPoint].data;
 		const uint8_t	poss = getPossibility(&tab->tab, point->x, point->y) & cluster->possibilityMask;
 		const uint8_t	nPoss = __builtin_popcount(poss);
