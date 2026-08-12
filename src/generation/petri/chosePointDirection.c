@@ -49,7 +49,7 @@ uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *clu
 	uint8_t	mChoiceX = MASK(chanceXf > 0 ? LEFT : RIGHT);
 	uint8_t	mChoiceY = MASK(chanceYf > 0 ? UP : DOWN);
 
-	if (poss & (mChoiceX | mChoiceY)) {
+	if (poss & (mChoiceX | mChoiceY)) {		// TODOL -> This no work
 		if ((poss & (mChoiceX | mChoiceY)) == (mChoiceX | mChoiceY)) {
 			uint64_t	chanceX = (uint64_t)roundf(fabs(chanceXf * 10000));
 			uint64_t	chanceY = (uint64_t)roundf(fabs(chanceYf * 10000));

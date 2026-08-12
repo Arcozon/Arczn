@@ -5,20 +5,24 @@ uint8_t		GPM_Angle(const t_point *point, const t_cluster *cluster) {
 	const int64_t	dX = point->x - cluster->xOrigin;	
 	const int64_t	dY = point->y - cluster->yOrigin;	
 
-	float teta = 0;
-	if (point->distance != 0)
-		teta = atan2f(dY, dX);
-	// uint8_t	mod = ((uint8_t)floorf(((teta + 2 * M_PI / 3) + 2 * M_PI) / (M_PI / 2) )) % NONE;
-	uint8_t	mod = ((uint8_t)floorf(((teta + M_PI / 4) + 2 * M_PI) / (M_PI / 2) )) % NONE;
+	if (point->distance == 0)
+		return (0b1111);
+	if (!dX)
+		return (MASK(RIGHT) | MASK(LEFT));
+	else if (!dY)
+		return (MASK(DOWN) | MASK(UP));
+	
+	float teta = atan2f(dY, dX);
+	uint8_t	mod = ((uint8_t)floorf(((teta) + 2 * M_PI) / (M_PI / 2) )) % NONE;
 	
 	uint8_t mask = 0b1111;
-	if (mod == 0 && dX != 0) {
+	if (mod == 0) {
 		mask &= ~MASK(UP);
-	} else if (mod == 1 && dY != 0) {
-		mask &= ~MASK(RIGHT);
-	}else if (mod == 2 && dX != 0) {
+	} else if (mod == 1) {
+		mask = 0;
+	}else if (mod == 2) {
 		mask &= ~MASK(DOWN);
-	} else if (mod == 3 && dY != 0){
+	} else if (mod == 3){
 		mask &= ~MASK(LEFT);
 	}
 	return (mask);

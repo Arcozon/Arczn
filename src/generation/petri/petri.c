@@ -109,7 +109,7 @@ void	_initCluster(const t_start *start, size_t HashTableSize, t_vec *vClusters) 
 			.chosePossibilityFn = start->chosePossibilityFn,
 			.possibilityMask = start->possibilityMask,
 			.getPossibilityMaskFn = start->getPossibilityMaskFn,
-			.choseLastPoint = 1};
+			.choseLastPoint = 0};
 	
 	// printf("%lu\n", HashTableSize);
 	if (cluster.choseLastPoint)
