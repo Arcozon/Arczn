@@ -41,7 +41,7 @@
 
 %token SEPARATOR ASSIGN
 
-%token WIDTH HEIGHT FNAME BACKGROUND
+%token WIDTH HEIGHT FNAME BACKGROUND FILL 
 
 %token START N_START
 %token COLOR RULES
@@ -107,17 +107,26 @@ settings_content:
 		parsConfig.fName_Defined = 1;
 		parsConfig.fName = yylval.str;
 	}
-	|	BACKGROUND ASSIGN color
+	|	backgroud	
+	;
+backgroud:
+		BACKGROUND ASSIGN color
 	{
 		if (parsConfig.bg_Defined)	YY_THROW("BackGround redefined");
 		parsConfig.bg_Defined = 1;
 		parsConfig.bg = $3;
 	}
+	|	BACKGROUND ASSIGN FILL
+	{
+		if (parsConfig.bg_Defined)	YY_THROW("BackGround redefined");
+		parsConfig.bg_Defined = 1;
+		parsConfig.bgFill = 1;
+	}
 	;
 
-
 start: 
-	{parsStart = (t_parsStart){};}	START '{' start_body '}'
+	{parsStart = (t_parsStart){};}
+		START '{' start_body '}'
 	{
 		//Dup start
 	}

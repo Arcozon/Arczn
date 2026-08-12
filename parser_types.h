@@ -12,11 +12,11 @@ typedef struct s_parsConfig {
 	uint64_t	height;
 	char		*fName;
 	t_clr		bg;
-	
+	uint8_t		bgFill:1;
+
 	uint64_t	nStart;
 	t_start		*starts;
 
-	// defaultClr
 	// default clrBound
 
 	uint64_t	width_Defined:1;
