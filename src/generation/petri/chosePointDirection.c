@@ -43,7 +43,6 @@ uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *clu
 	float teta = 0;
 	if (point->distance != 0)
 		teta = atan2f(dY, dX);
-	// teta += M_PI / 4;
 	float chanceXf = cos(teta);
 	float chanceYf = sin(teta);
 	uint8_t	mChoiceX = MASK(chanceYf > 0 ? LEFT : RIGHT);

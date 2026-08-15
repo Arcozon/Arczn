@@ -20,10 +20,9 @@ uint8_t		GPM_Angle(const t_point *point, const t_cluster *cluster) {
 		mask = MASK(UP) | MASK(LEFT);
 	} else if (dX < 0 && dY < 0){
 		mask = MASK(UP) | MASK(RIGHT);
-	} 
-	else if (dX == 0) {
-		mask = MASK(UP) | MASK(DOWN);
 	} else if (dY == 0) {
+		mask = MASK(UP) | MASK(DOWN);
+	} else if (dX == 0) {
 		mask = MASK(RIGHT) | MASK(LEFT);
 	}
 
