@@ -21,19 +21,6 @@ void	parsArg_nStart(const char *arg, t_nonConstArt *art) {
 	art->nStart = atoi(arg);
 }
 
-// void	parsArg_clrMin(const char *arg, t_nonConstArt *art) {
-// 	art->clrSetting.min = atoi(arg);
-// }
-
-// void	parsArg_clrMax(const char *arg, t_nonConstArt *art) {
-// 	art->clrSetting.max = atoi(arg);
-// }
-
-// void	parsArg_clrDelta(const char *arg, t_nonConstArt *art) {
-// 	art->clrSetting.delta = atoi(arg);
-// }
-
-
 void	parsArg_genRandom(const char *arg, t_nonConstArt *art) {
 	art->gen = G_RANDOM;
 	(void)arg;
@@ -50,6 +37,11 @@ void	parsArg_genPetri(const char *arg, t_nonConstArt *art) {
 void	parsArg_baseImg(const char *arg, t_nonConstArt *art) {
 	art->fNameBase = arg;
 	art->color = CLR_BASE_IMG;
+}
+
+void	parsArg_FillBg(const char *arg, t_nonConstArt *art) {
+	art->fillBg = true;
+	(void)arg;
 }
 
 void	parsArg_printColor(const char *arg, t_nonConstArt *art) {

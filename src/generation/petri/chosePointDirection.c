@@ -46,24 +46,25 @@ uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *clu
 	// teta += M_PI / 4;
 	float chanceXf = cos(teta);
 	float chanceYf = sin(teta);
-	uint8_t	mChoiceX = MASK(chanceXf > 0 ? LEFT : RIGHT);
-	uint8_t	mChoiceY = MASK(chanceYf > 0 ? UP : DOWN);
-
+	uint8_t	mChoiceX = MASK(chanceYf > 0 ? LEFT : RIGHT);
+	uint8_t	mChoiceY = MASK(chanceXf > 0 ? UP : DOWN);
+	if (dY == 0 && dX > 0)
+		printf("[%lu , %lu]: \n", point->x, point->y);
 	if (poss & (mChoiceX | mChoiceY)) {		// TODOL -> This no work
 		if ((poss & (mChoiceX | mChoiceY)) == (mChoiceX | mChoiceY)) {
 			uint64_t	chanceX = (uint64_t)roundf(fabs(chanceXf * 10000));
 			uint64_t	chanceY = (uint64_t)roundf(fabs(chanceYf * 10000));
+			
 			if (aRand(chanceX + chanceY) < chanceX)
 				return (__builtin_ctz(mChoiceX));
 			else
-				return (__builtin_ctz(mChoiceX));
+				return (__builtin_ctz(mChoiceY));
 		} else {
 			return (__builtin_ctz(poss & (mChoiceX | mChoiceY)));
 		}
 	} else {
 		return (__builtin_ctz(poss));
 	}
-	return (1);
 	(void)poss;(void)point;(void)cluster;
 }
 

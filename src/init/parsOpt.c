@@ -33,9 +33,7 @@ static const char	*_strsGenPetri[] = {"--petri"};
 static const char	*_strsFrame[] = {"--frame"};
 static const char	*_strsBaseImg[] = {"-b", "--base"};
 static const char	*_strsColor[] = {"-c", "--color"};
-// static const char	*_strsClrDelta[] = {"-d", "--delta"};
-// static const char	*_strsClrMin[] = {"-m", "--min"};
-// static const char	*_strsClrMax[] = {"-M", "--max"};
+static const char	*_strsFillBg[] = {"--bg"};
 static const char	*_strsHelp[] =	{"--help"} ;
 
 static const t_parsArg	pArg[__AT_MAX__] = {
@@ -63,12 +61,8 @@ static const t_parsArg	pArg[__AT_MAX__] = {
 			.nStrs = sizeof(_strsBaseImg) / sizeof(char *), .strs  = _strsBaseImg},
 		[AT_COLOR] = {.optType = AT_COLOR, .fnCheck = NULL, .fnPars  = parsArg_printColor,
 			.nStrs = sizeof(_strsColor) / sizeof(char *), .strs  = _strsColor},
-		// [AT_CLR_DELTA] = {.optType = AT_CLR_DELTA, .fnCheck = checkArg_int, .fnPars  = parsArg_clrDelta,
-		// 	.nStrs = sizeof(_strsClrDelta) / sizeof(char *), .strs  = _strsClrDelta},
-		// [AT_CLR_MIN] = {.optType = AT_CLR_MIN, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMin,
-		// 	.nStrs = sizeof(_strsClrMin) / sizeof(char *), .strs  = _strsClrMin},
-		// [AT_CLR_MAX] = {.optType = AT_CLR_MAX, .fnCheck = checkArg_int, .fnPars  = parsArg_clrMax,
-		// 	.nStrs = sizeof(_strsClrMax) / sizeof(char *), .strs  = _strsClrMax},
+		[AT_FILL_BG] = {.optType = AT_FILL_BG, .fnCheck = NULL, .fnPars  = parsArg_FillBg,
+			.nStrs = sizeof(_strsFillBg) / sizeof(char *), .strs  = _strsFillBg},
 		[AT_HELP] = {.optType = AT_HELP, .fnCheck = NULL, .fnPars  = NULL,
 			.nStrs = sizeof(_strsHelp) / sizeof(char *), .strs  = _strsHelp},
 	};

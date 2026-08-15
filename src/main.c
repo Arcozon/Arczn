@@ -58,7 +58,8 @@ void	selectApplyColor(t_art *tab) {
 	if (_genTabFn[tab->color]) {
 		(*_genTabFn[tab->color])(tab);
 		TIMER_START;
-		mergeBackGround(tab->arrClr, tab->widthClr, tab->heightClr, &tab->bgColor);
+		if (tab->fillBg)
+			mergeBackGround(tab->arrClr, tab->widthClr, tab->heightClr, &tab->bgColor);
 	}
 	
 }

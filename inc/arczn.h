@@ -75,6 +75,7 @@ struct s_art {
 
 	t_tab tab;
 	
+	const uint8_t		fillBg:1;
 	const char			*fNameBase;
 	const e_colorType	color;
 
@@ -97,6 +98,7 @@ struct s_nonConstArt {
 	
 	t_tab tab;
 
+	uint8_t		fillBg:1;
 	const char	*fNameBase;
 	e_colorType	color;
 	

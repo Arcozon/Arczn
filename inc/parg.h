@@ -16,9 +16,7 @@ enum	e_optType {
 	AT_OUTPUT,
 	AT_BASE_IMG,
 	AT_COLOR,
-	// AT_CLR_DELTA,
-	// AT_CLR_MIN,
-	// AT_CLR_MAX,
+	AT_FILL_BG,
 	AT_HELP,
 	__AT_MAX__
 };
@@ -68,6 +66,7 @@ void	parsArg_genRandom(const char *, t_nonConstArt *);
 void	parsArg_genIvy(const char *, t_nonConstArt *);
 void	parsArg_genPetri(const char *, t_nonConstArt *);
 
+void	parsArg_FillBg(const char *, t_nonConstArt *);
 void	parsArg_baseImg(const char *, t_nonConstArt *);
 void	parsArg_printColor(const char *, t_nonConstArt *);
 
