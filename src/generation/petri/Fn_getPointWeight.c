@@ -1,10 +1,14 @@
 #include "arczn.h"
 #include "petri.h"
 
+// uint64_t	GPW_One(const t_point *point, const t_cluster *cluster) {
+// 	return (1);
+// 	(void)point;(void)cluster;
+// }
+
 uint64_t	GPW_One(const t_point *point, const t_cluster *cluster) {
 	return (1);
-	(void)point;
-	(void)cluster;
+	(void)point;(void)cluster;
 }
 
 uint64_t	GPW_distance(const t_point *point, const t_cluster *cluster) {
@@ -28,15 +32,17 @@ uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster) {
 }
 
 uint64_t	GPW_test(const t_point *point, const t_cluster *cluster) {
-	const int64_t	dX = point->x - cluster->xOrigin;	
-	const int64_t	dY = point->y - cluster->yOrigin;	
+	const int64_t	dX = point->x - 150;	
+	const int64_t	dY = point->y - 150;	
+	const uint64_t	d0 = dY * dY + dX * dX;	
+	const uint64_t	r2 = 90 * 90;	
+	const uint64_t	delta = 10;	
 
-	if (point->distance == 0)
-		return (1);
-	if (!dX && dY < 0)
-		return (1000000);
-	return (point->distance);
-	return (dX * dX + dY * dY);
+	// if (d0 <= r2 + delta && d0 + delta >= r2)
+	if (d0 + delta >= r2)
+		return (100);
+	return (1);
+	(void)cluster;
 }
 
 uint64_t	GPW_spiral2(const t_point *point, const t_cluster *cluster) {

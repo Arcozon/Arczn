@@ -44,9 +44,11 @@ void	freeArt(t_nonConstArt *art) {
 typedef void	(*genTabFn)(t_art *);
 void	selectGenTab(t_art *tab) {
 	static const genTabFn _genTabFn[G_MAX] = {
-		genTabRandom,	genTabIvy,	genTabPetri
+		genTabRandom,	genTabIvy, genTabPetri
 	};
-	(*_genTabFn[tab->gen])(tab);
+	genTabPetri(tab);
+	// (*_genTabFn[tab->gen])(tab);
+	(void)_genTabFn;
 }
 
 
@@ -80,7 +82,9 @@ int main(int ac, char *av[], char *env[]) {
 		exit(1);
 	t_art art = *(t_art*)&nonConstArt;
 	TIMER_START;
-	selectGenTab(&art);
+	// selectGenTab(&art);
+	genTabPetri(&art);
+
 	// printFrame(&art);
 	TIMER_START;
 	selectApplyColor(&art);

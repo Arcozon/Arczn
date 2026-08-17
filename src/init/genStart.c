@@ -61,6 +61,8 @@ void	_fixStart(t_start *pStart, const t_bField *bField) {
 		pStart->y = aRand(bField->height);
 	_fixRules_Start(pStart);
 	_reboundRGB_Start(pStart);
+	if (pStart->chosePossibilityFn == NULL)
+		pStart->chosePossibilityFn = CPD_random;
 }
 
 // Retrurn 0 on success, 1 on duplicate
@@ -69,22 +71,39 @@ uint32_t fillOneStart(t_start *pStart, const t_bField *bField, size_t i, t_ht *h
 	// If already configured -> Pull
 	// else
 	(void)i;
-	{
+	if (i == 0) {
 	// 	start.x = aRand(bField->width);
 	// 	start.y = aRand(bField->height);
 
 		start.x = bField->width / 2;
 		start.y = bField->height / 2;
 
-		start.weight = 2;
+		start.weight = 1;
 		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
-		start.rules = (t_clrRules){{0x20, 0xef, 7}, {0x16, 0xe0, 7}, {0x23, 0xee, 7}};
-		start.getClusterWeightFn = GCW_Linear;
-		start.getPointWeightFn = GPW_test;
+		start.rules = (t_clrRules){{0xb0, 0xff, 3}, {0x66, 0xf0, 9}, {0xb0, 0xff, 5}};
+		start.getClusterWeightFn = 0;
+		start.getPointWeightFn = 0;
+		start.chosePossibilityFn = 0;
+		start.getPossibilityMaskFn = 0;
+		start.possibilityMask = MASK(UP) | MASK(LEFT) | MASK(DOWN) | MASK(RIGHT);
+		start.removePointFn = 0;
+		start.choseLastPoint = true;
+
+	} else
+	{
+		start.x = 150 + 90;
+		start.y = 150;
+
+		start.weight = 40000;
+		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
+		start.rules = (t_clrRules){{0x60, 0xaf, 6}, {0x26, 0x40, 7}, {0x73, 0xcf, 4}};
+		start.getClusterWeightFn = 0;
+		// start.getPointWeightFn = GPW_test;
 		start.chosePossibilityFn = CPD_Test;
 		start.getPossibilityMaskFn = GPM_Angle;
 		start.possibilityMask = MASK(UP) | MASK(LEFT) | MASK(DOWN) | MASK(RIGHT);
-		start.removePointFn = RP_test;
+		// start.removePointFn = RP_test;
+		// start.choseLastPoint = true;
 	}
 	_fixStart(&start, bField);
 	if (ht_get(htStart, &start)) { // If already in the thing

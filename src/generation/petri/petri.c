@@ -110,7 +110,7 @@ void	_initCluster(const t_start *start, size_t HashTableSize, t_vec *vClusters) 
 			.possibilityMask = start->possibilityMask,
 			.getPossibilityMaskFn = start->getPossibilityMaskFn,
 			.removePointFn = start->removePointFn,
-			.choseLastPoint = 0};
+			.choseLastPoint = start->choseLastPoint};
 	
 	// printf("%lu\n", HashTableSize);
 	if (cluster.choseLastPoint)
@@ -178,21 +178,26 @@ void	genTabPetri(t_art *art) {
 		const uint8_t	poss = getPossibility(&art->bField, point->x, point->y) & possibilityMask;
 		const uint8_t	nPoss = __builtin_popcount(poss);
 		bool			removePoint = (nPoss <= 1);
-	
+
+		// printf("%c\n", "TF"[!removePoint]);
 		if (nPoss >= 1) {
-			const uint8_t  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss, point, cluster);
+			const uint8_t  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss, possibilityMask, point, cluster);
+
 
 			if (choice < NONE)
-				_joinPoint(cluster, *point, choice, art->bField.arr);
+			_joinPoint(cluster, *point, choice, art->bField.arr);
 			else
-				removePoint = true;
+			removePoint = true;
+			// printf("%c\n", "TF"[!removePoint]);
 			if (!removePoint && oldCluster->removePointFn)
 				removePoint = oldCluster->removePointFn(choice, point, oldCluster, &art->bField);
-			if (nPoss > 1 && oldCluster->getPointWeightFn)	// update old point weight
+			// printf("%c\n", "TF"[!removePoint]);
+			if (!removePoint && oldCluster->getPointWeightFn)	// update old point weight
 				fTree_update(&cluster->weightPoints, indexPoint,
 					oldCluster->getPointWeightFn(point, oldCluster));
 		}
 		if (removePoint) {
+			// printf("remove %lu, %lu\n", point->x, point->y);
 			clusterRm(cluster, indexPoint, point);
 		}
 		if (cluster->ht->nItems == 0) {

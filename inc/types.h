@@ -37,7 +37,7 @@ typedef uint64_t	t_getClusterWeightSig(const t_cluster *cluster);
 typedef uint64_t	t_getPointWeightSig(const t_point *point, const t_cluster *cluster);
 
 typedef uint8_t		t_getPossibilityMaskSig(const t_point *point, const t_cluster *cluster);
-typedef uint8_t		t_chosePossibilitySig(const uint8_t poss, const t_point *point, const t_cluster *cluster);
+typedef uint8_t		t_chosePossibilitySig(const uint8_t poss, const uint8_t possMask, const t_point *point, const t_cluster *cluster);
 
 typedef bool		t_removePointSig(const uint8_t choice, const t_point *point, const t_cluster *cluster, const t_bField *bField);
 

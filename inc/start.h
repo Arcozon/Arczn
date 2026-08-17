@@ -9,6 +9,9 @@ struct s_start {
 	
 	size_t	weight;
 	t_getClusterWeightFn	getClusterWeightFn;
+
+	bool	choseLastPoint;
+
 	t_getPointWeightFn		getPointWeightFn;
 	
 	uint8_t					possibilityMask;

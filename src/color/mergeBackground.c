@@ -122,6 +122,8 @@ void	spreadOnePoint(t_vec *vec, const t_BgPoint *p1, t_clr *clr[], uint64_t w, u
 		if (checkOneDir(vec, &(t_BgPoint){.x = p.x - 1, .y = p.y}, clr, w, h, bgClr, &avrClr))	++count;
 		if (checkOneDir(vec, &(t_BgPoint){.x = p.x, .y = p.y + 1}, clr, w, h, bgClr, &avrClr))	++count;
 		if (checkOneDir(vec, &(t_BgPoint){.x = p.x, .y = p.y - 1}, clr, w, h, bgClr, &avrClr))	++count;
+		if (count == 0)
+			return ;
 		avrClr.r /= count;
 		avrClr.g /= count;
 		avrClr.b /= count;
