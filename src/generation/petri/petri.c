@@ -35,23 +35,23 @@ bool	_hasNeighbour(uint8_t *arr[], const size_t width, const size_t height, cons
 }
 
 __always_inline static inline
-uint8_t	getPossibility(const t_tab *tab, const size_t x, const size_t y) {
+uint8_t	getPossibility(const t_bField *bField, const size_t x, const size_t y) {
 	uint8_t	res = 0b0000;
 
 	if (x != 0) { // Check left
-		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x - 1, y))
+		if (!_hasNeighbour(bField->arr, bField->width, bField->height, x - 1, y))
 			res |= MASK(LEFT);
 	}
-	if (x + 1 < tab->width) { // Check right
-		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x + 1, y))
+	if (x + 1 < bField->width) { // Check right
+		if (!_hasNeighbour(bField->arr, bField->width, bField->height, x + 1, y))
 			res |= MASK(RIGHT);
 	}
 	if (y != 0) { // Check up
-		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x, y - 1))
+		if (!_hasNeighbour(bField->arr, bField->width, bField->height, x, y - 1))
 			res |= MASK(UP);
 	}
-	if (y + 1 < tab->height) { // Check down
-		if (!_hasNeighbour(tab->arr, tab->width, tab->height, x, y + 1))
+	if (y + 1 < bField->height) { // Check down
+		if (!_hasNeighbour(bField->arr, bField->width, bField->height, x, y + 1))
 			res |= MASK(DOWN);
 	}
 	return (res);
@@ -109,6 +109,7 @@ void	_initCluster(const t_start *start, size_t HashTableSize, t_vec *vClusters) 
 			.chosePossibilityFn = start->chosePossibilityFn,
 			.possibilityMask = start->possibilityMask,
 			.getPossibilityMaskFn = start->getPossibilityMaskFn,
+			.removePointFn = start->removePointFn,
 			.choseLastPoint = 0};
 	
 	// printf("%lu\n", HashTableSize);
@@ -133,9 +134,9 @@ void	_initCluster(const t_start *start, size_t HashTableSize, t_vec *vClusters) 
 		pCluster->weight = cluster.getClusterWeightFn(&cluster);
 }
 
-void	_initPetri(t_petri *petri, const t_art *art) {	// TODO: remove duplicates clusters
+void	_initPetri(t_petri *petri, const t_art *art) {
 	const t_startList	*startL = art->starts;
-	const size_t		HashTableSize = sqrt(art->tab.height * art->tab.width) / startL->n + 1;
+	const size_t		HashTableSize = sqrt(art->bField.height * art->bField.width) / startL->n + 1;
 
 	petri->vClusters = vec_create(sizeof(t_cluster));
 	fTree_create(&petri->weightClusters);
@@ -156,9 +157,9 @@ uint64_t	_getPointIndex(const t_fTree *fTree, uint8_t choseLastIndex) {
 }
 
 
-void	genTabPetri(t_art *tab) {
+void	genTabPetri(t_art *art) {
 	t_petri	petri = {};
-	_initPetri(&petri, tab);
+	_initPetri(&petri, art);
 	size_t	totalWeight = fTree_getTotalweight(&petri.weightClusters);
 
 	const t_cluster	*oldCluster = NULL;
@@ -174,21 +175,24 @@ void	genTabPetri(t_art *tab) {
 		size_t	indexPoint = _getPointIndex(&cluster->weightPoints, cluster->choseLastPoint);
 		const t_point	*point = cluster->weightPoints.val[indexPoint].data;
 		const uint8_t	possibilityMask = (cluster->getPossibilityMaskFn ? cluster->getPossibilityMaskFn(point, cluster) : 0b1111) & cluster->possibilityMask;
-		const uint8_t	poss = getPossibility(&tab->tab, point->x, point->y) & possibilityMask;
+		const uint8_t	poss = getPossibility(&art->bField, point->x, point->y) & possibilityMask;
 		const uint8_t	nPoss = __builtin_popcount(poss);
-		
+		bool			removePoint = (nPoss <= 1);
+	
 		if (nPoss >= 1) {
-			const int  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss, point, cluster);
+			const uint8_t  choice = (nPoss == 1) ? __builtin_ctz(poss) : cluster->chosePossibilityFn(poss, point, cluster);
 
-			if (choice >= 4)
-				printf("%d\n", choice);
-			_joinPoint(cluster, *point, choice, tab->tab.arr); // Maje it return a vec
-			// TODO: If new point, get new point weight
+			if (choice < NONE)
+				_joinPoint(cluster, *point, choice, art->bField.arr);
+			else
+				removePoint = true;
+			if (!removePoint && oldCluster->removePointFn)
+				removePoint = oldCluster->removePointFn(choice, point, oldCluster, &art->bField);
 			if (nPoss > 1 && oldCluster->getPointWeightFn)	// update old point weight
 				fTree_update(&cluster->weightPoints, indexPoint,
 					oldCluster->getPointWeightFn(point, oldCluster));
 		}
-		if (nPoss <= 1) {
+		if (removePoint) {
 			clusterRm(cluster, indexPoint, point);
 		}
 		if (cluster->ht->nItems == 0) {
@@ -203,7 +207,6 @@ void	genTabPetri(t_art *tab) {
 	for (size_t i = 0; i < petri.vClusters->size; ++i) {
 		t_cluster	*cluster = vec_get(petri.vClusters, i);
 
-		// vec_destroy(cluster->vec);
 		fTree_destroy(&cluster->weightPoints);
 		ht_destroy(cluster->ht);
 	}

@@ -16,7 +16,7 @@ t_nonConstArt	_defaultArt(void) {
 		.gen = G_PETRI,
 		.print = P_NORMAL,
 		.color = CLR_GRADIENT,
-		.tab = {.width = DEFAULT_WIDTH,
+		.bField = {.width = DEFAULT_WIDTH,
 			.height = DEFAULT_HEIGHT,
 			.arr = NULL},
 		.widthClr = 0,
@@ -27,11 +27,11 @@ t_nonConstArt	_defaultArt(void) {
 }
 
 void	freeArt(t_nonConstArt *art) {
-	const t_tab	*tab = &art->tab;
-	if (tab->arr != NULL) {
-		for (size_t i = 0; tab->arr[i]; ++i)
-			free(tab->arr[i]);
-		free(tab->arr);
+	const t_bField	*bField = &art->bField;
+	if (bField->arr != NULL) {
+		for (size_t i = 0; bField->arr[i]; ++i)
+			free(bField->arr[i]);
+		free(bField->arr);
 	}
 	if (art->arrClr != NULL) {
 		for (size_t i = 0; i < art->heightClr; ++i)

@@ -140,17 +140,17 @@ size_t	_parsArg(const int ac, char *av[], t_nonConstArt *art) {
 // }
 
 void	_fixDimentions(t_nonConstArt *art) {
-	if (art->tab.width == 0)
-		*(size_t *)&art->tab.width = 1;
-	if (art->tab.height == 0)
-		*(size_t *)&art->tab.height = 1;
-	if (art->nStart > art->tab.height * art->tab.width)
-		art->nStart = art->tab.height * art->tab.width;
+	if (art->bField.width == 0)
+		*(size_t *)&art->bField.width = 1;
+	if (art->bField.height == 0)
+		*(size_t *)&art->bField.height = 1;
+	if (art->nStart > art->bField.height * art->bField.width)
+		art->nStart = art->bField.height * art->bField.width;
 }
 
 size_t	_allocClr(t_nonConstArt *art) {
-	*(size_t *)&(art->widthClr) = art->tab.width * 2 - 1;
-	*(size_t *)&(art->heightClr) = art->tab.height * 2 - 1;
+	*(size_t *)&(art->widthClr) = art->bField.width * 2 - 1;
+	*(size_t *)&(art->heightClr) = art->bField.height * 2 - 1;
 	art->arrClr = calloc(art->heightClr, sizeof(art->arrClr[0]));
 	if (!art->arrClr)	return (1);
 	for (size_t i = 0; i < art->heightClr; ++i) {
@@ -174,8 +174,8 @@ size_t	init(const int ac, char *av[], t_nonConstArt *art) {
 			return (1);
 		}
 	}
-	art->tab.arr = allocArray(art->tab.width, art->tab.height);
-	if (!art->tab.arr)
+	art->bField.arr = allocArray(art->bField.width, art->bField.height);
+	if (!art->bField.arr)
 		return (1);
 	if (genStarts(art))
 		return (1);

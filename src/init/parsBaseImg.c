@@ -76,8 +76,8 @@ int	parsBaseImage(const char *baseFName, t_nonConstArt *art) {
 		fprintf(stderr, "Err spng_decode_image\n");
 		goto err;
 	}
-	*(size_t *)&art->tab.width = (ihdr.width + 1) / 2;
-	*(size_t *)&art->tab.height = (ihdr.height + 1) / 2;
+	*(size_t *)&art->bField.width = (ihdr.width + 1) / 2;
+	*(size_t *)&art->bField.height = (ihdr.height + 1) / 2;
 	if (_allocClr(art)) {
 		err = 1;
 		goto err;

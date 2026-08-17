@@ -10,9 +10,12 @@ struct s_start {
 	size_t	weight;
 	t_getClusterWeightFn	getClusterWeightFn;
 	t_getPointWeightFn		getPointWeightFn;
-	t_chosePossibilityFn	chosePossibilityFn;
+	
 	uint8_t					possibilityMask;
 	t_getPossibilityMaskFn	getPossibilityMaskFn;
+	t_chosePossibilityFn	chosePossibilityFn;
+
+	t_removePointFn		removePointFn;
 
 	t_clr		baseClr;
 	t_clrRules	rules;

@@ -77,8 +77,8 @@ static void	_printN(const size_t n, const aChar patern[]) {
 }
 
 void	printFrame(const t_art *art) {
-	const t_tab		*tab = &art->tab;
-	const size_t	trueWidth = tab->width * 2 - 1;
+	const t_bField		*bField = &art->bField;
+	const size_t	trueWidth = bField->width * 2 - 1;
 	
 	_printN(trueWidth + 4, fullLine);
 	write(0, "\n", 1);
@@ -86,12 +86,12 @@ void	printFrame(const t_art *art) {
 	_printN(trueWidth, emptyLine);
 	write(0, rightBorder, sizeof(rightBorder));
 	write(0, "\n", 1);
-	for (size_t i = 0; tab->arr[i]; ++i) {
+	for (size_t i = 0; bField->arr[i]; ++i) {
 		write(0, leftBorder, sizeof(leftBorder));
 		if (i & 1) {
-			_printLineOdd(tab->arr[i], tab->width);
+			_printLineOdd(bField->arr[i], bField->width);
 		} else {
-			_printLineEven(tab->arr[i], tab->width);
+			_printLineEven(bField->arr[i], bField->width);
 		}
 		write(0, rightBorder, sizeof(rightBorder));
 		write(0, "\n", 1);

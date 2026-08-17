@@ -28,6 +28,8 @@ struct s_cluster {
 	const t_getPointWeightFn		getPointWeightFn;
 	const t_chosePossibilityFn		chosePossibilityFn;
 	
+	const t_removePointFn			removePointFn;
+	
 	const uint8_t					choseLastPoint:1;
 };
 
@@ -45,23 +47,6 @@ struct s_petri {
 
 enum {	UP, LEFT, DOWN, RIGHT, NONE};
 
-uint64_t	GCW_Linear(const t_cluster *cluster);
-
-uint64_t	GPW_One(const t_point *point, const t_cluster *cluster);
-uint64_t	GPW_distance(const t_point *point, const t_cluster *cluster);
-uint64_t	GPW_test(const t_point *point, const t_cluster *cluster);
-uint64_t	GPW_rectangle(const t_point *point, const t_cluster *cluster);
-uint64_t	GPW_distance_ULDR(const t_point *point, const t_cluster *cluster);
-	
-uint8_t		GPM_Angle(const t_point *point, const t_cluster *cluster);	
-
-uint8_t	CPD_random(const uint8_t poss, const t_point *point, const t_cluster *cluster);
-uint8_t	CPD_first(const uint8_t poss, const t_point *point, const t_cluster *cluster);
-uint8_t	CPD_binary(const uint8_t poss, const t_point *point, const t_cluster *cluster);
-uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *cluster);
-uint8_t	CPD_ULRD(const uint8_t poss, const t_point *point, const t_cluster *cluster);
-uint8_t	CPD_ULDR(const uint8_t poss, const t_point *point, const t_cluster *cluster);
-
 size_t	pointHash(const void *rPtr);
 bool	pointCmp(const void *d1, const void *d2);
 void	*pointDup(const void *_toDup);
@@ -69,5 +54,29 @@ void	*pointDup(const void *_toDup);
 void	*clusterAdd(t_cluster *cluster, const t_point *p);
 void	clusterRm(t_cluster *cluster, const size_t index, const void *item);
 
+// Get Cluster Weight
+t_getClusterWeightSig	GCW_Linear;
+
+// Get Point Weight
+t_getPointWeightSig	GPW_One;
+t_getPointWeightSig	GPW_distance;
+t_getPointWeightSig	GPW_test;
+t_getPointWeightSig	GPW_rectangle;
+t_getPointWeightSig	GPW_distance_ULDR;
+	
+// Get Point Possibility Mask
+t_getPossibilityMaskSig	GPM_Angle;
+
+// Chose Possibility Direction
+t_chosePossibilitySig	CPD_Test;
+t_chosePossibilitySig	CPD_random;
+t_chosePossibilitySig	CPD_first;
+t_chosePossibilitySig	CPD_binary;
+t_chosePossibilitySig	CPD_angle;
+t_chosePossibilitySig	CPD_ULRD;
+t_chosePossibilitySig	CPD_ULDR;
+
+// Remove Point
+t_removePointSig	RP_test;
 
 #endif

@@ -58,7 +58,7 @@ enum e_colorType {
 };
 
 
-struct s_tab {
+struct s_bField {
 	const size_t	width;
 	const size_t	height;
 	uint8_t			**arr;
@@ -73,7 +73,7 @@ struct s_art {
 	const uint8_t	percent;
 	const e_genType	gen;
 
-	t_tab tab;
+	t_bField	bField;
 	
 	const uint8_t		fillBg:1;
 	const char			*fNameBase;
@@ -96,7 +96,7 @@ struct s_nonConstArt {
 	uint8_t		percent;
 	e_genType	gen;
 	
-	t_tab tab;
+	t_bField	bField;
 
 	uint8_t		fillBg:1;
 	const char	*fNameBase;
@@ -114,19 +114,19 @@ struct s_nonConstArt {
 size_t	init(const int ac, char *av[], t_nonConstArt *art);
 
 uint8_t	genNBit(const uint8_t nBit, const uint8_t percent);
-void	genTabRandom(t_art *tab);
-void	genTabIvy(t_art *tab);
-void	genTabPetri(t_art *tab);
+void	genTabRandom(t_art *art);
+void	genTabIvy(t_art *art);
+void	genTabPetri(t_art *art);
 
 void	applyColorGradient(t_art *art);
 void	applyColorBaseFile(t_art *art);
 
 void	mergeBackGround(t_clr *clr[], uint64_t w, uint64_t h, const t_clr *bgClr);
 
-void	printTab(const t_art *tab);
-void	printNColor(const t_art *tab);
-void	printFrame(const t_art *tab);
-void	printSavePng(const t_art *tab);
+void	printTab(const t_art *art);
+void	printNColor(const t_art *art);
+void	printFrame(const t_art *art);
+void	printSavePng(const t_art *art);
 
 // DEBUG
 void	printPoint(const char strHead[], const t_point *pointCmp);

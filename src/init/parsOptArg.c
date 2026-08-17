@@ -10,11 +10,11 @@ void	parsArg_percentOrphan(const char *arg, t_nonConstArt *art) {
 }
 
 void	parsArg_width(const char *arg, t_nonConstArt *art) {
-	*(size_t *)&art->tab.width = atoi(arg);
+	*(size_t *)&art->bField.width = atoi(arg);
 }
 
 void	parsArg_height(const char *arg, t_nonConstArt *art) {
-	*(size_t *)&art->tab.height = atoi(arg);
+	*(size_t *)&art->bField.height = atoi(arg);
 }
 
 void	parsArg_nStart(const char *arg, t_nonConstArt *art) {

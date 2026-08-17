@@ -54,41 +54,39 @@ void	_fixRules_Start(t_start *s) {
 }
 
 __always_inline __attribute__((flatten)) static
-void	_fixStart(t_start *pStart, const t_tab *tab) {
-	if (pStart->x >= tab->width)
-		pStart->x = aRand(tab->width);
-	if (pStart->y >= tab->height)
-		pStart->y = aRand(tab->height);
+void	_fixStart(t_start *pStart, const t_bField *bField) {
+	if (pStart->x >= bField->width)
+		pStart->x = aRand(bField->width);
+	if (pStart->y >= bField->height)
+		pStart->y = aRand(bField->height);
 	_fixRules_Start(pStart);
 	_reboundRGB_Start(pStart);
 }
 
 // Retrurn 0 on success, 1 on duplicate
-uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart) {
+uint32_t fillOneStart(t_start *pStart, const t_bField *bField, size_t i, t_ht *htStart) {
 	t_start start = {};
 	// If already configured -> Pull
 	// else
 	(void)i;
 	{
-	// 	start.x = aRand(tab->width);
-	// 	start.y = aRand(tab->height);
+	// 	start.x = aRand(bField->width);
+	// 	start.y = aRand(bField->height);
 
-		start.x = tab->width / 2;
-		start.y = tab->height / 2;
+		start.x = bField->width / 2;
+		start.y = bField->height / 2;
 
 		start.weight = 2;
 		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
-		// start.rules = (t_clrRules){{0x20, 0xef, 2}, {0x16, 0xe0, 2}, {0x23, 0xee, 2}};
 		start.rules = (t_clrRules){{0x20, 0xef, 7}, {0x16, 0xe0, 7}, {0x23, 0xee, 7}};
 		start.getClusterWeightFn = GCW_Linear;
-		// start.getPointWeightFn = GPW_rectangle;
-		start.getPointWeightFn = GPW_distance;
-		start.chosePossibilityFn = CPD_random;
-		start.chosePossibilityFn = CPD_angle;
+		start.getPointWeightFn = GPW_test;
+		start.chosePossibilityFn = CPD_Test;
 		start.getPossibilityMaskFn = GPM_Angle;
-		start.possibilityMask = 0b1111;
+		start.possibilityMask = MASK(UP) | MASK(LEFT) | MASK(DOWN) | MASK(RIGHT);
+		start.removePointFn = RP_test;
 	}
-	_fixStart(&start, tab);
+	_fixStart(&start, bField);
 	if (ht_get(htStart, &start)) { // If already in the thing
 		return (1);
 	}
@@ -106,7 +104,7 @@ size_t	genStarts(t_nonConstArt *art) {
 
 	uint64_t	index = 0;
 	for (size_t i = 0; i < art->nStart; ++i) {
-		if (!fillOneStart(&starts->lStart[index], &art->tab, i, htStart))
+		if (!fillOneStart(&starts->lStart[index], &art->bField, i, htStart))
 			++index;
 	}
 	starts->n = index;

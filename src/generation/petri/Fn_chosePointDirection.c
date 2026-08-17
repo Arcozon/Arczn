@@ -36,6 +36,38 @@ uint8_t	CPD_binary(const uint8_t poss, const t_point *point, const t_cluster *cl
 	(void)poss;(void)point;(void)cluster;
 }
 
+uint8_t	CPD_Test(const uint8_t poss, const t_point *point, const t_cluster *cluster) {
+	const int64_t	dX = point->x - cluster->xOrigin;	
+	const int64_t	dY = point->y - cluster->yOrigin;	
+
+	float teta = 0;
+	if (point->distance != 0)
+		teta = atan2f(dY, dX);
+	float chanceXf = cos(teta);
+	float chanceYf = sin(teta);
+	uint8_t	mChoiceX = MASK(chanceXf < 0 ? LEFT : RIGHT);
+	uint8_t	mChoiceY = MASK(chanceYf > 0 ? UP : DOWN);
+	printf("[%lu , %lu]: \n", point->x, point->y);
+	if (dY == 0 && dX > 0)
+		printf("[%lu , %lu]: \n", point->x, point->y);
+	if (poss & (mChoiceX | mChoiceY)) {		// TODOL -> This no work
+		if ((poss & (mChoiceX | mChoiceY)) == (mChoiceX | mChoiceY)) {
+			uint64_t	chanceX = (uint64_t)roundf(fabs(chanceXf * 1000000));
+			uint64_t	chanceY = (uint64_t)roundf(fabs(chanceYf * 1000000));
+			
+			if (aRand(chanceX + chanceY) < chanceX)
+				return (__builtin_ctz(mChoiceX));
+			else
+				return (__builtin_ctz(mChoiceY));
+		} else {
+			return (__builtin_ctz(poss & (mChoiceX | mChoiceY)));
+		}
+	} else {
+		return (__builtin_ctz(poss));
+	}
+	(void)poss;(void)point;(void)cluster;
+}
+
 uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *cluster) {
 	const int64_t	dX = point->x - cluster->xOrigin;	
 	const int64_t	dY = point->y - cluster->yOrigin;	
@@ -45,14 +77,15 @@ uint8_t	CPD_angle(const uint8_t poss, const t_point *point, const t_cluster *clu
 		teta = atan2f(dY, dX);
 	float chanceXf = cos(teta);
 	float chanceYf = sin(teta);
-	uint8_t	mChoiceX = MASK(chanceYf > 0 ? LEFT : RIGHT);
-	uint8_t	mChoiceY = MASK(chanceXf > 0 ? UP : DOWN);
+	uint8_t	mChoiceX = MASK(chanceXf < 0 ? LEFT : RIGHT);
+	uint8_t	mChoiceY = MASK(chanceYf > 0 ? UP : DOWN);
+	printf("[%lu , %lu]: \n", point->x, point->y);
 	if (dY == 0 && dX > 0)
 		printf("[%lu , %lu]: \n", point->x, point->y);
 	if (poss & (mChoiceX | mChoiceY)) {		// TODOL -> This no work
 		if ((poss & (mChoiceX | mChoiceY)) == (mChoiceX | mChoiceY)) {
-			uint64_t	chanceX = (uint64_t)roundf(fabs(chanceXf * 10000));
-			uint64_t	chanceY = (uint64_t)roundf(fabs(chanceYf * 10000));
+			uint64_t	chanceX = (uint64_t)roundf(fabs(chanceXf * 1000000));
+			uint64_t	chanceY = (uint64_t)roundf(fabs(chanceYf * 1000000));
 			
 			if (aRand(chanceX + chanceY) < chanceX)
 				return (__builtin_ctz(mChoiceX));

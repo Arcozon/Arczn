@@ -4,7 +4,7 @@ S_INIT =  parsOpt.c  parsOptArg.c  checkOptArg.c  parsBaseImg.c  genStart.c
 D_INIT =  init/
 INIT = $(addprefix $(D_INIT), $(S_INIT))
 
-S_PETRI =  getClusterWeight.c  getPointWeight.c  getPossibilityMask.c  chosePointDirection.c
+S_PETRI =  Fn_chosePointDirection.c  Fn_getClusterWeight.c  Fn_getPointWeight.c  Fn_getPossibilityMask.c  Fn_removePoint.c
 S_PETRI+=  petri.c  dataStructure.c  
 D_PETRI =  petri/
 PETRI = $(addprefix $(D_PETRI), $(S_PETRI))

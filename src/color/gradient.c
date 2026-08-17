@@ -85,8 +85,8 @@ void	_FillLine(const t_art *art, t_vec *vecPts, t_cPoint p, const t_clrRules *ru
 	do {
 		_spreadClrOnDir(&p, vecDir, art->arrClr, rules);
 		p.clrOrig =  &art->arrClr[p.y][p.x];
-		checkAllPossibleDir((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, &p, vecPts);
-		if (!isFilled((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, p.x, p.y, p.dirOrig))
+		checkAllPossibleDir((const uint8_t **)art->bField.arr, art->bField.width, art->heightClr, &p, vecPts);
+		if (!isFilled((const uint8_t **)art->bField.arr, art->bField.width, art->heightClr, p.x, p.y, p.dirOrig))
 			break ;
 		p.x += 2 * vecDir.dx;
 		p.y += 2 * vecDir.dy;
@@ -115,7 +115,7 @@ void	applyColorGradient(t_art *art) {
 								.dirOrig = NONE, .clrOrig = &art->arrClr[pStart.y][pStart.x]};
 		
 		art->arrClr[pStart.y][pStart.x] = starts->lStart[i].baseClr;	// Copy First
-		checkAllPossibleDir((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, &pStart, vec);
+		checkAllPossibleDir((const uint8_t **)art->bField.arr, art->bField.width, art->heightClr, &pStart, vec);
 		while (vec->size) {
 			const t_cPoint	p = *(t_cPoint *)vec_get(vec, vec->size - 1);
 			vec_rm(vec, vec->size - 1);

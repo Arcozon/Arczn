@@ -65,12 +65,12 @@ static void	_printLineOdd(const uint8_t lineTab[], const size_t width) {
 }
 
 void	printTab(const t_art *art) {
-	const t_tab	*tab = &art->tab;
-	for (size_t i = 0; tab->arr[i]; ++i) {
+	const t_bField	*bField = &art->bField;
+	for (size_t i = 0; bField->arr[i]; ++i) {
 		if (i & 1) {
-			_printLineOdd(tab->arr[i], tab->width);
+			_printLineOdd(bField->arr[i], bField->width);
 		} else {
-			_printLineEven(tab->arr[i], tab->width);
+			_printLineEven(bField->arr[i], bField->width);
 		}
 	}
 }

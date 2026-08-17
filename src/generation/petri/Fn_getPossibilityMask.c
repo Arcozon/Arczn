@@ -16,7 +16,7 @@ uint8_t		GPM_Angle(const t_point *point, const t_cluster *cluster) {
 		mask = MASK(DOWN) | MASK(LEFT);
 	} else if (dX > 0 && dY < 0) {
 		mask = MASK(DOWN) | MASK(RIGHT);
-	}else if (dX < 0 && dY > 0) {
+	} else if (dX < 0 && dY > 0) {
 		mask = MASK(UP) | MASK(LEFT);
 	} else if (dX < 0 && dY < 0){
 		mask = MASK(UP) | MASK(RIGHT);
@@ -26,7 +26,7 @@ uint8_t		GPM_Angle(const t_point *point, const t_cluster *cluster) {
 		mask = MASK(RIGHT) | MASK(LEFT);
 	}
 
-	if (dX == 0 && dY > 0)
-		printf("[%lu , %lu]: %x\n", point->x, point->y, mask);
+	// if (dX == 0 && dY > 0)
+	// 	printf("[%lu , %lu]: %x\n", point->x, point->y, mask);
 	return (mask);
 }

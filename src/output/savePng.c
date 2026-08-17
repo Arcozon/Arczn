@@ -13,7 +13,7 @@ const char	*_getFName(const t_art *art) {
 	struct tm tm = *localtime(&t);
 	snprintf(fName, sizeof(fName), format,
 		tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec,
-		genType[art->gen], art->tab.width, art->tab.height);
+		genType[art->gen], art->bField.width, art->bField.height);
 	// printf("[%s]\n", fName);
 	return (fName);
 }
