@@ -80,7 +80,7 @@ uint32_t fillOneStart(t_start *pStart, const t_bField *bField, size_t i, t_ht *h
 
 		start.weight = 1;
 		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
-		start.rules = (t_clrRules){{0xb0, 0xff, 3}, {0x66, 0xf0, 9}, {0xb0, 0xff, 5}};
+		start.rules = (t_clrRules){{0x00, 0x40, 3}, {0x50, 0xcf, 3}, {0x50, 0xc0, 4}};
 		start.getClusterWeightFn = 0;
 		start.getPointWeightFn = 0;
 		start.chosePossibilityFn = 0;
@@ -96,7 +96,7 @@ uint32_t fillOneStart(t_start *pStart, const t_bField *bField, size_t i, t_ht *h
 
 		start.weight = 40000;
 		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
-		start.rules = (t_clrRules){{0x60, 0xaf, 6}, {0x26, 0x40, 7}, {0x73, 0xcf, 4}};
+		start.rules = (t_clrRules){{0x45, 0x68, 4}, {0x00, 0x30, 2}, {0x30, 0x60, 9}};
 		start.getClusterWeightFn = 0;
 		// start.getPointWeightFn = GPW_test;
 		start.chosePossibilityFn = CPD_Test;
