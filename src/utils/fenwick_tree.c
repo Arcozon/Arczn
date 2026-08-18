@@ -88,7 +88,7 @@ void	fTree_update(t_fTree *tree, uint64_t index, const uint64_t nWeight) {
 uint64_t fTree_getIndex(const t_fTree *tree, uint64_t weight) {
 	const uint64_t	*BIT0 = &tree->BIT[-1];
 	size_t   index = 0;
-	size_t   bitmask = tree->cap;	// CAP IS A POWER OF 2
+	size_t   bitmask = tree->cap;
 
 	if (tree->cap == 0) {
 		printf("Fenwick tree cap == 0\n");
@@ -111,7 +111,6 @@ uint64_t fTree_getIndex(const t_fTree *tree, uint64_t weight) {
 
 
 uint64_t fTree_getRandomIndex(const t_fTree *tree) {
-	// printf(" -- TT WEIGHT: %lu\n", tree->BIT[tree->cap - 1]);
 	return (fTree_getIndex(tree, aRand(fTree_getTotalweight(tree))));
 }
 

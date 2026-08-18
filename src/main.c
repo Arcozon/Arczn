@@ -16,11 +16,9 @@ t_nonConstArt	_defaultArt(void) {
 		.gen = G_PETRI,
 		.print = P_NORMAL,
 		.color = CLR_GRADIENT,
-		.tab = {.width = DEFAULT_WIDTH,
+		.bField = {.width = DEFAULT_WIDTH,
 			.height = DEFAULT_HEIGHT,
 			.arr = NULL},
-		// .clrSetting = {	.min = DEFAULT_MIN, .max = DEFAULT_MAX,
-		// 		.delta = DEFAULT_DELTA, 0, 0},
 		.widthClr = 0,
 		.heightClr = 0,
 		.arrClr = NULL
@@ -29,11 +27,11 @@ t_nonConstArt	_defaultArt(void) {
 }
 
 void	freeArt(t_nonConstArt *art) {
-	const t_tab	*tab = &art->tab;
-	if (tab->arr != NULL) {
-		for (size_t i = 0; tab->arr[i]; ++i)
-			free(tab->arr[i]);
-		free(tab->arr);
+	const t_bField	*bField = &art->bField;
+	if (bField->arr != NULL) {
+		for (size_t i = 0; bField->arr[i]; ++i)
+			free(bField->arr[i]);
+		free(bField->arr);
 	}
 	if (art->arrClr != NULL) {
 		for (size_t i = 0; i < art->heightClr; ++i)
@@ -46,9 +44,11 @@ void	freeArt(t_nonConstArt *art) {
 typedef void	(*genTabFn)(t_art *);
 void	selectGenTab(t_art *tab) {
 	static const genTabFn _genTabFn[G_MAX] = {
-		genTabRandom,	genTabIvy,	genTabPetri
+		genTabRandom,	genTabIvy, genTabPetri
 	};
-	(*_genTabFn[tab->gen])(tab);
+	genTabPetri(tab);
+	// (*_genTabFn[tab->gen])(tab);
+	(void)_genTabFn;
 }
 
 
@@ -57,8 +57,13 @@ void	selectApplyColor(t_art *tab) {
 	static const genTabFn _genTabFn[CLR_MAX] = {
 		NULL,	applyColorGradient,	applyColorBaseFile
 	};
-	if (_genTabFn[tab->color])
+	if (_genTabFn[tab->color]) {
 		(*_genTabFn[tab->color])(tab);
+		TIMER_START;
+		if (tab->fillBg)
+			mergeBackGround(tab->arrClr, tab->widthClr, tab->heightClr, &tab->bgColor);
+	}
+	
 }
 
 typedef void	(*printTabFn)(const t_art *);
@@ -77,7 +82,9 @@ int main(int ac, char *av[], char *env[]) {
 		exit(1);
 	t_art art = *(t_art*)&nonConstArt;
 	TIMER_START;
-	selectGenTab(&art);
+	// selectGenTab(&art);
+	genTabPetri(&art);
+
 	// printFrame(&art);
 	TIMER_START;
 	selectApplyColor(&art);
@@ -85,6 +92,7 @@ int main(int ac, char *av[], char *env[]) {
 	selectPrintTab(&art);
 	TIMER_END;
 	// printFrame(&art);
+	
 	return (0);
 	(void)env;
 }

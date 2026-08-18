@@ -54,29 +54,58 @@ void	_fixRules_Start(t_start *s) {
 }
 
 __always_inline __attribute__((flatten)) static
-void	_fixStart(t_start *pStart, const t_tab *tab) {
-	const uint64_t	w = tab->width * 2;
-	const uint64_t	h = tab->height * 2;
-
-	if (pStart->x >= w)		pStart->x = aRand(tab->width) * 2;
-	if (pStart->y >= h)		pStart->y = aRand(tab->height) * 2;
+void	_fixStart(t_start *pStart, const t_bField *bField) {
+	if (pStart->x >= bField->width)
+		pStart->x = aRand(bField->width);
+	if (pStart->y >= bField->height)
+		pStart->y = aRand(bField->height);
 	_fixRules_Start(pStart);
 	_reboundRGB_Start(pStart);
+	if (pStart->chosePossibilityFn == NULL)
+		pStart->chosePossibilityFn = CPD_random;
 }
 
 // Retrurn 0 on success, 1 on duplicate
-uint32_t fillOneStart(t_start *pStart, const t_tab *tab, size_t i, t_ht *htStart) {
+uint32_t fillOneStart(t_start *pStart, const t_bField *bField, size_t i, t_ht *htStart) {
 	t_start start = {};
 	// If already configured -> Pull
 	// else
-	{
-		start.x = aRand(tab->width) * 2;
-		start.y = aRand(tab->height) * 2;
+	(void)i;
+	if (i == 0) {
+	// 	start.x = aRand(bField->width);
+	// 	start.y = aRand(bField->height);
+
+		start.x = bField->width / 2;
+		start.y = bField->height / 2;
+
 		start.weight = 1;
-		start.baseClr = (t_clr){0x9 * i + 25 * i, 0xb2* i + 55 * i, 0x3c* i + 65 * i};
-		start.rules = (t_clrRules){{0x40, 0xef, 5}, {0x36, 0xf0, 2}, {0x83, 0xce, 1}};
+		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
+		start.rules = (t_clrRules){{0x00, 0x40, 3}, {0x50, 0xcf, 3}, {0x50, 0xc0, 4}};
+		start.getClusterWeightFn = 0;
+		start.getPointWeightFn = 0;
+		start.chosePossibilityFn = 0;
+		start.getPossibilityMaskFn = 0;
+		start.possibilityMask = MASK(UP) | MASK(LEFT) | MASK(DOWN) | MASK(RIGHT);
+		start.removePointFn = 0;
+		start.choseLastPoint = true;
+
+	} else
+	{
+		start.x = 150 + 90;
+		start.y = 150;
+
+		start.weight = 40000;
+		start.baseClr = (t_clr){0x90 , 0xb0, 0x3e};
+		start.rules = (t_clrRules){{0x45, 0x68, 4}, {0x00, 0x30, 2}, {0x30, 0x60, 9}};
+		start.getClusterWeightFn = 0;
+		// start.getPointWeightFn = GPW_test;
+		start.chosePossibilityFn = CPD_Test;
+		start.getPossibilityMaskFn = GPM_Angle;
+		start.possibilityMask = MASK(UP) | MASK(LEFT) | MASK(DOWN) | MASK(RIGHT);
+		// start.removePointFn = RP_test;
+		// start.choseLastPoint = true;
 	}
-	_fixStart(&start, tab);
+	_fixStart(&start, bField);
 	if (ht_get(htStart, &start)) { // If already in the thing
 		return (1);
 	}
@@ -94,7 +123,7 @@ size_t	genStarts(t_nonConstArt *art) {
 
 	uint64_t	index = 0;
 	for (size_t i = 0; i < art->nStart; ++i) {
-		if (!fillOneStart(&starts->lStart[index], &art->tab, i, htStart))
+		if (!fillOneStart(&starts->lStart[index], &art->bField, i, htStart))
 			++index;
 	}
 	starts->n = index;

@@ -39,9 +39,9 @@ static struct s_span	_getSpanNeighbours(const size_t n, const uint8_t pLine[], c
 
 // void	genClrIvy(t_art *art);
 void	genTabIvy(t_art *art) {
-	t_tab			*tab = &art->tab;
-	const size_t	height = tab->height;
-	const size_t	width = tab->width;
+	t_bField		*bField = &art->bField;
+	const size_t	height = bField->height;
+	const size_t	width = bField->width;
 	const size_t	orphanPerc = art->orphanPercent;
 
 	for (size_t i = height * 2 - 1; i > 1;) {
@@ -49,22 +49,22 @@ void	genTabIvy(t_art *art) {
 		if (!(i & 1)){ // Horizontal Lines 
 			const size_t	tWidth = width - 1;
 			for (size_t j = 0; j < tWidth / 8; ++j) {
-				tab->arr[i][j] = genNBit(8, art->percent);
+				bField->arr[i][j] = genNBit(8, art->percent);
 			}
 			if (tWidth % 8)
-				tab->arr[i][tWidth / 8] = genNBit(tWidth % 8, art->percent);
+				bField->arr[i][tWidth / 8] = genNBit(tWidth % 8, art->percent);
 		} else {
 			for (size_t j = 0; j < width;) {
-				struct s_span s = _getSpanNeighbours(j, tab->arr[i + 1], width);
+				struct s_span s = _getSpanNeighbours(j, bField->arr[i + 1], width);
 				if (((size_t)aRand(100)) >= orphanPerc * 10 * (s.end - s.start) / width) {
 					size_t res = aRandRange(s.start, s.end);
-					tab->arr[i][res / 8] |= MASK(res % 8);
+					bField->arr[i][res / 8] |= MASK(res % 8);
 				}
 				j = s.end + 1;
 			}
 		}
 	}
-	_getTabIvyFirst(tab->arr[0], tab->width, art->nStart);
+	_getTabIvyFirst(bField->arr[0], bField->width, art->nStart);
 	// if (art->color == CLR_GRADIENT)	// TODO: Add the cluster sistem to that
 	// 	genClrIvy(art);
 }

@@ -4,14 +4,15 @@ S_INIT =  parsOpt.c  parsOptArg.c  checkOptArg.c  parsBaseImg.c  genStart.c
 D_INIT =  init/
 INIT = $(addprefix $(D_INIT), $(S_INIT))
 
-S_PETRI =  chosePossibility.c  getPointWeight.c  dataStructure.c  cluster.c  petri.c
+S_PETRI =  Fn_chosePointDirection.c  Fn_getClusterWeight.c  Fn_getPointWeight.c  Fn_getPossibilityMask.c  Fn_removePoint.c
+S_PETRI+=  petri.c  dataStructure.c  
 D_PETRI =  petri/
 PETRI = $(addprefix $(D_PETRI), $(S_PETRI))
 S_GEN =  random.c  ivy.c  $(PETRI)
 D_GEN =  generation/
 GEN = $(addprefix $(D_GEN), $(S_GEN))
 
-S_COLOR =  applyColor.c  gradient.c
+S_COLOR =  applyColor.c  gradient.c  mergeBackground.c
 D_COLOR =  color/
 COLOR = $(addprefix $(D_COLOR), $(S_COLOR))
 
@@ -19,7 +20,7 @@ S_OUTPUT =  print.c  frame.c  nColor.c  savePng.c
 D_OUTPUT =  output/
 OUTPUT = $(addprefix $(D_OUTPUT), $(S_OUTPUT))
 
-S_UTILS =  random.c  color.c  hashtable.c  vector.c  fenwick_tree.c
+S_UTILS =  random.c  color.c  hashtable.c  vector.c  fenwick_tree.c  debug.c
 D_UTILS =  utils/
 UTILS = $(addprefix $(D_UTILS), $(S_UTILS))
 

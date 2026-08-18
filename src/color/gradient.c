@@ -1,14 +1,14 @@
 #include "arczn.h"
 #include "vector.h"
 
-enum e_dir {UP, LEFT, DOWN, RIGHT, NONE};
+// enum e_dir {UP, LEFT, DOWN, RIGHT, NONE};
 
-typedef struct s_point {
+typedef struct s_cPoint {
 	size_t	x;
 	size_t	y;
-	enum e_dir	dirOrig;
+	uint32_t	dirOrig;
 	const t_clr	*clrOrig;
-}	t_point;
+}	t_cPoint;
 
 struct s_vecDir {
 	int8_t dx;
@@ -18,7 +18,7 @@ struct s_vecDir {
 static const struct s_vecDir	vecDirs[NONE] = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
 
 __always_inline __attribute__((const)) static
-uint8_t	isFilled(const uint8_t *arr[], uint64_t w, uint64_t h, uint64_t xClr, uint64_t y, enum e_dir direction) {
+uint8_t	isFilled(const uint8_t *arr[], uint64_t w, uint64_t h, uint64_t xClr, uint64_t y, uint32_t direction) {
 	uint64_t	x = xClr / 2;	// HERE
 
 	if (direction == UP) {
@@ -47,31 +47,31 @@ uint8_t	isFilled(const uint8_t *arr[], uint64_t w, uint64_t h, uint64_t xClr, ui
 }
 
 __always_inline static
-void	checkAllPossibleDir(const uint8_t *arr[], uint64_t w, uint64_t h, const t_point *origin, t_vec *vecPts) {
-	const enum e_dir	dir = origin->dirOrig;
+void	checkAllPossibleDir(const uint8_t *arr[], uint64_t w, uint64_t h, const t_cPoint *origin, t_vec *vecPts) {
+	const uint32_t	dir = origin->dirOrig;
 	const size_t		X = origin->x;
 	const size_t		Y = origin->y;
 
 	if (dir != LEFT && dir != RIGHT) {	// Add Left Right
 		if (isFilled(arr, w, h, X, Y, LEFT)) {
-			vec_add(vecPts, &(t_point){.x = X - 2, .y = Y, .dirOrig = LEFT, .clrOrig = origin->clrOrig});
+			vec_add(vecPts, &(t_cPoint){.x = X - 2, .y = Y, .dirOrig = LEFT, .clrOrig = origin->clrOrig});
 		}
 		if (isFilled(arr, w, h, X, Y, RIGHT)) {
-			vec_add(vecPts, &(t_point){.x = X + 2, .y = Y, .dirOrig = RIGHT, .clrOrig = origin->clrOrig});
+			vec_add(vecPts, &(t_cPoint){.x = X + 2, .y = Y, .dirOrig = RIGHT, .clrOrig = origin->clrOrig});
 		}
 	}
 	if (dir != UP && dir != DOWN) {
 		if (isFilled(arr, w, h, X, Y, UP)) {
-			vec_add(vecPts, &(t_point){.x = X, .y = Y - 2, .dirOrig = UP, .clrOrig = origin->clrOrig});
+			vec_add(vecPts, &(t_cPoint){.x = X, .y = Y - 2, .dirOrig = UP, .clrOrig = origin->clrOrig});
 		}
 		if (isFilled(arr, w, h, X, Y, DOWN)) {
-			vec_add(vecPts, &(t_point){.x = X, .y = Y + 2, .dirOrig = DOWN, .clrOrig = origin->clrOrig});
+			vec_add(vecPts, &(t_cPoint){.x = X, .y = Y + 2, .dirOrig = DOWN, .clrOrig = origin->clrOrig});
 		}
 	}
 }
 
 __always_inline static
-void	_spreadClrOnDir(const t_point *p, const struct s_vecDir dir, t_clr *arrClr[], const t_clrRules *rules) {
+void	_spreadClrOnDir(const t_cPoint *p, const struct s_vecDir dir, t_clr *arrClr[], const t_clrRules *rules) {
 	const uint64_t	bX = p->x;
 	const uint64_t	bY = p->y;
 
@@ -79,35 +79,45 @@ void	_spreadClrOnDir(const t_point *p, const struct s_vecDir dir, t_clr *arrClr[
 }
 
 __always_inline static
-void	_FillLine(const t_art *art, t_vec *vecPts, t_point p, const t_clrRules *rules) {
+void	_FillLine(const t_art *art, t_vec *vecPts, t_cPoint p, const t_clrRules *rules) {
 	const struct s_vecDir	vecDir = vecDirs[p.dirOrig];
 
 	do {
 		_spreadClrOnDir(&p, vecDir, art->arrClr, rules);
 		p.clrOrig =  &art->arrClr[p.y][p.x];
-		checkAllPossibleDir((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, &p, vecPts);
-		if (!isFilled((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, p.x, p.y, p.dirOrig))
+		checkAllPossibleDir((const uint8_t **)art->bField.arr, art->bField.width, art->heightClr, &p, vecPts);
+		if (!isFilled((const uint8_t **)art->bField.arr, art->bField.width, art->heightClr, p.x, p.y, p.dirOrig))
 			break ;
 		p.x += 2 * vecDir.dx;
 		p.y += 2 * vecDir.dy;
 	} while (1);
 }
 
+__always_inline static
+void	_fillBackground(t_clr *clr[], const t_clr bgColor, size_t width, size_t height) {
+	if (bgColor.r || bgColor.g || bgColor.b) {
+		for (size_t i = 0; i < height; ++i) {
+			for (size_t j = 0; j < width; ++j)
+				clr[i][j] = bgColor;
+		}
+	}
+}
 
 __attribute__((flatten))
 void	applyColorGradient(t_art *art) {
 	const t_startList	*starts = art->starts;
-	t_vec	*vec = vec_create(sizeof(t_point));
+	t_vec	*vec = vec_create(sizeof(t_cPoint));
 
+	_fillBackground(art->arrClr, art->bgColor, art->widthClr, art->heightClr);
 	for (size_t i = 0; i < starts->n; ++i) {
 		const t_clrRules	rules = starts->lStart[i].rules;
-		const t_point	pStart = {.x = starts->lStart[i].x, .y = starts->lStart[i].y,
+		const t_cPoint	pStart = {.x = starts->lStart[i].x * 2, .y = starts->lStart[i].y * 2,
 								.dirOrig = NONE, .clrOrig = &art->arrClr[pStart.y][pStart.x]};
 		
 		art->arrClr[pStart.y][pStart.x] = starts->lStart[i].baseClr;	// Copy First
-		checkAllPossibleDir((const uint8_t **)art->tab.arr, art->tab.width, art->heightClr, &pStart, vec);
+		checkAllPossibleDir((const uint8_t **)art->bField.arr, art->bField.width, art->heightClr, &pStart, vec);
 		while (vec->size) {
-			const t_point	p = *(t_point *)vec_get(vec, vec->size - 1);
+			const t_cPoint	p = *(t_cPoint *)vec_get(vec, vec->size - 1);
 			vec_rm(vec, vec->size - 1);
 			_FillLine(art, vec, p, &rules);
 		}

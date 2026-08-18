@@ -291,4 +291,3 @@ void	yy_warning (const char s[]) {
 int main(void) {
 	yyparse();
 }
- 

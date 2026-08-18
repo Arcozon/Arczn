@@ -6,7 +6,19 @@
 struct s_start {
 	size_t	x;
 	size_t	y;
+	
 	size_t	weight;
+	t_getClusterWeightFn	getClusterWeightFn;
+
+	bool	choseLastPoint;
+
+	t_getPointWeightFn		getPointWeightFn;
+	
+	uint8_t					possibilityMask;
+	t_getPossibilityMaskFn	getPossibilityMaskFn;
+	t_chosePossibilityFn	chosePossibilityFn;
+
+	t_removePointFn		removePointFn;
 
 	t_clr		baseClr;
 	t_clrRules	rules;
