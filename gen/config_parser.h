@@ -85,7 +85,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "config_parser.y"
+#line 24 "config_parser.y"
 
 	uint64_t	uint64;
 	uint8_t		uint8;

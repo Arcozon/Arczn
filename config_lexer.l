@@ -13,21 +13,21 @@
 	t_clr	strToClr(const char *);
 	char	*dupAddDotPng(const char *);
 %}
-
+%option caseless
 %%
 
 
-width|w				{	return (WIDTH);	}
+width|w			{	return (WIDTH);	}
 height|h			{	return (HEIGHT);}
 file|fname			{	return (FNAME);}
 background|bg		{	return (BACKGROUND);	}
 fill				{	return (FILL);	}
 
-"start"		{	return (START);	}
-"nStart"	{	return (N_START);	}
+start|cluster		{	return (START);	}
+nstart				{	return (N_START);	}
 
-[xX]		{	return(X);	}
-[yY]		{	return(Y);	}
+x			{	return(X);	}
+y			{	return(Y);	}
 
 
 rule|rules	{	return (RULES);	}

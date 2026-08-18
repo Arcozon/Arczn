@@ -73,6 +73,11 @@
 	#include <stdlib.h>
 
 	#include "parser_types.h"
+	#include "random.h"
+
+	void	fixOneClrRules(t_oneClrRules *c);
+	void	fixStart(void);
+
 	t_parsConfig	parsConfig;
 	t_parsStart		parsStart;
 	t_parsClr		parsClr;
@@ -85,7 +90,7 @@
 
 # define YY_THROW(str)	{yyerror(str);YYABORT;}
 
-#line 89 "gen/config_parser.c"
+#line 94 "gen/config_parser.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -559,11 +564,11 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    56,    56,    59,    56,    68,    69,    73,    83,    93,
-     103,   110,   113,   119,   128,   128,   135,   136,   140,   147,
-     154,   161,   174,   176,   176,   178,   183,   187,   191,   198,
-     198,   205,   217,   223,   229,   238,   246,   257,   258,   261,
-     262,   265,   266,   268,   269,   272,   275
+       0,    61,    61,    64,    61,    73,    74,    78,    88,    98,
+     108,   115,   118,   124,   133,   133,   145,   146,   150,   156,
+     162,   168,   177,   179,   179,   181,   186,   190,   194,   201,
+     201,   213,   228,   234,   240,   249,   257,   268,   269,   272,
+     273,   276,   277,   279,   280,   283,   286
 };
 #endif
 
@@ -1197,25 +1202,25 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* $@1: %empty  */
-#line 56 "config_parser.y"
+#line 61 "config_parser.y"
         {
 		parsConfig = (t_parsConfig){.nStart = 1};
 	}
-#line 1205 "gen/config_parser.c"
+#line 1210 "gen/config_parser.c"
     break;
 
   case 3: /* $@2: %empty  */
-#line 59 "config_parser.y"
+#line 64 "config_parser.y"
                  {
 		if (!parsConfig.width_Defined)	YY_THROW("Width not defined");
 		if (!parsConfig.height_Defined)	YY_THROW("Height not defined");
-		if (!parsConfig.width_Defined)	YY_THROW("Width not defined");
+		// if (!parsConfig.width_Defined)	YY_THROW("Width not defined");
 	}
-#line 1215 "gen/config_parser.c"
+#line 1220 "gen/config_parser.c"
     break;
 
   case 7: /* settings_content: WIDTH ASSIGN uint64  */
-#line 74 "config_parser.y"
+#line 79 "config_parser.y"
                 {
 		if (parsConfig.width_Defined)	YY_THROW("Width redefined");
 		if ((yyvsp[0].uint64) == 0)	{
@@ -1225,11 +1230,11 @@ yyreduce:
 		parsConfig.width_Defined = 1;
 		parsConfig.width = (yyvsp[0].uint64);
 	}
-#line 1229 "gen/config_parser.c"
+#line 1234 "gen/config_parser.c"
     break;
 
   case 8: /* settings_content: HEIGHT ASSIGN uint64  */
-#line 84 "config_parser.y"
+#line 89 "config_parser.y"
         {
 		if (parsConfig.height_Defined)	YY_THROW("Height redefined");
 		if ((yyvsp[0].uint64) == 0)	{
@@ -1239,11 +1244,11 @@ yyreduce:
 		parsConfig.height_Defined = 1;
 		parsConfig.height = (yyvsp[0].uint64);
 	}
-#line 1243 "gen/config_parser.c"
+#line 1248 "gen/config_parser.c"
     break;
 
   case 9: /* settings_content: N_START ASSIGN uint64  */
-#line 94 "config_parser.y"
+#line 99 "config_parser.y"
         {
 		if (parsConfig.nStart_Defined)	YY_THROW("nStart redefined");
 		if ((yyvsp[0].uint64) == 0)	{
@@ -1253,205 +1258,211 @@ yyreduce:
 		parsConfig.nStart_Defined = 1;
 		parsConfig.nStart = (yyvsp[0].uint64);
 	}
-#line 1257 "gen/config_parser.c"
+#line 1262 "gen/config_parser.c"
     break;
 
   case 10: /* settings_content: FNAME ASSIGN STRING  */
-#line 104 "config_parser.y"
+#line 109 "config_parser.y"
         {
 		if (parsConfig.fName_Defined)	YY_THROW("Fname redefined");
 		if (yylval.str == NULL)			YY_THROW("Fname malloc fail");
 		parsConfig.fName_Defined = 1;
 		parsConfig.fName = yylval.str;
 	}
-#line 1268 "gen/config_parser.c"
+#line 1273 "gen/config_parser.c"
     break;
 
   case 12: /* backgroud: BACKGROUND ASSIGN color  */
-#line 114 "config_parser.y"
+#line 119 "config_parser.y"
         {
 		if (parsConfig.bg_Defined)	YY_THROW("BackGround redefined");
 		parsConfig.bg_Defined = 1;
 		parsConfig.bg = (yyvsp[0].clr);
 	}
-#line 1278 "gen/config_parser.c"
+#line 1283 "gen/config_parser.c"
     break;
 
   case 13: /* backgroud: BACKGROUND ASSIGN FILL  */
-#line 120 "config_parser.y"
+#line 125 "config_parser.y"
         {
 		if (parsConfig.bg_Defined)	YY_THROW("BackGround redefined");
 		parsConfig.bg_Defined = 1;
 		parsConfig.bgFill = 1;
 	}
-#line 1288 "gen/config_parser.c"
+#line 1293 "gen/config_parser.c"
     break;
 
   case 14: /* $@3: %empty  */
-#line 128 "config_parser.y"
+#line 133 "config_parser.y"
         {parsStart = (t_parsStart){};}
-#line 1294 "gen/config_parser.c"
+#line 1299 "gen/config_parser.c"
     break;
 
   case 15: /* start: $@3 START '{' start_body '}'  */
-#line 130 "config_parser.y"
+#line 135 "config_parser.y"
         {
-		//Dup start
+		fixStart();
+		if (parsConfig.nStartInPtr == parsConfig.nStart)	++parsConfig.nStart;
+		parsConfig.starts = realloc(parsConfig.starts, sizeof(t_start) * (parsConfig.nStartInPtr + 1));
+		if (!parsConfig.starts)	YY_THROW("Starts realloc fail\n");
+		memcpy(&parsConfig.starts[parsConfig.nStartInPtr], &parsStart.start, sizeof(parsStart.start));
+		++parsConfig.nStartInPtr;
 	}
-#line 1302 "gen/config_parser.c"
+#line 1312 "gen/config_parser.c"
     break;
 
   case 18: /* start_body_content: X ASSIGN uint64  */
-#line 141 "config_parser.y"
+#line 151 "config_parser.y"
                 {
 			if (parsStart.x_Defined) YY_THROW("X redefined")
 			parsStart.x_Defined = 1;
 			parsStart.start.x = (yyvsp[0].uint64);
-			printf("X = %lu\n ", (yyvsp[0].uint64));
 		}
-#line 1313 "gen/config_parser.c"
+#line 1322 "gen/config_parser.c"
     break;
 
   case 19: /* start_body_content: Y ASSIGN uint64  */
-#line 148 "config_parser.y"
+#line 157 "config_parser.y"
                 {
 			if (parsStart.y_Defined) YY_THROW("Y redefined")
 			parsStart.y_Defined = 1;
 			parsStart.start.y = (yyvsp[0].uint64);
-			printf("Y = %lu\n ", (yyvsp[0].uint64));
 		}
-#line 1324 "gen/config_parser.c"
+#line 1332 "gen/config_parser.c"
     break;
 
   case 20: /* start_body_content: COLOR ASSIGN color  */
-#line 155 "config_parser.y"
+#line 163 "config_parser.y"
                 {
 			if (parsStart.clr_Defined) YY_THROW("Color redefined")
 			parsStart.clr_Defined = 1;
 			parsStart.start.baseClr = (yyvsp[0].clr);
-			printf("Clr = #%02X%02X%02X\n", (yyvsp[0].clr).r, (yyvsp[0].clr).g, (yyvsp[0].clr).b);
 		}
-#line 1335 "gen/config_parser.c"
+#line 1342 "gen/config_parser.c"
     break;
 
   case 21: /* start_body_content: RULES ASSIGN clr_rules  */
-#line 162 "config_parser.y"
+#line 169 "config_parser.y"
                 {
 			if (parsStart.rules_Defined) YY_THROW("Color rule redefined")
 			parsStart.rules_Defined = 1;
 			parsStart.start.rules = (yyvsp[0].clrRules);
-			printf("Color rule\n");
-			printf("\t r: %u-%u (%u)\n", (yyvsp[0].clrRules).r.min, (yyvsp[0].clrRules).r.max, (yyvsp[0].clrRules).r.delta);
-			printf("\t g: %u-%u (%u)\n", (yyvsp[0].clrRules).g.min, (yyvsp[0].clrRules).g.max, (yyvsp[0].clrRules).g.delta);
-			printf("\t b: %u-%u (%u)\n", (yyvsp[0].clrRules).b.min, (yyvsp[0].clrRules).b.max, (yyvsp[0].clrRules).b.delta);
 		}
-#line 1349 "gen/config_parser.c"
+#line 1352 "gen/config_parser.c"
     break;
 
   case 22: /* color: CLR_RGB  */
-#line 175 "config_parser.y"
+#line 178 "config_parser.y"
                 {	(yyval.clr) = yylval.clr; }
-#line 1355 "gen/config_parser.c"
+#line 1358 "gen/config_parser.c"
     break;
 
   case 23: /* $@4: %empty  */
-#line 176 "config_parser.y"
+#line 179 "config_parser.y"
                 {parsClr = (t_parsClr){};}
-#line 1361 "gen/config_parser.c"
+#line 1364 "gen/config_parser.c"
     break;
 
   case 24: /* color: $@4 '{' single_color ',' single_color ',' single_color '}'  */
-#line 177 "config_parser.y"
+#line 180 "config_parser.y"
                 {	(yyval.clr) = parsClr.clr;	}
-#line 1367 "gen/config_parser.c"
+#line 1370 "gen/config_parser.c"
     break;
 
   case 25: /* color: '{' uint64 ',' uint64 ',' uint64 '}'  */
-#line 179 "config_parser.y"
+#line 182 "config_parser.y"
                 {	(yyval.clr) = (t_clr){.r = (yyvsp[-5].uint64), .g = (yyvsp[-3].uint64), .b = (yyvsp[-1].uint64)}; }
-#line 1373 "gen/config_parser.c"
+#line 1376 "gen/config_parser.c"
     break;
 
   case 26: /* single_color: TRED ASSIGN uint64  */
-#line 184 "config_parser.y"
+#line 187 "config_parser.y"
                 {	if (parsClr.r_Defined) YY_THROW("Red redefined")
 			parsClr.clr.r = (yyvsp[0].uint64); parsClr.r_Defined = 1;
 		}
-#line 1381 "gen/config_parser.c"
+#line 1384 "gen/config_parser.c"
     break;
 
   case 27: /* single_color: TGREEN ASSIGN uint64  */
-#line 188 "config_parser.y"
+#line 191 "config_parser.y"
                 {	if (parsClr.g_Defined) YY_THROW("Green redefined")
 			parsClr.clr.g = (yyvsp[0].uint64); parsClr.g_Defined = 1;
 		}
-#line 1389 "gen/config_parser.c"
+#line 1392 "gen/config_parser.c"
     break;
 
   case 28: /* single_color: TBLUE ASSIGN uint64  */
-#line 192 "config_parser.y"
+#line 195 "config_parser.y"
                 {	if (parsClr.b_Defined)  YY_THROW("Blue redefined")
 			parsClr.clr.b = (yyvsp[0].uint64); parsClr.b_Defined = 1;
 		}
-#line 1397 "gen/config_parser.c"
+#line 1400 "gen/config_parser.c"
     break;
 
   case 29: /* $@5: %empty  */
-#line 198 "config_parser.y"
+#line 201 "config_parser.y"
                 { parsClrRules = (t_parsClrRules){};}
-#line 1403 "gen/config_parser.c"
+#line 1406 "gen/config_parser.c"
     break;
 
   case 30: /* clr_rules: $@5 '{' separator_0_ one_rule separator_1_ one_rule separator_1_ one_rule separator_0_ '}'  */
-#line 204 "config_parser.y"
-                { (yyval.clrRules) = parsClrRules.rules; }
-#line 1409 "gen/config_parser.c"
+#line 207 "config_parser.y"
+                { 
+			fixOneClrRules(&parsClrRules.rules.r);
+			fixOneClrRules(&parsClrRules.rules.g);
+			fixOneClrRules(&parsClrRules.rules.b);
+			(yyval.clrRules) = parsClrRules.rules;
+	}
+#line 1417 "gen/config_parser.c"
     break;
 
   case 31: /* clr_rules: clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 ')'  */
-#line 206 "config_parser.y"
+#line 214 "config_parser.y"
         {
 		t_clrRules	res = {};
 		res.r = (t_oneClrRules){.min = (yyvsp[-9].clr).r, .max = (yyvsp[-7].clr).r, .delta = (yyvsp[-5].uint64)};
 		res.g = (t_oneClrRules){.min = (yyvsp[-9].clr).g, .max = (yyvsp[-7].clr).g, .delta = (yyvsp[-3].uint64)};
 		res.b = (t_oneClrRules){.min = (yyvsp[-9].clr).b, .max = (yyvsp[-7].clr).b, .delta = (yyvsp[-1].uint64)};
+		fixOneClrRules(&res.r);
+		fixOneClrRules(&res.g);
+		fixOneClrRules(&res.b);
 		(yyval.clrRules) = res;
 	}
-#line 1421 "gen/config_parser.c"
+#line 1432 "gen/config_parser.c"
     break;
 
   case 32: /* one_rule: TRED ASSIGN verbose_one_rule  */
-#line 218 "config_parser.y"
+#line 229 "config_parser.y"
                 {
 			if (parsClrRules.r_Defined)	YY_THROW("Color rule for red redefined");
 			parsClrRules.r_Defined = 1;
 			parsClrRules.rules.r = (yyvsp[0].oneClrRule);
 		}
-#line 1431 "gen/config_parser.c"
+#line 1442 "gen/config_parser.c"
     break;
 
   case 33: /* one_rule: TGREEN ASSIGN verbose_one_rule  */
-#line 224 "config_parser.y"
+#line 235 "config_parser.y"
                 {
 			if (parsClrRules.g_Defined)	YY_THROW("Color rule for green redefined");
 			parsClrRules.g_Defined = 1;
 			parsClrRules.rules.g = (yyvsp[0].oneClrRule);
 		}
-#line 1441 "gen/config_parser.c"
+#line 1452 "gen/config_parser.c"
     break;
 
   case 34: /* one_rule: TBLUE ASSIGN verbose_one_rule  */
-#line 230 "config_parser.y"
+#line 241 "config_parser.y"
                 {
 			if (parsClrRules.b_Defined)	YY_THROW("Color rule for blue redefined");
 			parsClrRules.b_Defined = 1;
 			parsClrRules.rules.b = (yyvsp[0].oneClrRule);
 		}
-#line 1451 "gen/config_parser.c"
+#line 1462 "gen/config_parser.c"
     break;
 
   case 35: /* verbose_one_rule: '{' uint64 ',' uint64 ',' uint64 '}'  */
-#line 239 "config_parser.y"
+#line 250 "config_parser.y"
                 {
 			t_oneClrRules	res = {};
 			res.min = (yyvsp[-5].uint64);
@@ -1459,11 +1470,11 @@ yyreduce:
 			res.delta = (yyvsp[-1].uint64);
 			(yyval.oneClrRule) = res;
 		}
-#line 1463 "gen/config_parser.c"
+#line 1474 "gen/config_parser.c"
     break;
 
   case 36: /* verbose_one_rule: '[' uint64 '-' uint64 ']' '(' uint64 ')'  */
-#line 247 "config_parser.y"
+#line 258 "config_parser.y"
                 {
 			t_oneClrRules	res = {};
 			res.min = (yyvsp[-6].uint64);
@@ -1471,23 +1482,23 @@ yyreduce:
 			res.delta = (yyvsp[-1].uint64);
 			(yyval.oneClrRule) = res;
 		}
-#line 1475 "gen/config_parser.c"
+#line 1486 "gen/config_parser.c"
     break;
 
   case 45: /* uint64: UINT64  */
-#line 273 "config_parser.y"
+#line 284 "config_parser.y"
         { (yyval.uint64) = yylval.uint64; }
-#line 1481 "gen/config_parser.c"
+#line 1492 "gen/config_parser.c"
     break;
 
   case 46: /* clr_rgb: CLR_RGB  */
-#line 276 "config_parser.y"
+#line 287 "config_parser.y"
         { (yyval.clr) = yylval.clr; }
-#line 1487 "gen/config_parser.c"
+#line 1498 "gen/config_parser.c"
     break;
 
 
-#line 1491 "gen/config_parser.c"
+#line 1502 "gen/config_parser.c"
 
       default: break;
     }
@@ -1680,10 +1691,95 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 279 "config_parser.y"
+#line 290 "config_parser.y"
 
 
 t_parsStart	pStart = {};
+
+void	fixOneClrRules(t_oneClrRules *c) {
+	if (c->min > c->max) { 
+		const uint8_t	min = c->min;
+		c->min = c->max;
+		c->max = min;
+	}
+	if (c->delta > (c->max - c->min))
+		c->delta=  c->max - c->min;
+}
+
+t_oneClrRules	mkRandomOneClrRule(void) {
+	t_oneClrRules rule = {};
+	const uint8_t	range = aRand(256);
+	
+	rule.min = aRand(256 - range);
+	rule.max = rule.min + range;
+	{
+		uint8_t div = aRand(15) + 10;
+		uint8_t delta = range / div;
+		if (delta == 0)
+			delta = 1;
+		if (delta > range)
+			delta = range;
+		rule.delta = delta;
+	}
+	return (rule);
+}
+
+t_oneClrRules	mkOneClrRule(uint8_t base) {
+	t_oneClrRules rule = {};
+
+	rule.min = aRandRange(0, base);
+	rule.max = aRandRange(base, 256);
+	{
+		const uint8_t div = aRand(15) + 10;
+		const uint8_t	range = rule.max - rule.min;
+		uint8_t delta = range / div;
+		if (delta == 0)
+			delta = 1;
+		if (delta > range)
+			delta = range;
+		rule.delta = delta;
+	}
+	return (rule);
+}
+
+
+void	fixStart(void) {
+	t_start	*start = &parsStart.start;
+	if (!parsStart.x_Defined) {
+		start->x = aRand(parsConfig.width);
+		parsStart.x_Defined = 1;
+	}
+	if (!parsStart.y_Defined) {
+		start->y = aRand(parsConfig.height);
+		parsStart.y_Defined = 1;
+	}
+	if (!parsStart.weight_Defined) {
+		start->weight = 1;
+		parsStart.weight_Defined = 1;
+	}
+	if (!parsStart.rules_Defined) {
+		if (!parsStart.clr_Defined)
+			start->rules = (t_clrRules){mkRandomOneClrRule(), mkRandomOneClrRule(), mkRandomOneClrRule()};
+		else {
+			const t_clr	*c = &start->baseClr;
+			start->rules = (t_clrRules){mkOneClrRule(c->r), mkOneClrRule(c->g), mkOneClrRule(c->b)};
+		}
+		parsStart.rules_Defined = 1;
+	}
+	if (!parsStart.clr_Defined) {
+		const t_clrRules	*r = &start->rules;
+		start->baseClr = (t_clr){aRandRange(r->r.min, r->r.max),
+							aRandRange(r->g.min, r->g.max),
+							aRandRange(r->b.min, r->b.max)};
+		parsStart.clr_Defined = 1;
+	}
+	printf("Start: {\t[%lu, %lu]\n", start->x, start->y);
+	printf("\tClr = #%02X%02X%02X\n", start->baseClr.r, start->baseClr.g, start->baseClr.b);
+	printf("\tColor rule\n");
+	printf("\t\tr: %u-%u (%u)\n", start->rules.r.min, start->rules.r.max, start->rules.r.delta);
+	printf("\t\tg: %u-%u (%u)\n", start->rules.g.min, start->rules.g.max, start->rules.g.delta);
+	printf("\t\tb: %u-%u (%u)\n}\n", start->rules.b.min, start->rules.b.max, start->rules.b.delta);
+}
 
 void	yyerror (const char s[]) {
 	fprintf (stderr, "\033[1;31mError: \033[0;31m%s\033[0m\n", s);

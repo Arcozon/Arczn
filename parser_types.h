@@ -7,6 +7,8 @@
 
 #include <string.h>
 
+
+
 typedef struct s_parsConfig {
 	uint64_t	width;
 	uint64_t	height;
@@ -16,7 +18,8 @@ typedef struct s_parsConfig {
 
 	uint64_t	nStart;
 	t_start		*starts;
-
+	
+	uint64_t	nStartInPtr;
 	// default clrBound
 
 	uint64_t	width_Defined:1;

@@ -65,7 +65,7 @@ struct s_bField {
 };
 
 struct s_art {
-	const uint64_t	nStart;
+	const uint64_t		nStart;
 	const t_startList	*starts;
 	// t_startList			*branch;
 

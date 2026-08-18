@@ -3,6 +3,11 @@
 	#include <stdlib.h>
 
 	#include "parser_types.h"
+	#include "random.h"
+
+	void	fixOneClrRules(t_oneClrRules *c);
+	void	fixStart(void);
+
 	t_parsConfig	parsConfig;
 	t_parsStart		parsStart;
 	t_parsClr		parsClr;
@@ -59,7 +64,7 @@ config:
 	settings {
 		if (!parsConfig.width_Defined)	YY_THROW("Width not defined");
 		if (!parsConfig.height_Defined)	YY_THROW("Height not defined");
-		if (!parsConfig.width_Defined)	YY_THROW("Width not defined");
+		// if (!parsConfig.width_Defined)	YY_THROW("Width not defined");
 	}
 	start_0_
 	;
@@ -128,7 +133,12 @@ start:
 	{parsStart = (t_parsStart){};}
 		START '{' start_body '}'
 	{
-		//Dup start
+		fixStart();
+		if (parsConfig.nStartInPtr == parsConfig.nStart)	++parsConfig.nStart;
+		parsConfig.starts = realloc(parsConfig.starts, sizeof(t_start) * (parsConfig.nStartInPtr + 1));
+		if (!parsConfig.starts)	YY_THROW("Starts realloc fail\n");
+		memcpy(&parsConfig.starts[parsConfig.nStartInPtr], &parsStart.start, sizeof(parsStart.start));
+		++parsConfig.nStartInPtr;
 	}
 	;
 start_body:
@@ -142,31 +152,24 @@ start_body_content:
 			if (parsStart.x_Defined) YY_THROW("X redefined")
 			parsStart.x_Defined = 1;
 			parsStart.start.x = $3;
-			printf("X = %lu\n ", $3);
 		}
 	|	Y ASSIGN uint64
 		{
 			if (parsStart.y_Defined) YY_THROW("Y redefined")
 			parsStart.y_Defined = 1;
 			parsStart.start.y = $3;
-			printf("Y = %lu\n ", $3);
 		}
 	|	COLOR ASSIGN color
 		{
 			if (parsStart.clr_Defined) YY_THROW("Color redefined")
 			parsStart.clr_Defined = 1;
 			parsStart.start.baseClr = $3;
-			printf("Clr = #%02X%02X%02X\n", $3.r, $3.g, $3.b);
 		}
 	|	RULES ASSIGN clr_rules
 		{
 			if (parsStart.rules_Defined) YY_THROW("Color rule redefined")
 			parsStart.rules_Defined = 1;
 			parsStart.start.rules = $3;
-			printf("Color rule\n");
-			printf("\t r: %u-%u (%u)\n", $3.r.min, $3.r.max, $3.r.delta);
-			printf("\t g: %u-%u (%u)\n", $3.g.min, $3.g.max, $3.g.delta);
-			printf("\t b: %u-%u (%u)\n", $3.b.min, $3.b.max, $3.b.delta);
 		}
 	;
 
@@ -201,13 +204,21 @@ clr_rules:
 			one_rule separator_1_
 			one_rule separator_0_
 		'}'
-		{ $$ = parsClrRules.rules; }
+		{ 
+			fixOneClrRules(&parsClrRules.rules.r);
+			fixOneClrRules(&parsClrRules.rules.g);
+			fixOneClrRules(&parsClrRules.rules.b);
+			$$ = parsClrRules.rules;
+	}
 	|	clr_rgb '-' clr_rgb '(' uint64 ',' uint64 ',' uint64 ')'
 	{
 		t_clrRules	res = {};
 		res.r = (t_oneClrRules){.min = $1.r, .max = $3.r, .delta = $5};
 		res.g = (t_oneClrRules){.min = $1.g, .max = $3.g, .delta = $7};
 		res.b = (t_oneClrRules){.min = $1.b, .max = $3.b, .delta = $9};
+		fixOneClrRules(&res.r);
+		fixOneClrRules(&res.g);
+		fixOneClrRules(&res.b);
 		$$ = res;
 	}
 	
@@ -279,6 +290,91 @@ clr_rgb:	CLR_RGB
 %%
 
 t_parsStart	pStart = {};
+
+void	fixOneClrRules(t_oneClrRules *c) {
+	if (c->min > c->max) { 
+		const uint8_t	min = c->min;
+		c->min = c->max;
+		c->max = min;
+	}
+	if (c->delta > (c->max - c->min))
+		c->delta=  c->max - c->min;
+}
+
+t_oneClrRules	mkRandomOneClrRule(void) {
+	t_oneClrRules rule = {};
+	const uint8_t	range = aRand(256);
+	
+	rule.min = aRand(256 - range);
+	rule.max = rule.min + range;
+	{
+		uint8_t div = aRand(15) + 10;
+		uint8_t delta = range / div;
+		if (delta == 0)
+			delta = 1;
+		if (delta > range)
+			delta = range;
+		rule.delta = delta;
+	}
+	return (rule);
+}
+
+t_oneClrRules	mkOneClrRule(uint8_t base) {
+	t_oneClrRules rule = {};
+
+	rule.min = aRandRange(0, base);
+	rule.max = aRandRange(base, 256);
+	{
+		const uint8_t div = aRand(15) + 10;
+		const uint8_t	range = rule.max - rule.min;
+		uint8_t delta = range / div;
+		if (delta == 0)
+			delta = 1;
+		if (delta > range)
+			delta = range;
+		rule.delta = delta;
+	}
+	return (rule);
+}
+
+
+void	fixStart(void) {
+	t_start	*start = &parsStart.start;
+	if (!parsStart.x_Defined) {
+		start->x = aRand(parsConfig.width);
+		parsStart.x_Defined = 1;
+	}
+	if (!parsStart.y_Defined) {
+		start->y = aRand(parsConfig.height);
+		parsStart.y_Defined = 1;
+	}
+	if (!parsStart.weight_Defined) {
+		start->weight = 1;
+		parsStart.weight_Defined = 1;
+	}
+	if (!parsStart.rules_Defined) {
+		if (!parsStart.clr_Defined)
+			start->rules = (t_clrRules){mkRandomOneClrRule(), mkRandomOneClrRule(), mkRandomOneClrRule()};
+		else {
+			const t_clr	*c = &start->baseClr;
+			start->rules = (t_clrRules){mkOneClrRule(c->r), mkOneClrRule(c->g), mkOneClrRule(c->b)};
+		}
+		parsStart.rules_Defined = 1;
+	}
+	if (!parsStart.clr_Defined) {
+		const t_clrRules	*r = &start->rules;
+		start->baseClr = (t_clr){aRandRange(r->r.min, r->r.max),
+							aRandRange(r->g.min, r->g.max),
+							aRandRange(r->b.min, r->b.max)};
+		parsStart.clr_Defined = 1;
+	}
+	printf("Start: {\t[%lu, %lu]\n", start->x, start->y);
+	printf("\tClr = #%02X%02X%02X\n", start->baseClr.r, start->baseClr.g, start->baseClr.b);
+	printf("\tColor rule\n");
+	printf("\t\tr: %u-%u (%u)\n", start->rules.r.min, start->rules.r.max, start->rules.r.delta);
+	printf("\t\tg: %u-%u (%u)\n", start->rules.g.min, start->rules.g.max, start->rules.g.delta);
+	printf("\t\tb: %u-%u (%u)\n}\n", start->rules.b.min, start->rules.b.max, start->rules.b.delta);
+}
 
 void	yyerror (const char s[]) {
 	fprintf (stderr, "\033[1;31mError: \033[0;31m%s\033[0m\n", s);

@@ -88,9 +88,9 @@ LEX		=  flex
 pars:	$(NAME_PARS)
 	clear
 	@echo -e '\t\033[1;32m./$(NAME_PARS) <test.config\033[0m'
-	@./$(NAME_PARS) <test.config
+	@valgrind -q --leak-check=full --show-leak-kinds=all ./$(NAME_PARS) <test.config
 
-$(NAME_PARS):	$(YACC_C_GEN)	$(LEX_C_GEN)
+$(NAME_PARS):	$(YACC_C_GEN)	$(LEX_C_GEN) $(D_BUILD)$(D_UTILS)random.o
 	cc $^ -I. -I$(D_GEN_PARS) $(INC_FLAGS) -o $@
 
 $(YACC_C_GEN): $(YACC_SRC)
